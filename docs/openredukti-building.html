@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Building OpenRedukti &#8212; OpenRedukti Alpha documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="OpenRedukti C++ API" href="openredukti-cpp-api.html" />
+    <link rel="prev" title="Quick Start using Docker containers" href="openredukti-docker-quickstart.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="building-openredukti">
+<h1>Building OpenRedukti<a class="headerlink" href="#building-openredukti" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>OpenRedukti makes use of following external libraries:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://developers.google.com/protocol-buffers/">Protocol Buffers</a> is used to implement data types</p></li>
+<li><p><a class="reference external" href="http://www.openblas.net/">OpenBLAS</a> is used for Linear Algebra</p></li>
+<li><p><a class="reference external" href="http://www.netlib.org/lapack/">LAPACK</a> is used for Linear Algebra</p></li>
+<li><p><a class="reference external" href="https://cmake.org/">CMake</a> is used to generate build scripts</p></li>
+</ul>
+<p>Optionally if you want to enable a gRPC based server application then additional dependency on:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://grpc.io/">gRPC</a> framework</p></li>
+</ul>
+<p>Note that the gRPC server is required if you want to use the pricing and curve building functions from the <a class="reference external" href="https://github.com/redukti/PyRedukti">Python interface</a>.</p>
+</div>
+<div class="section" id="build-instructions-for-rhel-7-6">
+<h2>Build Instructions for RHEL 7.6<a class="headerlink" href="#build-instructions-for-rhel-7-6" title="Permalink to this headline">¶</a></h2>
+<p>I am using gcc 8.3 on Redhat obtained via devtoolset-8.
+I installed CMake manually as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir ~/Software
+cd ~/Software
+wget -O &quot;cmake-3.14.5-Linux-x86_64.tar.gz&quot; &quot;https://github.com/Kitware/CMake/releases/download/v3.14.5/cmake-3.14.5-Linux-x86_64.tar.gz&quot;
+tar xvf &quot;cmake-3.14.5-Linux-x86_64.tar.gz&quot;
+rm &quot;cmake-3.14.5-Linux-x86_64.tar.gz&quot;
+export PATH=/Software/cmake-3.14.5-Linux-x86_64/bin:${PATH}
+</pre></div>
+</div>
+<p>I enabled <a class="reference external" href="https://fedoraproject.org/wiki/EPEL">EPEL</a> repository. This was necessary to obtain openblas which I then installed as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">yum</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="n">openblas</span><span class="o">-</span><span class="n">devel</span> <span class="n">readline</span><span class="o">-</span><span class="n">devel</span>
+</pre></div>
+</div>
+<div class="section" id="build-protobuf">
+<h3>Build protobuf<a class="headerlink" href="#build-protobuf" title="Permalink to this headline">¶</a></h3>
+<p>I built protobuf as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">sources</span>
+<span class="n">cd</span> <span class="o">~/</span><span class="n">sources</span>
+<span class="n">wget</span> <span class="s2">&quot;https://github.com/protocolbuffers/protobuf/releases/download/v3.8.0/protobuf-cpp-3.8.0.tar.gz&quot;</span> <span class="o">-</span><span class="n">O</span> <span class="s2">&quot;protobuf-cpp-3.8.0.tar.gz&quot;</span>
+<span class="n">tar</span> <span class="n">xvf</span> <span class="s2">&quot;protobuf-cpp-3.8.0.tar.gz&quot;</span>
+<span class="n">cd</span> <span class="n">protobuf</span><span class="o">-</span><span class="mf">3.8</span><span class="o">.</span><span class="mi">0</span>
+<span class="o">./</span><span class="n">autogen</span><span class="o">.</span><span class="n">sh</span>
+<span class="o">./</span><span class="n">configure</span> <span class="o">--</span><span class="n">prefix</span><span class="o">=~/</span><span class="n">Software</span><span class="o">/</span><span class="n">protobuf</span>
+<span class="n">make</span> <span class="n">install</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="build-grpc">
+<h3>Build gRPC<a class="headerlink" href="#build-grpc" title="Permalink to this headline">¶</a></h3>
+<p>I built gRPC as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir -p ~/sources
+cd ~/sources
+git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc
+cd grpc
+git submodule update --init
+sed -i &#39;s/\-Werror//g&#39; third_party/boringssl/CMakeLists.txt
+sed -i &#39;s/\-Werror//g&#39; Makefile
+prefix=~/Software/grpc make install
+</pre></div>
+</div>
+</div>
+<div class="section" id="build-openredukti">
+<h3>Build OpenRedukti<a class="headerlink" href="#build-openredukti" title="Permalink to this headline">¶</a></h3>
+<p>OpenRedukti was built as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">sources</span>
+<span class="n">cd</span> <span class="o">~/</span><span class="n">sources</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">redukti</span><span class="o">/</span><span class="n">OpenRedukti</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">OpenRedukti</span>
+<span class="n">mkdir</span> <span class="n">cppbuild</span>
+<span class="n">cd</span> <span class="n">cppbuild</span>
+<span class="n">cmake</span> <span class="o">-</span><span class="n">DGRPC_SERVER</span><span class="o">=</span><span class="n">ON</span> <span class="o">-</span><span class="n">DProtobuf_ROOT</span><span class="o">=~/</span><span class="n">Software</span><span class="o">/</span><span class="n">protobuf</span> <span class="o">-</span><span class="n">DCMAKE_INSTALL_PREFIX</span><span class="o">=~/</span><span class="n">Software</span><span class="o">/</span><span class="n">redukti</span> <span class="o">-</span><span class="n">DGRPC_ROOT</span><span class="o">=~/</span><span class="n">Software</span><span class="o">/</span><span class="n">grpc</span> <span class="o">..</span>
+<span class="n">make</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>You can omit the <code class="docutils literal notranslate"><span class="pre">GRPC_SERVER</span></code> option if that is not needed.</p>
+</div>
+<div class="section" id="running-openredukti-server">
+<h3>Running OpenRedukti server<a class="headerlink" href="#running-openredukti-server" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export LD_LIBRARY_PATH=$HOME/Software/protobuf/lib:$HOME/Software/redukti/lib:$HOME/Software/grpc/lib:$LD_LIBRARY_PATH
+$HOME/Software/redukti/bin/reduktiserv -s $HOME/Software/redukti/scripts/pricing.lua -p 9001
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="build-instructions-for-ubuntu-linux-18-04-lts">
+<h2>Build Instructions for Ubuntu Linux 18.04 LTS<a class="headerlink" href="#build-instructions-for-ubuntu-linux-18-04-lts" title="Permalink to this headline">¶</a></h2>
+<p>Following instructions do not build gRPC server.</p>
+<div class="section" id="pre-requisites">
+<h3>Pre-Requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h3>
+<p>Install following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">git</span>
+<span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">cmake</span>
+<span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">libreadline</span><span class="o">-</span><span class="n">dev</span>
+<span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">libopenblas</span><span class="o">-</span><span class="n">dev</span>
+<span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">libprotobuf</span><span class="o">-</span><span class="n">dev</span>
+<span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">protobuf</span><span class="o">-</span><span class="n">compiler</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h3>Build OpenRedukti<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Clone the OpenRedukti github repository and do following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">buildrelease</span>
+<span class="n">cd</span> <span class="n">buildrelease</span>
+<span class="n">cmake</span> <span class="o">-</span><span class="n">DCMAKE_INSTALL_PREFIX</span><span class="o">=~/</span><span class="n">Software</span><span class="o">/</span><span class="n">OpenRedukti</span> <span class="o">-</span><span class="n">DCMAKE_BUILD_TYPE</span><span class="o">=</span><span class="n">Release</span> <span class="o">..</span>
+<span class="n">make</span> <span class="n">install</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="build-instructions-for-windows">
+<h2>Build Instructions for Windows<a class="headerlink" href="#build-instructions-for-windows" title="Permalink to this headline">¶</a></h2>
+<p>These are instructions for building OpenRedukti on Windows 10 64-bit.</p>
+<div class="section" id="setup-openblas-and-lapack">
+<h3>Setup OpenBLAS and LAPACK<a class="headerlink" href="#setup-openblas-and-lapack" title="Permalink to this headline">¶</a></h3>
+<p>These are available as pre-built packages from <a class="reference external" href="https://github.com/dibyendumajumdar/ravi-external-libs">Ravi Distribution Dependencies</a>.
+We assume here that the installed libraries are under <code class="docutils literal notranslate"><span class="pre">c:\Software\OpenRedukti</span></code>.</p>
+<p>If you have your OpenBLAS and LAPACK files installed differently, please review and amend the <code class="docutils literal notranslate"><span class="pre">FindOpenBLAS.cmake</span></code> file in the <code class="docutils literal notranslate"><span class="pre">cmake</span></code> folder.</p>
+</div>
+<div class="section" id="obtain-protocol-buffers-via-vcpkg">
+<h3>Obtain Protocol Buffers via vcpkg<a class="headerlink" href="#obtain-protocol-buffers-via-vcpkg" title="Permalink to this headline">¶</a></h3>
+<p>NOTE: I had to build protobuf locally because I faced some issues with below. (FIXME)</p>
+<p>Install <a class="reference external" href="https://github.com/Microsoft/vcpkg">vcpkg</a>.
+We assume below that <code class="docutils literal notranslate"><span class="pre">vcpkg</span></code> is installed at <code class="docutils literal notranslate"><span class="pre">c:\work\vcpkg</span></code>.</p>
+<p>Get protobuf as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vcpkg</span> <span class="n">install</span> <span class="n">protobuf</span><span class="p">:</span><span class="n">x64</span><span class="o">-</span><span class="n">windows</span>
+</pre></div>
+</div>
+<p>On my machine after installation I get this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span>\<span class="n">work</span>\<span class="n">vcpkg</span><span class="o">&gt;</span><span class="n">vcpkg</span> <span class="nb">list</span>
+<span class="n">protobuf</span><span class="p">:</span><span class="n">x64</span><span class="o">-</span><span class="n">windows</span>                               <span class="mf">3.6</span><span class="o">.</span><span class="mi">1</span><span class="o">-</span><span class="mi">2</span>          <span class="n">Protocol</span> <span class="n">Buffers</span> <span class="o">-</span> <span class="n">Google</span><span class="s1">&#39;s data interchange format</span>
+</pre></div>
+</div>
+<p>Ensure protoc is on the path as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">PATH</span><span class="o">=</span><span class="n">C</span><span class="p">:</span>\<span class="n">work</span>\<span class="n">vcpkg</span>\<span class="n">installed</span>\<span class="n">x64</span><span class="o">-</span><span class="n">windows</span>\<span class="n">tools</span>\<span class="n">protobuf</span><span class="p">;</span><span class="o">%</span><span class="n">PATH</span><span class="o">%</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="build-gprc">
+<h3>Build gPRC<a class="headerlink" href="#build-gprc" title="Permalink to this headline">¶</a></h3>
+<p>This is an optional step.</p>
+<p>On Windows, you can build and install gRPC using <cite>vcpkg</cite>. This is what I did.
+Or else follow instructions at <a class="reference external" href="https://github.com/grpc/grpc/blob/master/BUILDING.md">gRPC C++ Building from source</a>.</p>
+</div>
+<div class="section" id="id2">
+<h3>Build OpenRedukti<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Once all of above steps are done, you can build OpenRedukti as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">build</span>
+<span class="n">cd</span> <span class="n">build</span>
+<span class="nb">set</span> <span class="n">PATH</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">Software</span>\<span class="n">protobuf371d</span>\<span class="nb">bin</span><span class="p">;</span><span class="o">%</span><span class="n">PATH</span><span class="o">%</span>
+<span class="n">cmake</span>  <span class="o">-</span><span class="n">DCMAKE_INSTALL_PREFIX</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">Software</span>\<span class="n">OpenRedukti</span> <span class="o">-</span><span class="n">G</span> <span class="s2">&quot;Visual Studio 15 2017 Win64&quot;</span> <span class="o">-</span><span class="n">DCMAKE_BUILD_TYPE</span><span class="o">=</span><span class="n">Debug</span> <span class="o">-</span><span class="n">DPROTOBUF_SRC_ROOT_FOLDER</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">Software</span>\<span class="n">protobuf371d</span> <span class="o">-</span><span class="n">DgRPC_DIR</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">work</span>\<span class="n">vcpkg</span>\<span class="n">installed</span>\<span class="n">x64</span><span class="o">-</span><span class="n">windows</span><span class="o">-</span><span class="n">static</span><span class="o">-</span><span class="n">dyncrt</span>\<span class="n">share</span>\<span class="n">grpc</span> <span class="o">-</span><span class="n">Dc</span><span class="o">-</span><span class="n">ares_DIR</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">work</span>\<span class="n">vcpkg</span>\<span class="n">installed</span>\<span class="n">x64</span><span class="o">-</span><span class="n">windows</span><span class="o">-</span><span class="n">static</span><span class="o">-</span><span class="n">dyncrt</span>\<span class="n">share</span>\<span class="n">c</span><span class="o">-</span><span class="n">ares</span> <span class="o">..</span>
+</pre></div>
+</div>
+<p>Above creates projects suited for debug build. You can go into VS2017 and do the build from there.</p>
+<p>For a release build, do following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">buildrelease</span>
+<span class="n">cd</span> <span class="n">buildrelease</span>
+<span class="n">cmake</span> <span class="o">-</span><span class="n">DCMAKE_INSTALL_PREFIX</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">Software</span>\<span class="n">OpenRedukti</span> <span class="o">-</span><span class="n">G</span> <span class="s2">&quot;Visual Studio 15 2017 Win64&quot;</span> <span class="o">-</span><span class="n">DCMAKE_BUILD_TYPE</span><span class="o">=</span><span class="n">Release</span> <span class="o">..</span>
+</pre></div>
+</div>
+<p>Remember to select Release configuration in VS2017. You can run the INSTALL target to copy the final binaries to the installation location specified with <code class="docutils literal notranslate"><span class="pre">-DCMAKE_INSTALL_PREFIX</span></code> option.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">OpenRedukti</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="openredukti-intro.html">Introduction to OpenRedukti</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-docker-quickstart.html">Quick Start using Docker containers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Building OpenRedukti</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-instructions-for-rhel-7-6">Build Instructions for RHEL 7.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-instructions-for-ubuntu-linux-18-04-lts">Build Instructions for Ubuntu Linux 18.04 LTS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-instructions-for-windows">Build Instructions for Windows</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-cpp-api.html">OpenRedukti C++ API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-ravi-api.html">OpenRedukti Scripting With Ravi</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyredukti-intro.html">An Introduction to PyRedukti</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyredukti-api.html">redukti package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="openredukti-docker-quickstart.html" title="previous chapter">Quick Start using Docker containers</a></li>
+      <li>Next: <a href="openredukti-cpp-api.html" title="next chapter">OpenRedukti C++ API</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Dibyendu Majumdar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/openredukti-building.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

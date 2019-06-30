@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Quick Start using Docker containers &#8212; OpenRedukti Alpha documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Building OpenRedukti" href="openredukti-building.html" />
+    <link rel="prev" title="Introduction to OpenRedukti" href="openredukti-intro.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="quick-start-using-docker-containers">
+<h1>Quick Start using Docker containers<a class="headerlink" href="#quick-start-using-docker-containers" title="Permalink to this headline">¶</a></h1>
+<p>You can try out OpenRedukti using Docker container technology.</p>
+<p>We assume you have have Docker installed locally.</p>
+<p>Also if you want to save Jupyter Notebooks then you may need to use Linux env, as on Windows the file system binding may not work.</p>
+<div class="section" id="starting-openredukti-server">
+<h2>Starting OpenRedukti server<a class="headerlink" href="#starting-openredukti-server" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">redukti</span><span class="o">/</span><span class="n">openredukti</span><span class="p">:</span><span class="n">latest</span>
+<span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> <span class="o">-</span><span class="n">it</span> <span class="o">-</span><span class="n">p</span> <span class="mi">9001</span><span class="p">:</span><span class="mi">9001</span><span class="o">/</span><span class="n">tcp</span> <span class="n">redukti</span><span class="o">/</span><span class="n">openredukti</span><span class="p">:</span><span class="n">latest</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="starting-python3-jupyter-with-pyredukti-support">
+<h2>Starting Python3 Jupyter with PyRedukti support<a class="headerlink" href="#starting-python3-jupyter-with-pyredukti-support" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">redukti</span><span class="o">/</span><span class="n">pyredukti</span><span class="p">:</span><span class="n">latest</span>
+<span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> <span class="o">-</span><span class="n">it</span> <span class="o">-</span><span class="n">p</span> <span class="mi">8888</span><span class="p">:</span><span class="mi">8888</span><span class="o">/</span><span class="n">tcp</span> <span class="o">-</span><span class="n">v</span><span class="s2">&quot;$PWD&quot;</span><span class="p">:</span><span class="o">/</span><span class="n">data</span><span class="p">:</span><span class="n">z</span> <span class="n">redukti</span><span class="o">/</span><span class="n">pyredukti</span><span class="p">:</span><span class="n">latest</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">OpenRedukti</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="openredukti-intro.html">Introduction to OpenRedukti</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick Start using Docker containers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#starting-openredukti-server">Starting OpenRedukti server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#starting-python3-jupyter-with-pyredukti-support">Starting Python3 Jupyter with PyRedukti support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-building.html">Building OpenRedukti</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-cpp-api.html">OpenRedukti C++ API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-ravi-api.html">OpenRedukti Scripting With Ravi</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyredukti-intro.html">An Introduction to PyRedukti</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyredukti-api.html">redukti package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="openredukti-intro.html" title="previous chapter">Introduction to OpenRedukti</a></li>
+      <li>Next: <a href="openredukti-building.html" title="next chapter">Building OpenRedukti</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Dibyendu Majumdar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/openredukti-docker-quickstart.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,947 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>OpenRedukti Scripting With Ravi &#8212; OpenRedukti Alpha documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="An Introduction to PyRedukti" href="pyredukti-intro.html" />
+    <link rel="prev" title="OpenRedukti C++ API" href="openredukti-cpp-api.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="openredukti-scripting-with-ravi">
+<h1>OpenRedukti Scripting With Ravi<a class="headerlink" href="#openredukti-scripting-with-ravi" title="Permalink to this headline">¶</a></h1>
+<p>OpenRedukti comes with a scripting language <a class="reference external" href="http://ravilang.org">Ravi</a> that is a dialect of <a class="reference external" href="http://www.lua.org">Lua</a>.
+It is much easier to play with and understand how OpenRedukti works by running small examples in the scripting language.</p>
+<p>Once you have built OpenRedukti, you will find a commandline program called <code class="docutils literal notranslate"><span class="pre">dylan</span></code>. To start the scripting environment
+just invoke this command. It works the same way as the Lua command line.</p>
+<p>To exit the scripting environment enter ^Z on Windows, and ^D on Unix systems.</p>
+<p>The scripting API is a subset of the OpenRedukti C++ API, therefore not every feature is available.</p>
+<div class="section" id="date-types">
+<h2>Date Types<a class="headerlink" href="#date-types" title="Permalink to this headline">¶</a></h2>
+<p>Dates are represented as integer values. The api for dates is as follows:</p>
+<div class="section" id="converting-to-date-type">
+<h3>Converting to Date type<a class="headerlink" href="#converting-to-date-type" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>reduki.date(day,month,year)</dt><dd><p>takes day, month, year and returns a date</p>
+</dd>
+<dt>reduki.date(str)</dt><dd><p>Parse a string representation of date. It will detect seperator character ‘/’ or ‘-‘. The formats acceptable are yyyy/mm/dd, dd/mm/yyyy, yyyy-mm-dd, or dd-mm-yyyy</p>
+</dd>
+<dt>reduki.date{ d,m,y }</dt><dd><p>takes table and converts to date</p>
+</dd>
+<dt>reduki.date()</dt><dd><p>returns today’s date</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">local</span> <span class="n">t</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">t</span><span class="o">.</span><span class="n">effective_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2016</span><span class="p">}</span>
+<span class="n">t</span><span class="o">.</span><span class="n">termination_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2017</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="decomposing-a-date-type">
+<h3>Decomposing a Date type<a class="headerlink" href="#decomposing-a-date-type" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>redukti.date_parts(date)</dt><dd><p>takes a date and returns day, month, year</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">print_date</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="n">local</span> <span class="n">d</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date_parts</span><span class="p">(</span> <span class="n">d</span> <span class="p">)</span>
+    <span class="k">return</span> <span class="n">string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%02d</span><span class="s2">/</span><span class="si">%02d</span><span class="s2">/</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">end</span>
+
+<span class="n">print_date</span><span class="p">(</span><span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="s1">&#39;2017/10/04&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="date-arithmetic">
+<h3>Date arithmetic<a class="headerlink" href="#date-arithmetic" title="Permalink to this headline">¶</a></h3>
+<p>As a date value represents the number of days since 1899/12/31, you can simply add or subtract from it to get to another date.
+Following api is provided for adding a period to date.</p>
+<dl class="simple">
+<dt>redukti.addperiod(date, period)</dt><dd><p>Adds period to date and returns resulting date
+Periods are entities like 1D, 4W, 1M or 15Y.</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">redukti</span><span class="o">.</span><span class="n">addperiod</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="s1">&#39;5Y&#39;</span><span class="p">))</span>    <span class="o">--</span> <span class="n">add</span> <span class="mi">5</span> <span class="n">years</span> <span class="n">to</span> <span class="n">the</span> <span class="n">date</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">redukti</span><span class="o">.</span><span class="n">addperiod</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="s1">&#39;-1D&#39;</span><span class="p">))</span>   <span class="o">--</span> <span class="n">subtract</span> <span class="mi">1</span> <span class="n">day</span> <span class="kn">from</span> <span class="nn">date</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="holiday-calendars">
+<h2>Holiday Calendars<a class="headerlink" href="#holiday-calendars" title="Permalink to this headline">¶</a></h2>
+<p>The api for obtaining and working with calendars is as follows:</p>
+<dl class="simple">
+<dt>redukti.calendar(businesscenters)</dt><dd><p>Returns a calendar object. Suported business centers are AUSY, USNY, GBLO, EUTA, JPTO and BRSP. You can specify more than one
+center by separating the values by a comma.</p>
+</dd>
+<dt>calendar:advance(date, period [, business_day_convention])</dt><dd><p>Advances the given date by the given period and adjusts it to be on a business day. Business day convention defaults to FOLLOWING.</p>
+</dd>
+<dt>calendar:advance(date, days [, business_day_convention])</dt><dd><p>Moves the date forward or back by specified number of business days. Business day convention defaults to FOLLOWING.</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cal</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">calendar</span><span class="p">(</span><span class="s1">&#39;USNY,GBLO&#39;</span><span class="p">)</span>     <span class="o">--</span> <span class="n">joint</span> <span class="n">calendar</span>
+<span class="n">today</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>  <span class="o">--</span> <span class="n">today</span><span class="s1">&#39;s date</span>
+<span class="n">month_ago</span> <span class="o">=</span> <span class="n">cal</span><span class="p">:</span><span class="n">advance</span><span class="p">(</span><span class="n">today</span><span class="p">,</span> <span class="s2">&quot;-1M&quot;</span><span class="p">,</span> <span class="s2">&quot;FOLLOWING&quot;</span><span class="p">)</span>
+<span class="n">month_hence</span> <span class="o">=</span> <span class="n">cal</span><span class="p">:</span><span class="n">advance</span><span class="p">(</span><span class="n">today</span><span class="p">,</span> <span class="s2">&quot;1M&quot;</span><span class="p">,</span> <span class="s2">&quot;FOLLOWING&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">today</span><span class="p">,</span> <span class="n">month_ago</span><span class="p">,</span> <span class="n">month_hence</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="day-count-fractions">
+<h2>Day Count Fractions<a class="headerlink" href="#day-count-fractions" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>redukti.dayfraction(name)</dt><dd><p>Returns a Day Count Fraction object for the specified name - name must be ISDA / FpML compatible.</p>
+</dd>
+<dt>dayfraction:fraction(d1, d2)</dt><dd><p>Calculates the day fraction between two dates.</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fraction</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">dayfraction</span><span class="p">(</span><span class="s1">&#39;ACT/360&#39;</span><span class="p">)</span>
+<span class="n">today</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+<span class="n">two_years_later</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">addperiod</span><span class="p">(</span><span class="n">today</span><span class="p">,</span> <span class="s2">&quot;2Y&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">fraction</span><span class="p">:</span><span class="n">fraction</span><span class="p">(</span><span class="n">today</span><span class="p">,</span> <span class="n">two_years_later</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="indices">
+<h2>Indices<a class="headerlink" href="#indices" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>redukti.index(currency, index_family, tenor)</dt><dd><p>Returns an index object</p>
+</dd>
+<dt>redukti.index(isda_index, tenor)</dt><dd><p>Returns an index object</p>
+</dd>
+<dt>index:maturity(value_date)</dt><dd><p>Returns maturity date given the value date, as per the index</p>
+</dd>
+<dt>index:adjust_date(date, days)</dt><dd><p>Adds/subtracts the number of business days specified and adjusts the resulting date as per fixing calendar</p>
+</dd>
+<dt>index:date_components(date)</dt><dd><p>Computes fixing date, value date and maturity date given the start date and returns all three</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">idx</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;LIBOR&#39;</span><span class="p">,</span> <span class="s1">&#39;1W&#39;</span><span class="p">)</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">23</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">2016</span><span class="p">)</span>
+<span class="n">adjusted</span> <span class="o">=</span> <span class="n">idx</span><span class="p">:</span><span class="n">adjust_date</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">assert</span><span class="p">(</span><span class="n">adjusted</span> <span class="o">==</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">2016</span><span class="p">))</span>
+<span class="n">fixing_dt</span><span class="p">,</span> <span class="n">value_dt</span><span class="p">,</span> <span class="n">maturity_dt</span> <span class="o">=</span> <span class="n">idx</span><span class="p">:</span><span class="n">date_components</span><span class="p">(</span><span class="n">adjusted</span><span class="p">)</span>
+<span class="k">assert</span><span class="p">(</span><span class="n">maturity_dt</span> <span class="o">==</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">31</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">2016</span><span class="p">))</span>
+<span class="k">assert</span><span class="p">(</span><span class="n">value_dt</span> <span class="o">==</span> <span class="n">adjusted</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="automatic-differentiation">
+<h2>Automatic Differentiation<a class="headerlink" href="#automatic-differentiation" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>redukti.adouble1{ n1, n2, … }</dt><dd><p>Returns an adouble object for each array value. The assumption is that the array values are part of a multivariate function, and therefore each value is treated as variable. The total number of variables is equal to the numeber of values in the array. The adouble objects are set up for first order derrivative computation. Note that the maximum number of allowed variables is 100 to keep memory usage in check.</p>
+</dd>
+<dt>redukti.adouble1(n1, n2, …)</dt><dd><p>Same as above but input is in the form of parameters rather than an array.</p>
+</dd>
+<dt>redukti.adouble2{ n1, n2, … }</dt><dd><p>As above, but the returned adouble objects are set up to compute second order derivatives too.</p>
+</dd>
+<dt>redukti.adouble2(n1, n2, …)</dt><dd><p>Same as above but input is in the form of parameters rather than an array.</p>
+</dd>
+<dt>adouble:gradient()</dt><dd><p>Returns the gradient as an array</p>
+</dd>
+<dt>adouble:hessian()</dt><dd><p>Only available if second order derivatives are being calculated. The hessian is returned as a table of arrays where each row is an array.</p>
+</dd>
+<dt>adouble:abs()</dt><dd><p>Returns the absolute value</p>
+</dd>
+<dt>abouble:pow(n)</dt><dd><p>Returns adouble object raised to power n</p>
+</dd>
+<dt>adouble:sqrt()</dt><dd><p>Return square root of adouble object</p>
+</dd>
+<dt>adouble:exp()</dt><dd><p>Returns exp(adouble)</p>
+</dd>
+<dt>adouble:log()</dt><dd><p>Returns log(adouble), where log is natural logarithm</p>
+</dd>
+<dt>adouble:cos()</dt><dd><p>Returns cos(adouble)</p>
+</dd>
+<dt>adouble:sin()</dt><dd><p>Return sin(adouble)</p>
+</dd>
+<dt>adouble:tan()</dt><dd><p>Returns tan(adouble)</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span> <span class="n">compute</span> <span class="n">derivate</span> <span class="n">of</span> <span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span> <span class="n">where</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">adouble1</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="n">ans</span> <span class="o">=</span> <span class="n">x</span><span class="p">:</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Above outputs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="n">value</span><span class="o">=</span><span class="mf">25.0</span><span class="p">,</span>
+  <span class="n">firstorder</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">10.0</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This tells you that the value of x^2 is 25.0, and derivative is 10.0 - i.e. 2*x, as you would expect.</p>
+<p>Here is another example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">adouble2</span> <span class="p">{</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">}</span>
+<span class="o">--</span> <span class="n">compute</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span>
+<span class="n">added</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span>
+<span class="n">multiplied</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="n">z</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">added</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">multiplied</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Results in following output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="n">value</span><span class="o">=</span><span class="mf">14.0</span><span class="p">,</span>
+  <span class="n">firstorder</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+  <span class="p">}</span>
+  <span class="n">secondorder</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="p">{</span>
+  <span class="n">value</span><span class="o">=</span><span class="mf">90.0</span><span class="p">,</span>
+  <span class="n">firstorder</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">18.0</span><span class="p">,</span>
+    <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">30.0</span><span class="p">,</span>
+    <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">15.0</span>
+  <span class="p">}</span>
+  <span class="n">secondorder</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">6.0</span><span class="p">,</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span>
+    <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">6.0</span><span class="p">,</span>
+    <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span>
+    <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span>
+    <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">5.0</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Since the matrix data for a second order derivative can grow very large, the scripting api restricts the number of allowed variables in a single object to 100.</p>
+<p>Another example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">adouble2</span> <span class="p">{</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">}</span>
+<span class="n">ans</span> <span class="o">=</span> <span class="n">x</span><span class="p">:</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">y</span><span class="p">:</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Results in:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="n">value</span><span class="o">=</span><span class="mf">1764.0</span><span class="p">,</span>
+  <span class="n">firstorder</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">588.0</span><span class="p">,</span>
+    <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">504.0</span>
+  <span class="p">}</span>
+  <span class="n">secondorder</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">98.0</span><span class="p">,</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">168.0</span><span class="p">,</span>
+    <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">168.0</span><span class="p">,</span>
+    <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">72.0</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="calculation-schedules">
+<h2>Calculation Schedules<a class="headerlink" href="#calculation-schedules" title="Permalink to this headline">¶</a></h2>
+<dl>
+<dt>redukti.schedule { parameters }</dt><dd><p>Builds a calculation schedule and returns 3 arrays : adjusted start dates, adjusted end dates, adjusted payment dates. Note that some payment dates may be set to 0 - this means that there is no payment in that calculation period. For instance when compounding, or in zero coupon streams, payments do not occur with every period.</p>
+<p>The parameters may include following:</p>
+<dl class="simple">
+<dt>effective_date</dt><dd><p>(required) unadjusted effective date - this defines the start of the schedule</p>
+</dd>
+<dt>termination_date</dt><dd><p>(required if term not present) unadjusted termination date - this defines the end date of the schedule.</p>
+</dd>
+<dt>term</dt><dd><p>(required if termination_date not present) term is the length of the transaction, e.g. 5Y.</p>
+</dd>
+<dt>payment_frequency</dt><dd><p>(required) the frequency of payment, may be 1T for single payment, or supported tenor values upto 1Y.</p>
+</dd>
+<dt>payment_day_convention</dt><dd><p>BusinessDayConvention to be used to adjust payment dates</p>
+</dd>
+<dt>payment_business_centers</dt><dd><p>Business Centers to be use for computing payment holidays</p>
+</dd>
+<dt>roll_convention</dt><dd><p>FpML defined RollConvention for deciding how to calculate period start/end dates</p>
+</dd>
+<dt>calculation_frequency</dt><dd><p>the frequency of calculating accruals, also equal to the frequency at which resets occur for non-OIS streams. Must be &lt;= payment frequency</p>
+</dd>
+<dt>calculation_day_convention</dt><dd><p>the BusinessDayConvention to be used for adjusting calculation period dates</p>
+</dd>
+<dt>calculation_business_centers</dt><dd><p>Business Centers to be used for computing holidays when adjusting calculation period dates</p>
+</dd>
+<dt>first_regular_period_start_date</dt><dd><p>unadjusted start date of the first regular period, implies front stub</p>
+</dd>
+<dt>last_regular_period_end_date</dt><dd><p>unadjusted end date of the last regular period, implies back stub</p>
+</dd>
+<dt>first_payment_date</dt><dd><p>used if first payment does not occur at the first possible payment date</p>
+</dd>
+<dt>last_regular_payment_date</dt><dd><p>used if last regular period payment date does not occur at the last possible regular payment date</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">t</span><span class="o">.</span><span class="n">effective_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2016</span><span class="p">}</span>
+<span class="n">t</span><span class="o">.</span><span class="n">termination_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2017</span><span class="p">}</span>
+<span class="n">t</span><span class="o">.</span><span class="n">payment_frequency</span> <span class="o">=</span> <span class="s2">&quot;3M&quot;</span>
+<span class="n">t</span><span class="o">.</span><span class="n">payment_business_centers</span> <span class="o">=</span> <span class="s2">&quot;GBLO,USNY&quot;</span>
+<span class="n">t</span><span class="o">.</span><span class="n">payment_day_convention</span> <span class="o">=</span> <span class="s2">&quot;MODFOLLOWING&quot;</span>
+
+<span class="n">starts</span><span class="p">,</span> <span class="n">ends</span><span class="p">,</span> <span class="n">pays</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+<span class="n">function</span> <span class="n">print_date</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="n">local</span> <span class="n">d</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date_parts</span><span class="p">(</span> <span class="n">d</span> <span class="p">)</span>
+    <span class="k">return</span> <span class="n">string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%02d</span><span class="s2">/</span><span class="si">%02d</span><span class="s2">/</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">end</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="c1">#starts do</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;  adjusted start date &#39;</span> <span class="o">..</span> <span class="n">print_date</span><span class="p">(</span><span class="n">starts</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;    adjusted end date &#39;</span> <span class="o">..</span> <span class="n">print_date</span><span class="p">(</span><span class="n">ends</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">pays</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">~=</span> <span class="mi">0</span> <span class="n">then</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;adjusted payment date &#39;</span> <span class="o">..</span> <span class="n">print_date</span><span class="p">(</span><span class="n">ends</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+        <span class="k">else</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;           no payment &#39;</span><span class="p">)</span>
+        <span class="n">end</span>
+<span class="n">end</span>
+</pre></div>
+</div>
+<p>This outputs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span>         <span class="n">adjusted</span> <span class="n">start</span> <span class="n">date</span> <span class="mi">04</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2016</span>
+<span class="mi">1</span>           <span class="n">adjusted</span> <span class="n">end</span> <span class="n">date</span> <span class="mi">01</span><span class="o">/</span><span class="mi">04</span><span class="o">/</span><span class="mi">2016</span>
+<span class="mi">1</span>       <span class="n">adjusted</span> <span class="n">payment</span> <span class="n">date</span> <span class="mi">01</span><span class="o">/</span><span class="mi">04</span><span class="o">/</span><span class="mi">2016</span>
+<span class="mi">2</span>         <span class="n">adjusted</span> <span class="n">start</span> <span class="n">date</span> <span class="mi">01</span><span class="o">/</span><span class="mi">04</span><span class="o">/</span><span class="mi">2016</span>
+<span class="mi">2</span>           <span class="n">adjusted</span> <span class="n">end</span> <span class="n">date</span> <span class="mi">01</span><span class="o">/</span><span class="mi">07</span><span class="o">/</span><span class="mi">2016</span>
+<span class="mi">2</span>       <span class="n">adjusted</span> <span class="n">payment</span> <span class="n">date</span> <span class="mi">01</span><span class="o">/</span><span class="mi">07</span><span class="o">/</span><span class="mi">2016</span>
+<span class="mi">3</span>         <span class="n">adjusted</span> <span class="n">start</span> <span class="n">date</span> <span class="mi">01</span><span class="o">/</span><span class="mi">07</span><span class="o">/</span><span class="mi">2016</span>
+<span class="mi">3</span>           <span class="n">adjusted</span> <span class="n">end</span> <span class="n">date</span> <span class="mi">03</span><span class="o">/</span><span class="mi">10</span><span class="o">/</span><span class="mi">2016</span>
+<span class="mi">3</span>       <span class="n">adjusted</span> <span class="n">payment</span> <span class="n">date</span> <span class="mi">03</span><span class="o">/</span><span class="mi">10</span><span class="o">/</span><span class="mi">2016</span>
+<span class="mi">4</span>         <span class="n">adjusted</span> <span class="n">start</span> <span class="n">date</span> <span class="mi">03</span><span class="o">/</span><span class="mi">10</span><span class="o">/</span><span class="mi">2016</span>
+<span class="mi">4</span>           <span class="n">adjusted</span> <span class="n">end</span> <span class="n">date</span> <span class="mi">03</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">4</span>       <span class="n">adjusted</span> <span class="n">payment</span> <span class="n">date</span> <span class="mi">03</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2017</span>
+</pre></div>
+</div>
+<p>Another example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">t</span><span class="o">.</span><span class="n">effective_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">{</span><span class="mi">25</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">2016</span><span class="p">}</span>
+<span class="n">t</span><span class="o">.</span><span class="n">termination_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">{</span><span class="mi">25</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">2017</span><span class="p">}</span>
+<span class="n">t</span><span class="o">.</span><span class="n">payment_frequency</span> <span class="o">=</span> <span class="s2">&quot;3M&quot;</span>
+<span class="n">t</span><span class="o">.</span><span class="n">payment_business_centers</span> <span class="o">=</span> <span class="s2">&quot;GBLO,USNY&quot;</span>
+<span class="n">t</span><span class="o">.</span><span class="n">payment_day_convention</span> <span class="o">=</span> <span class="s2">&quot;MODFOLLOWING&quot;</span>
+<span class="n">t</span><span class="o">.</span><span class="n">calculation_frequency</span> <span class="o">=</span> <span class="s2">&quot;1M&quot;</span>
+<span class="n">t</span><span class="o">.</span><span class="n">calculation_business_centers</span> <span class="o">=</span> <span class="s2">&quot;GBLO,USNY&quot;</span>
+<span class="n">t</span><span class="o">.</span><span class="n">calculation_day_convention</span> <span class="o">=</span> <span class="s2">&quot;MODFOLLOWING&quot;</span>
+
+<span class="n">starts</span><span class="p">,</span> <span class="n">ends</span><span class="p">,</span> <span class="n">pays</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This time the output is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span>         <span class="n">adjusted</span> <span class="n">start</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">11</span><span class="o">/</span><span class="mi">2016</span>
+<span class="mi">1</span>           <span class="n">adjusted</span> <span class="n">end</span> <span class="n">date</span> <span class="mi">28</span><span class="o">/</span><span class="mi">12</span><span class="o">/</span><span class="mi">2016</span>
+<span class="mi">1</span>                  <span class="n">no</span> <span class="n">payment</span>
+<span class="mi">2</span>         <span class="n">adjusted</span> <span class="n">start</span> <span class="n">date</span> <span class="mi">28</span><span class="o">/</span><span class="mi">12</span><span class="o">/</span><span class="mi">2016</span>
+<span class="mi">2</span>           <span class="n">adjusted</span> <span class="n">end</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">2</span>                  <span class="n">no</span> <span class="n">payment</span>
+<span class="mi">3</span>         <span class="n">adjusted</span> <span class="n">start</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">3</span>           <span class="n">adjusted</span> <span class="n">end</span> <span class="n">date</span> <span class="mi">27</span><span class="o">/</span><span class="mi">02</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">3</span>       <span class="n">adjusted</span> <span class="n">payment</span> <span class="n">date</span> <span class="mi">27</span><span class="o">/</span><span class="mi">02</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">4</span>         <span class="n">adjusted</span> <span class="n">start</span> <span class="n">date</span> <span class="mi">27</span><span class="o">/</span><span class="mi">02</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">4</span>           <span class="n">adjusted</span> <span class="n">end</span> <span class="n">date</span> <span class="mi">27</span><span class="o">/</span><span class="mi">03</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">4</span>                  <span class="n">no</span> <span class="n">payment</span>
+<span class="mi">5</span>         <span class="n">adjusted</span> <span class="n">start</span> <span class="n">date</span> <span class="mi">27</span><span class="o">/</span><span class="mi">03</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">5</span>           <span class="n">adjusted</span> <span class="n">end</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">04</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">5</span>                  <span class="n">no</span> <span class="n">payment</span>
+<span class="mi">6</span>         <span class="n">adjusted</span> <span class="n">start</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">04</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">6</span>           <span class="n">adjusted</span> <span class="n">end</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">6</span>       <span class="n">adjusted</span> <span class="n">payment</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">7</span>         <span class="n">adjusted</span> <span class="n">start</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">7</span>           <span class="n">adjusted</span> <span class="n">end</span> <span class="n">date</span> <span class="mi">26</span><span class="o">/</span><span class="mi">06</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">7</span>                  <span class="n">no</span> <span class="n">payment</span>
+<span class="mi">8</span>         <span class="n">adjusted</span> <span class="n">start</span> <span class="n">date</span> <span class="mi">26</span><span class="o">/</span><span class="mi">06</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">8</span>           <span class="n">adjusted</span> <span class="n">end</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">07</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">8</span>                  <span class="n">no</span> <span class="n">payment</span>
+<span class="mi">9</span>         <span class="n">adjusted</span> <span class="n">start</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">07</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">9</span>           <span class="n">adjusted</span> <span class="n">end</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">08</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">9</span>       <span class="n">adjusted</span> <span class="n">payment</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">08</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">10</span>        <span class="n">adjusted</span> <span class="n">start</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">08</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">10</span>          <span class="n">adjusted</span> <span class="n">end</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">09</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">10</span>                 <span class="n">no</span> <span class="n">payment</span>
+<span class="mi">11</span>        <span class="n">adjusted</span> <span class="n">start</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">09</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">11</span>          <span class="n">adjusted</span> <span class="n">end</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">10</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">11</span>                 <span class="n">no</span> <span class="n">payment</span>
+<span class="mi">12</span>        <span class="n">adjusted</span> <span class="n">start</span> <span class="n">date</span> <span class="mi">25</span><span class="o">/</span><span class="mi">10</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">12</span>          <span class="n">adjusted</span> <span class="n">end</span> <span class="n">date</span> <span class="mi">27</span><span class="o">/</span><span class="mi">11</span><span class="o">/</span><span class="mi">2017</span>
+<span class="mi">12</span>      <span class="n">adjusted</span> <span class="n">payment</span> <span class="n">date</span> <span class="mi">27</span><span class="o">/</span><span class="mi">11</span><span class="o">/</span><span class="mi">2017</span>
+</pre></div>
+</div>
+<p>Note that in the examples above I did not specify roll convention so this was inferred.</p>
+</div>
+<div class="section" id="interpolators">
+<h2>Interpolators<a class="headerlink" href="#interpolators" title="Permalink to this headline">¶</a></h2>
+<dl>
+<dt>redukti.interpolator { parameters }</dt><dd><p>Returns an interpolator object</p>
+<p>Parameters can be following:</p>
+<dl class="simple">
+<dt>x</dt><dd><p>values to be used for x axis</p>
+</dd>
+<dt>y</dt><dd><p>values to be used for y axis (interpolation occurs in y axis)</p>
+</dd>
+<dt>order</dt><dd><p>1 if first order derivatives are needed; 2 will generate second order derivatives also</p>
+</dd>
+<dt>interpolator</dt><dd><p>The type of interpolator, e.g. Linear, LogLinear, CubicSplineNatural, LogCubicSplineNatural, MonotoneConvex</p>
+</dd>
+</dl>
+</dd>
+<dt>interpolator:interpolate(x [, n])</dt><dd><p>Returns the interpolated value. If the optional parameter n is 1 the return value is an adouble containing the interpolated value as well as the derivatives computed using automatic differentiation. If the optional parameter n is 2 then the return value is an adouble but computed using numeric differentiation. The latter is for testing purposes only.</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">}</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1000000.0</span><span class="p">,</span> <span class="mf">20004.0</span><span class="p">,</span> <span class="mf">300000.5</span><span class="p">,</span> <span class="mf">4000000.0</span><span class="p">,</span> <span class="mf">900000.0</span><span class="p">}</span>
+
+<span class="n">interp1</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">interpolator</span> <span class="p">{</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">,</span>
+        <span class="n">interpolator</span> <span class="o">=</span> <span class="s1">&#39;CubicSplineNatural&#39;</span><span class="p">,</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="p">}</span>
+
+<span class="n">interp2</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">interpolator</span> <span class="p">{</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">,</span>
+        <span class="n">interpolator</span> <span class="o">=</span> <span class="s1">&#39;MonotoneConvex&#39;</span><span class="p">,</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="p">}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">interp1</span><span class="p">:</span><span class="n">interpolate</span><span class="p">(</span><span class="mf">0.035</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">interp2</span><span class="p">:</span><span class="n">interpolate</span><span class="p">(</span><span class="mf">0.035</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="interest-rate-curves">
+<h2>Interest Rate Curves<a class="headerlink" href="#interest-rate-curves" title="Permalink to this headline">¶</a></h2>
+<dl>
+<dt>redukti.curve { parameters }</dt><dd><p>Sets up an interest rate curve. The parameters are as follows.</p>
+<dl class="simple">
+<dt>reference_date</dt><dd><p>The date of the curve, all maturities are with respect to this date</p>
+</dd>
+<dt>maturities</dt><dd><p>An array of maturity dates</p>
+</dd>
+<dt>values</dt><dd><p>An array of numbers representing zero rates or discount factors</p>
+</dd>
+<dt>value_type</dt><dd><p>‘ZeroRate’ or ‘DiscountFactor’ - indicates the type of value</p>
+</dd>
+<dt>interpolator</dt><dd><p>Interpolator type. For ZeroRate curves, use Linear, CubicSplineNatural, MonotoneConvex. For discount factor curves, use LogLinear, LogCubicSplineNatural</p>
+</dd>
+<dt>currency</dt><dd><p>Currency, forms part of curve’s id</p>
+</dd>
+<dt>index_family</dt><dd><p>IndexFamily, forms part of curve’s id</p>
+</dd>
+<dt>tenor</dt><dd><p>Curve’s tenor, forms part of curve’s id</p>
+</dd>
+<dt>order</dt><dd><p>If 1 first order derivatives will be computed, if 2 additionally second order derivatives will be computed</p>
+</dd>
+<dt>curve_type</dt><dd><p>‘Forward’ or ‘Discount’ - this is a logical marker for how the curve will be used, forms part of curve’s id</p>
+</dd>
+</dl>
+</dd>
+<dt>curve:zero_rate(date)</dt><dd><p>Returns the zero rate</p>
+</dd>
+<dt>curve:discount_factor(date)</dt><dd><p>Returns the discount factor</p>
+</dd>
+<dt>curve:sensitivities(date)</dt><dd><p>Computes and returns sensitivities for given date with respect to the curve pillars.</p>
+</dd>
+<dt>curve:values()</dt><dd><p>Returns three arrays - maturies, zero rates and discount factors</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<p>As creating a curve manually is tedious, often it is easier to import data from files. For an example of this please see the the example in <a class="reference external" href="https://github.com/redukti/OpenRedukti/blob/master/tests/test_zerocurve.lua">test_zerocurve.lua</a>.</p>
+</div>
+<div class="section" id="time-series-fixings">
+<h2>Time Series / Fixings<a class="headerlink" href="#time-series-fixings" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>redukti.fixing_service { data }</dt><dd><p>Creates a FixingService object. The data must be a table containing values indexed by Index type. Each value must be a table that has fixings indexed by date. That is, of the form:</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+        <span class="p">[</span><span class="n">index1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="p">[</span><span class="n">date1</span><span class="p">]</span> <span class="o">=</span> <span class="n">index1value1</span><span class="p">,</span>
+                <span class="p">[</span><span class="n">date2</span><span class="p">]</span> <span class="o">=</span> <span class="n">index1value2</span>
+        <span class="p">},</span>
+        <span class="p">[</span><span class="n">index2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="p">[</span><span class="n">date1</span><span class="p">]</span> <span class="o">=</span> <span class="n">index2value1</span><span class="p">,</span>
+                <span class="p">[</span><span class="n">date2</span><span class="p">]</span> <span class="o">=</span> <span class="n">index2value2</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>fixing_service:fixing(index, date)</dt><dd><p>Returns the fixing for given index and date. If not found then returns nil</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<p>This too is easier to load from files, hence I will refer to the following script as an example.</p>
+</div>
+<div class="section" id="cashflows">
+<h2>Cashflows<a class="headerlink" href="#cashflows" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>redukti.cashflows { data }</dt><dd><p>Sets up a CFCollection object and returns it.</p>
+</dd>
+</dl>
+<p>The contents of <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">data</span> <span class="pre">}</span></code> mirrors the CFCollection protocol buffers type, except that it is expressed as a Lua table. Here is an example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span>
+<span class="p">{</span> <span class="o">--</span> <span class="n">Collection</span>
+        <span class="o">--</span> <span class="n">first</span> <span class="n">stream</span>
+        <span class="p">{</span>
+                <span class="o">--</span> <span class="n">cashflow</span>
+                <span class="p">{</span>
+                        <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;simple&#39;</span><span class="p">,</span>
+                        <span class="n">currency</span> <span class="o">=</span> <span class="s1">&#39;USD&#39;</span><span class="p">,</span>
+                        <span class="n">amount</span> <span class="o">=</span> <span class="mf">40523611.1111111</span><span class="p">,</span>
+                        <span class="n">payment_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2017</span><span class="p">)</span>
+                <span class="p">},</span>
+                <span class="o">--</span> <span class="n">cashflow</span>
+                <span class="p">{</span>
+                        <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;ois&#39;</span><span class="p">,</span>
+                        <span class="n">accrual_start_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2016</span><span class="p">),</span>
+                        <span class="n">accrual_end_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2017</span><span class="p">),</span>
+                        <span class="n">notional</span> <span class="o">=</span> <span class="mi">815000000</span><span class="p">,</span>
+                        <span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;USD-Federal Funds-H.15-OIS-COMPOUND&#39;</span><span class="p">,</span>
+                        <span class="n">day_count_fraction</span> <span class="o">=</span> <span class="s1">&#39;ACT/360&#39;</span><span class="p">,</span>
+                        <span class="n">payment_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2017</span><span class="p">)</span>
+                <span class="p">},</span>
+                <span class="o">--</span> <span class="n">cashflow</span>
+                <span class="p">{</span>
+                        <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;floating&#39;</span><span class="p">,</span>
+                        <span class="n">compounding_method</span> <span class="o">=</span> <span class="s1">&#39;FLAT&#39;</span><span class="p">,</span>
+                        <span class="n">currency</span> <span class="o">=</span> <span class="s1">&#39;USD&#39;</span><span class="p">,</span>
+                        <span class="n">day_count_fraction</span> <span class="o">=</span> <span class="s1">&#39;ACT/360&#39;</span><span class="p">,</span>
+                        <span class="n">payment_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">2017</span><span class="p">),</span>
+                        <span class="n">periods</span> <span class="o">=</span> <span class="p">{</span>
+                                <span class="p">{</span>
+                                        <span class="n">notional</span> <span class="o">=</span> <span class="mi">10000000</span><span class="p">,</span>
+                                        <span class="n">accrual_start_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2017</span><span class="p">),</span>
+                                        <span class="n">accrual_end_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">2017</span><span class="p">),</span>
+                                        <span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;USD-LIBOR-BBA&#39;</span><span class="p">,</span>
+                                        <span class="n">tenor</span> <span class="o">=</span> <span class="s1">&#39;1M&#39;</span><span class="p">,</span>
+                                        <span class="n">spread</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.0009</span>
+                                <span class="p">},</span>
+                                <span class="p">{</span>
+                                        <span class="n">notional</span> <span class="o">=</span> <span class="mi">10000000</span><span class="p">,</span>
+                                        <span class="n">accrual_start_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">2017</span><span class="p">),</span>
+                                        <span class="n">accrual_end_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2017</span><span class="p">),</span>
+                                        <span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;USD-LIBOR-BBA&#39;</span><span class="p">,</span>
+                                        <span class="n">tenor</span> <span class="o">=</span> <span class="s1">&#39;1M&#39;</span><span class="p">,</span>
+                                        <span class="n">spread</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.0009</span>
+                                <span class="p">},</span>
+                                <span class="p">{</span>
+                                        <span class="n">notional</span> <span class="o">=</span> <span class="mi">10000000</span><span class="p">,</span>
+                                        <span class="n">accrual_start_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2017</span><span class="p">),</span>
+                                        <span class="n">accrual_end_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2017</span><span class="p">),</span>
+                                        <span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;USD-LIBOR-BBA&#39;</span><span class="p">,</span>
+                                        <span class="n">tenor</span> <span class="o">=</span> <span class="s1">&#39;1M&#39;</span><span class="p">,</span>
+                                        <span class="n">spread</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.0009</span>
+                                <span class="p">}</span>
+                        <span class="p">}</span>
+                <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="o">--</span> <span class="n">second</span> <span class="n">stream</span>
+        <span class="p">{</span>
+                <span class="o">--</span> <span class="n">cashflow</span>
+                <span class="p">{</span>
+                        <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;fra&#39;</span><span class="p">,</span>
+                        <span class="n">currency</span> <span class="o">=</span> <span class="s1">&#39;USD&#39;</span><span class="p">,</span>
+                        <span class="n">day_count_fraction</span> <span class="o">=</span> <span class="s1">&#39;ACT/360&#39;</span><span class="p">,</span>
+                        <span class="n">payment_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2014</span><span class="p">),</span>
+                        <span class="n">notional</span> <span class="o">=</span> <span class="mi">15000000</span><span class="p">,</span>
+                        <span class="n">fixed_rate</span> <span class="o">=</span> <span class="mf">0.015</span><span class="p">,</span>
+                        <span class="n">accrual_start_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2014</span><span class="p">),</span>
+                        <span class="n">accrual_end_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">2014</span><span class="p">),</span>
+                        <span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;USD-LIBOR-BBA&#39;</span><span class="p">,</span>
+                        <span class="n">tenor</span> <span class="o">=</span> <span class="s1">&#39;2M&#39;</span><span class="p">,</span>
+                        <span class="n">index2</span> <span class="o">=</span> <span class="s1">&#39;USD-LIBOR-BBA&#39;</span><span class="p">,</span>
+                        <span class="n">tenor2</span> <span class="o">=</span> <span class="s1">&#39;3M&#39;</span><span class="p">,</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">flows</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">cashflows</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tostring</span><span class="p">(</span><span class="n">flows</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>When you run this the output will dump the generated protocol buffers value in JSON like format.</p>
+</div>
+<div class="section" id="utility-for-loading-data">
+<h2>Utility for Loading Data<a class="headerlink" href="#utility-for-loading-data" title="Permalink to this headline">¶</a></h2>
+<p>The scripting api contains following utility for loading data from CSV files.</p>
+<dl>
+<dt>redukti.loadcsv { parameters }</dt><dd><p>Loads data from a CSV file. Returns a table where each element represents a row in the CSV file.</p>
+<p>Following parameters are supported:</p>
+<dl>
+<dt>file</dt><dd><p>Specifies the path and name of the file to read from</p>
+</dd>
+<dt>conversion</dt><dd><p>Contains a string where each character represents a conversion rule for a column. Following rules are allowed:</p>
+<dl class="simple">
+<dt>‘s’</dt><dd><p>Intepret as string field</p>
+</dd>
+<dt>‘n’</dt><dd><p>Interpret as number field</p>
+</dd>
+<dt>‘i’</dt><dd><p>Interpret as integer field</p>
+</dd>
+<dt>‘d’</dt><dd><p>Interpret as date field</p>
+</dd>
+<dt>‘-‘</dt><dd><p>Ignore column, field set to nil</p>
+</dd>
+</dl>
+</dd>
+<dt>headings</dt><dd><p>A value of true means that the source file has headings</p>
+</dd>
+<dt>fields</dt><dd><p>A value of true means that each field will be named by the column heading</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Suppose that a file contains:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">index</span><span class="p">,</span><span class="n">tenor</span><span class="p">,</span><span class="n">date</span><span class="p">,</span><span class="n">fixing</span>
+<span class="n">EUR</span><span class="o">-</span><span class="n">EONIA</span><span class="o">-</span><span class="n">OIS</span><span class="o">-</span><span class="n">COMPOUND</span><span class="p">,</span><span class="mi">1</span><span class="n">D</span><span class="p">,</span><span class="mi">02</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2007</span><span class="p">,</span><span class="mf">0.036</span>
+<span class="n">EUR</span><span class="o">-</span><span class="n">EURIBOR</span><span class="o">-</span><span class="n">Reuters</span><span class="p">,</span><span class="mi">1</span><span class="n">W</span><span class="p">,</span><span class="mi">02</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2007</span><span class="p">,</span><span class="mf">0.03614</span>
+<span class="n">EUR</span><span class="o">-</span><span class="n">EURIBOR</span><span class="o">-</span><span class="n">Reuters</span><span class="p">,</span><span class="mi">2</span><span class="n">W</span><span class="p">,</span><span class="mi">02</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2007</span><span class="p">,</span><span class="mf">0.03615</span>
+<span class="n">EUR</span><span class="o">-</span><span class="n">EURIBOR</span><span class="o">-</span><span class="n">Reuters</span><span class="p">,</span><span class="mi">1</span><span class="n">M</span><span class="p">,</span><span class="mi">02</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2007</span><span class="p">,</span><span class="mf">0.03629</span>
+<span class="n">EUR</span><span class="o">-</span><span class="n">EURIBOR</span><span class="o">-</span><span class="n">Reuters</span><span class="p">,</span><span class="mi">3</span><span class="n">M</span><span class="p">,</span><span class="mi">02</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2007</span><span class="p">,</span><span class="mf">0.03725</span>
+<span class="n">EUR</span><span class="o">-</span><span class="n">EURIBOR</span><span class="o">-</span><span class="n">Reuters</span><span class="p">,</span><span class="mi">6</span><span class="n">M</span><span class="p">,</span><span class="mi">02</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2007</span><span class="p">,</span><span class="mf">0.03857</span>
+<span class="n">EUR</span><span class="o">-</span><span class="n">EURIBOR</span><span class="o">-</span><span class="n">Reuters</span><span class="p">,</span><span class="mi">12</span><span class="n">M</span><span class="p">,</span><span class="mi">02</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2007</span><span class="p">,</span><span class="mf">0.0403</span>
+<span class="n">EUR</span><span class="o">-</span><span class="n">EONIA</span><span class="o">-</span><span class="n">OIS</span><span class="o">-</span><span class="n">COMPOUND</span><span class="p">,</span><span class="mi">1</span><span class="n">D</span><span class="p">,</span><span class="mi">03</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2007</span><span class="p">,</span><span class="mf">0.036</span>
+</pre></div>
+</div>
+<p>Then we can load this using following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fixings</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">loadcsv</span> <span class="p">{</span> <span class="n">file</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">conversion</span><span class="o">=</span><span class="s1">&#39;ssdn&#39;</span><span class="p">,</span> <span class="n">heading</span><span class="o">=</span><span class="n">true</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">true</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>Here is a dump of the first three lines of the table:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">table_print</span><span class="p">(</span><span class="n">fixings</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="n">table</span>
+    <span class="p">(</span>
+       <span class="p">[</span><span class="n">tenor</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="n">D</span>
+       <span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="n">EUR</span><span class="o">-</span><span class="n">EONIA</span><span class="o">-</span><span class="n">OIS</span><span class="o">-</span><span class="n">COMPOUND</span>
+       <span class="p">[</span><span class="n">fixing</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="mf">0.036</span>
+       <span class="p">[</span><span class="n">date</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="mi">39084</span>
+    <span class="p">)</span>
+<span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="n">table</span>
+    <span class="p">(</span>
+       <span class="p">[</span><span class="n">tenor</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="n">W</span>
+       <span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="n">EUR</span><span class="o">-</span><span class="n">EURIBOR</span><span class="o">-</span><span class="n">Reuters</span>
+       <span class="p">[</span><span class="n">fixing</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="mf">0.03614</span>
+       <span class="p">[</span><span class="n">date</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="mi">39084</span>
+    <span class="p">)</span>
+<span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="n">table</span>
+    <span class="p">(</span>
+       <span class="p">[</span><span class="n">tenor</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="mi">2</span><span class="n">W</span>
+       <span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="n">EUR</span><span class="o">-</span><span class="n">EURIBOR</span><span class="o">-</span><span class="n">Reuters</span>
+       <span class="p">[</span><span class="n">fixing</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="mf">0.03615</span>
+       <span class="p">[</span><span class="n">date</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="mi">39084</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="building-curves">
+<h2>Building Curves<a class="headerlink" href="#building-curves" title="Permalink to this headline">¶</a></h2>
+<dl>
+<dt>redukti.build_curves( business_date, curve_definitions, par_rates [, pricing_script] )</dt><dd><p>Builds a set of Zero Rate curves from par rates. Requires curve definitions and par rates as input.</p>
+<dl>
+<dt>curve_definitions</dt><dd><p>The curve definitions must be presented as a table that mirrors the IRCurveDefinition protocol buffers message type. Values must be keyed by the IRCurveDefinition.id. Each value must be a table conatining the fields corresponding to an IRCurveDefinition. These are:</p>
+<dl class="simple">
+<dt>group</dt><dd><p>CurveGroup</p>
+</dd>
+<dt>curve_id</dt><dd><p>ID of the curve</p>
+</dd>
+<dt>interpolator</dt><dd><p>Interpolator to be used, e.g. Linear</p>
+</dd>
+<dt>currency</dt><dd><p>Currency of the curve</p>
+</dd>
+<dt>index_family</dt><dd><p>IndexFamily</p>
+</dd>
+<dt>interpolated_on</dt><dd><p>‘ZeroRate’ or ‘DiscountFactor’</p>
+</dd>
+<dt>curve_tenor</dt><dd><p>Tenor of the curve</p>
+</dd>
+<dt>maturity_generation_rule</dt><dd><p>Specifies how maturities for instruments are derived</p>
+</dd>
+<dt>tenors</dt><dd><p>Optional list of tenor values used if maturities are derived from fixed tenors</p>
+</dd>
+</dl>
+</dd>
+<dt>par_rates</dt><dd><p>The input par rates must be presented as a table. The elements in the table must have following fields.</p>
+<dl class="simple">
+<dt>curve_id</dt><dd><p>a IRCurveDefinition.id that is defined in the curve definitions</p>
+</dd>
+<dt>instrument_type</dt><dd><p>The type of instrument. This is mapped to a Ravi / Lua scripting function name.</p>
+</dd>
+<dt>instrument_id</dt><dd><p>The id of the instrument - this has to be in a specific format.</p>
+</dd>
+<dt>par_rate</dt><dd><p>The par rate</p>
+</dd>
+<dt>forward_curve_id</dt><dd><p>IRCurveDefinition.id of the curve to be used for forward rates</p>
+</dd>
+<dt>discount_curve_id</dt><dd><p>IRCurveDefinition.id of the curve to be used for discounting</p>
+</dd>
+<dt>floating_tenor</dt><dd><p>The tenor to be used on floating leg of the instrument.</p>
+</dd>
+</dl>
+</dd>
+<dt>pricing_script</dt><dd><p>This is a Lua script that is responsible for generating the cashflow structure for each instrument used in the curve. See the default script named <code class="docutils literal notranslate"><span class="pre">pricing.lua</span></code> that is supplied with OpenRedukti. If a name isn’t supplied the script defaults to the one used when building OpenRedukti; this is useful for testing but not very good for deployment as the path to the script is baked in at compile time!</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Examples:</p>
+<p>Please see the function <code class="docutils literal notranslate"><span class="pre">build_curves</span></code> in <a class="reference external" href="https://github.com/redukti/OpenRedukti/blob/master/tests/utils.lua">utils.lua</a>.</p>
+</div>
+<div class="section" id="cashflow-pricing">
+<h2>Cashflow Pricing<a class="headerlink" href="#cashflow-pricing" title="Permalink to this headline">¶</a></h2>
+<p>This is complex process involving several steps.</p>
+<ol class="arabic simple">
+<li><p>First of all you need a set of zero curves, either bootstrapped from par rates, or obtained from another source.</p></li>
+<li><p>You need to setup a curve mapper.</p></li>
+<li><p>You need fixings.</p></li>
+<li><p>You need to setup a ValuationContext.</p></li>
+<li><p>You then convert the Cashflows to an internal format ready for pricing.</p></li>
+<li><p>Next you need to setup a curve provider.</p></li>
+<li><p>Finally you invoke the pricing function to compute the PV and the sensitivities of the cashflows.</p></li>
+</ol>
+<div class="section" id="curve-mapper">
+<h3>Curve Mapper<a class="headerlink" href="#curve-mapper" title="Permalink to this headline">¶</a></h3>
+<p>The purpose of the Curve Mapper is to allow mapping of logical curves, so that the cashflow generator can reference curves without knowing how these curves will actually be delivered. So this provides a level of indirection.</p>
+<p>The api is described below.</p>
+<dl>
+<dt>redukti.curve_mapper()</dt><dd><p>Sets up a curve mapper object</p>
+</dd>
+<dt>redukti.pricing_curve_id { parameters }</dt><dd><p>Returns a logical curve id. The parameters are:</p>
+<dl class="simple">
+<dt>curve_type</dt><dd><p>‘Forward’ or ‘Discount’</p>
+</dd>
+<dt>currency</dt><dd><p>Currency</p>
+</dd>
+<dt>index_family</dt><dd><p>IndexFamily</p>
+</dd>
+<dt>tenor</dt><dd><p>Optional tenor of the curve</p>
+</dd>
+</dl>
+</dd>
+<dt>curve_mapper:add_mapping( from_id, to_id )</dt><dd><p>This sets up a mapping from ‘from_id’ to ‘to_id’. Both ids must be pricing_curve_ids.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curve_mapper</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">curve_mapper</span><span class="p">()</span>
+<span class="n">f_eonia_id</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">pricing_curve_id</span> <span class="p">{</span> <span class="n">curve_type</span> <span class="o">=</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">currency</span> <span class="o">=</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="n">index_family</span> <span class="o">=</span> <span class="s1">&#39;EONIA&#39;</span><span class="p">}</span>
+<span class="n">d_eonia_id</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">pricing_curve_id</span> <span class="p">{</span> <span class="n">curve_type</span> <span class="o">=</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">currency</span> <span class="o">=</span> <span class="s1">&#39;EUR&#39;</span> <span class="p">}</span>
+<span class="n">d_euribor_id</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">pricing_curve_id</span> <span class="p">{</span> <span class="n">curve_type</span> <span class="o">=</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">currency</span> <span class="o">=</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="n">index_family</span> <span class="o">=</span> <span class="s1">&#39;EURIBOR&#39;</span><span class="p">}</span>
+<span class="n">f_euribor_1m_id</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">pricing_curve_id</span> <span class="p">{</span> <span class="n">curve_type</span> <span class="o">=</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">currency</span> <span class="o">=</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="n">index_family</span> <span class="o">=</span> <span class="s1">&#39;EURIBOR&#39;</span><span class="p">,</span> <span class="n">tenor</span> <span class="o">=</span> <span class="s1">&#39;1M&#39;</span><span class="p">}</span>
+<span class="n">f_euribor_3m_id</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">pricing_curve_id</span> <span class="p">{</span> <span class="n">curve_type</span> <span class="o">=</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">currency</span> <span class="o">=</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="n">index_family</span> <span class="o">=</span> <span class="s1">&#39;EURIBOR&#39;</span><span class="p">,</span> <span class="n">tenor</span> <span class="o">=</span> <span class="s1">&#39;3M&#39;</span><span class="p">}</span>
+<span class="n">f_euribor_6m_id</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">pricing_curve_id</span> <span class="p">{</span> <span class="n">curve_type</span> <span class="o">=</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">currency</span> <span class="o">=</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="n">index_family</span> <span class="o">=</span> <span class="s1">&#39;EURIBOR&#39;</span><span class="p">,</span> <span class="n">tenor</span> <span class="o">=</span> <span class="s1">&#39;6M&#39;</span><span class="p">}</span>
+<span class="n">f_euribor_12m_id</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">pricing_curve_id</span> <span class="p">{</span> <span class="n">curve_type</span> <span class="o">=</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">currency</span> <span class="o">=</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="n">index_family</span> <span class="o">=</span> <span class="s1">&#39;EURIBOR&#39;</span><span class="p">,</span> <span class="n">tenor</span> <span class="o">=</span> <span class="s1">&#39;12M&#39;</span><span class="p">}</span>
+<span class="n">d_euribor_1m_id</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">pricing_curve_id</span> <span class="p">{</span> <span class="n">curve_type</span> <span class="o">=</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">currency</span> <span class="o">=</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="n">index_family</span> <span class="o">=</span> <span class="s1">&#39;EURIBOR&#39;</span><span class="p">,</span> <span class="n">tenor</span> <span class="o">=</span> <span class="s1">&#39;1M&#39;</span><span class="p">}</span>
+<span class="n">d_euribor_3m_id</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">pricing_curve_id</span> <span class="p">{</span> <span class="n">curve_type</span> <span class="o">=</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">currency</span> <span class="o">=</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="n">index_family</span> <span class="o">=</span> <span class="s1">&#39;EURIBOR&#39;</span><span class="p">,</span> <span class="n">tenor</span> <span class="o">=</span> <span class="s1">&#39;3M&#39;</span><span class="p">}</span>
+<span class="n">d_euribor_6m_id</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">pricing_curve_id</span> <span class="p">{</span> <span class="n">curve_type</span> <span class="o">=</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">currency</span> <span class="o">=</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="n">index_family</span> <span class="o">=</span> <span class="s1">&#39;EURIBOR&#39;</span><span class="p">,</span> <span class="n">tenor</span> <span class="o">=</span> <span class="s1">&#39;6M&#39;</span><span class="p">}</span>
+<span class="n">d_euribor_12m_id</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">pricing_curve_id</span> <span class="p">{</span> <span class="n">curve_type</span> <span class="o">=</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">currency</span> <span class="o">=</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="n">index_family</span> <span class="o">=</span> <span class="s1">&#39;EURIBOR&#39;</span><span class="p">,</span> <span class="n">tenor</span> <span class="o">=</span> <span class="s1">&#39;12M&#39;</span><span class="p">}</span>
+<span class="n">f_euribor_id</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">pricing_curve_id</span> <span class="p">{</span> <span class="n">curve_type</span> <span class="o">=</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">currency</span> <span class="o">=</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="n">index_family</span> <span class="o">=</span> <span class="s1">&#39;EURIBOR&#39;</span><span class="p">}</span>
+
+<span class="o">--</span> <span class="nb">map</span> <span class="n">request</span> <span class="k">for</span> <span class="n">forward</span> <span class="n">EONIA</span> <span class="n">curve</span> <span class="n">to</span> <span class="n">discount</span> <span class="n">curve</span>
+<span class="n">curve_mapper</span><span class="p">:</span><span class="n">add_mapping</span><span class="p">(</span> <span class="n">f_eonia_id</span><span class="p">,</span> <span class="n">d_eonia_id</span> <span class="p">)</span>
+<span class="o">--</span> <span class="nb">map</span> <span class="nb">any</span> <span class="n">request</span> <span class="k">for</span> <span class="n">EURIBOR</span> <span class="n">Discount</span> <span class="n">to</span> <span class="n">EONIA</span> <span class="n">discount</span>
+<span class="n">curve_mapper</span><span class="p">:</span><span class="n">add_mapping</span><span class="p">(</span> <span class="n">d_euribor_id</span><span class="p">,</span> <span class="n">d_eonia_id</span> <span class="p">)</span>
+<span class="o">--</span> <span class="nb">map</span> <span class="n">euribor</span> <span class="mi">1</span><span class="n">m</span> <span class="n">to</span> <span class="n">generic</span>
+<span class="n">curve_mapper</span><span class="p">:</span><span class="n">add_mapping</span><span class="p">(</span> <span class="n">f_euribor_1m_id</span><span class="p">,</span> <span class="n">f_euribor_id</span> <span class="p">)</span>
+<span class="o">--</span> <span class="nb">map</span> <span class="n">euribor</span> <span class="mi">12</span><span class="n">m</span> <span class="n">to</span> <span class="n">generic</span>
+<span class="n">curve_mapper</span><span class="p">:</span><span class="n">add_mapping</span><span class="p">(</span> <span class="n">f_euribor_1m_id</span><span class="p">,</span> <span class="n">f_euribor_id</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="valuationcontext">
+<h3>ValuationContext<a class="headerlink" href="#valuationcontext" title="Permalink to this headline">¶</a></h3>
+<dl>
+<dt>redukti.valuation_context( parameters, fixing_service)</dt><dd><p>Sets up a ValuationContex object.</p>
+<dl>
+<dt>parameters</dt><dd><p>Table containing parameters. Parameters are:</p>
+<dl class="simple">
+<dt>reference_date</dt><dd><p>Business date</p>
+</dd>
+<dt>order</dt><dd><p>If 1 first order derivatives will be computed, if 2, second order derivatives will be computed as well.</p>
+</dd>
+</dl>
+</dd>
+<dt>fixing_service</dt><dd><p>A FixingService object</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">utils</span> <span class="o">=</span> <span class="k">assert</span><span class="p">(</span><span class="n">require</span><span class="p">(</span><span class="s1">&#39;utils&#39;</span><span class="p">))</span>
+<span class="n">fixing_service</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">load_fixings</span><span class="p">(</span><span class="s1">&#39;../testdata/20121211/fixings.csv&#39;</span><span class="p">)</span>
+<span class="n">business_date</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="s1">&#39;2012/12/11&#39;</span><span class="p">)</span>
+<span class="n">valuation_context</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">valuation_context</span><span class="p">({</span> <span class="n">reference_date</span> <span class="o">=</span> <span class="n">business_date</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">},</span> <span class="n">fixing_service</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cashflow-conversion">
+<h3>Cashflow Conversion<a class="headerlink" href="#cashflow-conversion" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>redukti.prepare_cashflows_for_pricing(valuation_context, curve_mapper, cashflows)</dt><dd><p>Converts the supplied cashflows to a format suitable for pricing.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flows</span> <span class="o">=</span> <span class="n">deposit_rate</span><span class="p">(</span><span class="n">redukti</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2013</span><span class="p">),</span> <span class="s1">&#39;EUR&#39;</span><span class="p">,</span> <span class="s1">&#39;EURIBOR&#39;</span><span class="p">,</span> <span class="s1">&#39;1Y&#39;</span><span class="p">,</span> <span class="mf">0.00140</span><span class="p">)</span>
+<span class="n">pricing_cashflows</span> <span class="o">=</span> <span class="n">redukti</span><span class="o">.</span><span class="n">prepare_cashflows_for_pricing</span><span class="p">(</span><span class="n">valuation_context</span><span class="p">,</span> <span class="n">curve_mapper</span><span class="p">,</span> <span class="n">flows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="curveprovider">
+<h3>CurveProvider<a class="headerlink" href="#curveprovider" title="Permalink to this headline">¶</a></h3>
+<p>The CurveProvider resolves logical curve ids and maps these to actual curve objects.</p>
+<dl class="simple">
+<dt>redukti.curve_provider()</dt><dd><p>Creates a curve_provider object.</p>
+</dd>
+<dt>curve_provider:add_mapping(pricing_curve_id, curve)</dt><dd><p>Adds a mapping from a pricing_curve_id to a Zero Curve object.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<p>Please see the script <a class="reference external" href="https://github.com/redukti/OpenRedukti/blob/master/tests/test_pricing.lua">test_pricing.lua</a>.</p>
+</div>
+<div class="section" id="calculate-npv-and-sensitivities">
+<h3>Calculate NPV and Sensitivities<a class="headerlink" href="#calculate-npv-and-sensitivities" title="Permalink to this headline">¶</a></h3>
+<p>Finally you can invoke:</p>
+<dl class="simple">
+<dt>redukti.present_value(valuation_context, pricing_cashflows, curve_provider)</dt><dd><p>Computes the NPV and sensitivities and returns a PricingResult object.</p>
+</dd>
+<dt>pricing_result:ok()</dt><dd><p>Tells if you pricing was successful</p>
+</dd>
+<dt>pricing_result:curve_ids()</dt><dd><p>Returns an array of curve identifiers used for pricing</p>
+</dd>
+<dt>pricing_result:delta(curve_id)</dt><dd><p>Given a curve id, returns the first order sensitivities as an table of values keyed by curve pillars.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<p>Please see the script <a class="reference external" href="https://github.com/redukti/OpenRedukti/blob/master/tests/test_pricing.lua">test_pricing.lua</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">OpenRedukti</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="openredukti-intro.html">Introduction to OpenRedukti</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-docker-quickstart.html">Quick Start using Docker containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-building.html">Building OpenRedukti</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-cpp-api.html">OpenRedukti C++ API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">OpenRedukti Scripting With Ravi</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#date-types">Date Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#holiday-calendars">Holiday Calendars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#day-count-fractions">Day Count Fractions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#indices">Indices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#automatic-differentiation">Automatic Differentiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculation-schedules">Calculation Schedules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interpolators">Interpolators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interest-rate-curves">Interest Rate Curves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#time-series-fixings">Time Series / Fixings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cashflows">Cashflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utility-for-loading-data">Utility for Loading Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-curves">Building Curves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cashflow-pricing">Cashflow Pricing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyredukti-intro.html">An Introduction to PyRedukti</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyredukti-api.html">redukti package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="openredukti-cpp-api.html" title="previous chapter">OpenRedukti C++ API</a></li>
+      <li>Next: <a href="pyredukti-intro.html" title="next chapter">An Introduction to PyRedukti</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Dibyendu Majumdar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/openredukti-ravi-api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

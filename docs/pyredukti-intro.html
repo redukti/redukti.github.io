@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>An Introduction to PyRedukti &#8212; OpenRedukti Alpha documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="redukti package" href="pyredukti-api.html" />
+    <link rel="prev" title="OpenRedukti Scripting With Ravi" href="openredukti-ravi-api.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="an-introduction-to-pyredukti">
+<h1>An Introduction to PyRedukti<a class="headerlink" href="#an-introduction-to-pyredukti" title="Permalink to this headline">¶</a></h1>
+<p>PyRedukti is a Python binding for <a class="reference internal" href="openredukti-intro.html"><span class="doc">Introduction to OpenRedukti</span></a>.</p>
+<p>OpenRedukti is a C++ library that has following features:</p>
+<ul class="simple">
+<li><p>Ability to express an interest rate product as a set of cashflows</p></li>
+<li><p>Bootstrap continuously compounded zero coupon interest rate curves using Linear, CubicSpline, and MonotoneConvex interpolators</p></li>
+<li><p>Interpolate curves in the discount factor space using LogLinear and LogCubicSpline interpolators</p></li>
+<li><p>Compute present value of cashflows</p></li>
+<li><p>Compute first and second order derivatives using <a class="reference external" href="http://www.autodiff.org/">Automatic/algorithmic Differentiation</a>.</p></li>
+</ul>
+<p>These features are available as a library, but additionally OpenRedukti provides a server implementation
+based upon <a class="reference external" href="https://grpc.io/">gRPC</a> technology.</p>
+<p>The Python bindings operate at two levels.</p>
+<p>At the low level, the Python bindings provide wrappers for a number of OpenRedukti classes such as:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Date</span></code> - Date value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ADVar</span></code> - Automatically differentiated variable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Calendar</span></code> - Business Day Calendars</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DayFraction</span></code> - Day Count Fraction calculators</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">InterestRateIndex</span></code> - Various functions related to indices</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Interpolators</span></code> - Various 2-d interpolation schemes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">YieldCurve</span></code> - Includes two subtypes: <code class="docutils literal notranslate"><span class="pre">InterpolatedYieldCurve</span></code>, and <code class="docutils literal notranslate"><span class="pre">SvenssonCurve</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ScheduleGenerator</span></code> - generates cashflow schedules</p></li>
+</ul>
+<p>Associated with these are a bunch of types and enum values that are generated from Google Protocol Buffer descriptions.</p>
+<p>At a higher level, PyRedukti offers the ability to communicate with the OpenRedukti server.
+Using this model, you get following additional capabilities:</p>
+<ul class="simple">
+<li><p>Build Zero Curves from market quotes (PAR rates)</p></li>
+<li><p>Prime the server with market data such as Zero Curves and Fixings</p></li>
+<li><p>Get NPV and Zero/PAR Sensitivities calculated for trades that can be represented as cashflows</p></li>
+</ul>
+<p>The following classes and utilities provide the core functions:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MarketData</span></code> - This class encapsulates reading raw market data from CSV formatted files</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ServerCommand</span></code> - This class encapsulates the functions for interacting with the OpenRedukti server</p></li>
+</ul>
+<div class="section" id="building-pyredukti">
+<h2>Building PyRedukti<a class="headerlink" href="#building-pyredukti" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pre-requisites">
+<h3>Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Python 3.6 and above</p></li>
+<li><p>Following packages are required
+- pip
+- grpcio
+- grpcio-tools
+- cython</p></li>
+</ul>
+</div>
+<div class="section" id="build-steps">
+<h3>Build steps<a class="headerlink" href="#build-steps" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>First build with support for gRPC, see <a class="reference internal" href="openredukti-building.html"><span class="doc">Building OpenRedukti</span></a>.</p></li>
+<li><p>We assume that Protobuf is installed under <code class="docutils literal notranslate"><span class="pre">$HOME/Software/protobuf</span></code>.</p></li>
+<li><p>We assume that OpenRedukti is installed under <code class="docutils literal notranslate"><span class="pre">$HOME/Software/redukti</span></code>.</p></li>
+<li><p>We assume that gRPC C++ library is installed under <code class="docutils literal notranslate"><span class="pre">$HOME/Software/grpc</span></code>.</p></li>
+</ul>
+</div>
+<div class="section" id="build-and-install-python-module">
+<h3>Build and install Python module<a class="headerlink" href="#build-and-install-python-module" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> as follows:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export LD_LIBRARY_PATH=$HOME/Software/protobuf/lib:$HOME/Software/redukti/lib:$HOME/Software/grpc/lib:$LD_LIBRARY_PATH
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Setup Python virtual; environment if necessary</p></li>
+<li><p>Execute following steps:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">bdist_wheel</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">dist</span><span class="o">/</span><span class="n">pyredukti</span><span class="o">-</span><span class="mf">0.1</span><span class="o">-</span><span class="n">cp36</span><span class="o">-</span><span class="n">cp36m</span><span class="o">-</span><span class="n">linux_x86_64</span><span class="o">.</span><span class="n">whl</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="checking-out-pyredukti">
+<h2>Checking Out PyRedukti<a class="headerlink" href="#checking-out-pyredukti" title="Permalink to this headline">¶</a></h2>
+<p>Note that you will need to start an OpenRedukti server if you wish to try out the valuation functionality.</p>
+<p>For example sessions in PyRedukti, please look at the Jupyter Notebook samples in <a class="reference external" href="https://github.com/redukti/PyRedukti/tree/master/notebooks">https://github.com/redukti/PyRedukti/tree/master/notebooks</a>.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">OpenRedukti</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="openredukti-intro.html">Introduction to OpenRedukti</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-docker-quickstart.html">Quick Start using Docker containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-building.html">Building OpenRedukti</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-cpp-api.html">OpenRedukti C++ API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-ravi-api.html">OpenRedukti Scripting With Ravi</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">An Introduction to PyRedukti</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#building-pyredukti">Building PyRedukti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checking-out-pyredukti">Checking Out PyRedukti</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyredukti-api.html">redukti package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="openredukti-ravi-api.html" title="previous chapter">OpenRedukti Scripting With Ravi</a></li>
+      <li>Next: <a href="pyredukti-api.html" title="next chapter">redukti package</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Dibyendu Majumdar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/pyredukti-intro.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

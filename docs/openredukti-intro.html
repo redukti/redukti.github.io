@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Introduction to OpenRedukti &#8212; OpenRedukti Alpha documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quick Start using Docker containers" href="openredukti-docker-quickstart.html" />
+    <link rel="prev" title="Welcome to OpenRedukti’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="introduction-to-openredukti">
+<h1>Introduction to OpenRedukti<a class="headerlink" href="#introduction-to-openredukti" title="Permalink to this headline">¶</a></h1>
+<p>OpenRedukti is a C++ library for working with Interest Rate Derivative products such as Interest Rate Swaps, and
+FRAs. It allows you to build Interest Rate curves with different interpolation methods, and then use these curves
+to compute present value and sensitivities of Interest Rate Derivatives.</p>
+<p>OpenRedukti is Free Software, licensed under the GNU General Public License, v3. If you wish to use OpenRedukti
+under a non-GPL license, you can raise an issue on <a class="reference external" href="https://github.com/redukti/OpenRedukti">GitHub repository</a>.
+A liberal license will be granted to your company at zero cost, provided you agree to allow your company
+to be listed as a user of OpenRedukti.</p>
+<div class="section" id="main-features">
+<h2>Main Features<a class="headerlink" href="#main-features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Small library with minimal external dependencies (only external dependencies are BLAS, LAPACK and Google Protocol Buffers)</p></li>
+<li><p>Ability to express an interest rate product as a set of cashflows</p></li>
+<li><p>Bootstrap continuously compounded zero coupon interest rate curves using Linear, CubicSpline, and MonotoneConvex interpolators</p></li>
+<li><p>Interpolate curves in the discount factor space using LogLinear and LogCubicSpline interpolators</p></li>
+<li><p>Compute present value of cashflows</p></li>
+<li><p>Compute first and second order derivatives using <a class="reference external" href="http://www.autodiff.org/">Automatic/algorithmic Differentiation</a>.</p></li>
+<li><p>Script using <a class="reference external" href="https://github.com/dibyendumajumdar/ravi">Ravi</a> - a derivative of <a class="reference external" href="http://www.lua.org">Lua</a> programming language</p></li>
+<li><p>Script using Python, see <a class="reference internal" href="pyredukti-intro.html"><span class="doc">An Introduction to PyRedukti</span></a>.</p></li>
+<li><p>Docker images now available to make it easier to try out OpenRedukti and PyRedukti: see <a class="reference internal" href="openredukti-docker-quickstart.html"><span class="doc">Quick Start using Docker containers</span></a>.</p></li>
+</ul>
+</div>
+<div class="section" id="background">
+<h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>OpenRedukti is part of the <a class="reference external" href="http://redukti.com/">MyCCP</a> product that was being developed by REDUKTI LIMITED. The development of MyCPP
+was halted in June 2017 due to lack of funding. A decision was taken then to Open Source parts of the MyCCP product, leading to
+the release of OpenRedukti.</p>
+<p>The main differences between the Open Source release and the proprietary version used in MyCCP are:</p>
+<ul class="simple">
+<li><p>Only the core C++ pricing library has been released</p></li>
+<li><p>The functionality for generating cashflows from FpML trades has not been released as this is fine tuned for the needs of MyCCP</p></li>
+<li><p>The Limit Checker and VaR Calculator have not been released</p></li>
+<li><p>The MyCCP front-end and middle tier components, written in C#, have not been released as these are very specific to requirements of a CCP.</p></li>
+</ul>
+<p>For further details of the full scope of the MyCCP product, please visit <a class="reference external" href="http://redukti.com/myccp-product-specifications.html">Redukti.Com</a>.</p>
+</div>
+<div class="section" id="ackowledgements">
+<h2>Ackowledgements<a class="headerlink" href="#ackowledgements" title="Permalink to this headline">¶</a></h2>
+<p>OpenRedukti gratefully acknowledges ideas and code it is using from other projects.</p>
+<ul class="simple">
+<li><p>My good friend <a class="reference external" href="https://www.linkedin.com/in/christer-rydberg-phd-98012a7/">Christer Rydberg</a> for showing me how to implement Automatic Differentiation and for help and advice over the years.</p></li>
+<li><p><a class="reference external" href="http://adl.stanford.edu/hyperdual/">Jeffrey Fike’s work</a> on automatic differentiation using hyperdual vectors.</p></li>
+<li><p><a class="reference external" href="http://quantlib.org/index.shtml">QuantLib</a> which has provided the basis for some of the key components such as interpolators.</p></li>
+<li><p>The monotone convex interpolation method is based on papers and VB code from <a class="reference external" href="http://finmod.co.za/#our-research">Financial Modeling Agency</a>.</p></li>
+<li><p>The <a class="reference external" href="http://devernay.free.fr/hacks/cminpack/">C/C++ Minpack</a> library provides the Levenberg-Marquardt solver used in curve building.</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">OpenRedukti</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction to OpenRedukti</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#main-features">Main Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ackowledgements">Ackowledgements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-docker-quickstart.html">Quick Start using Docker containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-building.html">Building OpenRedukti</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-cpp-api.html">OpenRedukti C++ API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-ravi-api.html">OpenRedukti Scripting With Ravi</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyredukti-intro.html">An Introduction to PyRedukti</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyredukti-api.html">redukti package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to OpenRedukti’s documentation!</a></li>
+      <li>Next: <a href="openredukti-docker-quickstart.html" title="next chapter">Quick Start using Docker containers</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Dibyendu Majumdar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/openredukti-intro.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
