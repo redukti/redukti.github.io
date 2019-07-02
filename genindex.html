@@ -86,12 +86,16 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.schedule_pb2.Schedule.adjusted_payment_dates">adjusted_payment_dates (redukti.schedule_pb2.Schedule attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyredukti-api.html#redukti.schedule_pb2.Schedule.adjusted_start_dates">adjusted_start_dates (redukti.schedule_pb2.Schedule attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyredukti-api.html#redukti.Calendar.advance">advance() (redukti.Calendar method)</a>
+
+      <ul>
+        <li><a href="pyredukti-api.html#redukti.Date.advance">(redukti.Date method)</a>
 </li>
+      </ul></li>
       <li><a href="pyredukti-api.html#redukti.ADVar">ADVar (class in redukti)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.cashflow_pb2.CFSimple.amount">amount (redukti.cashflow_pb2.CFSimple attribute)</a>
@@ -424,6 +428,8 @@
         <li><a href="pyredukti-api.html#redukti.cashflow_pb2.CFSimple.discounting_index_family">(redukti.cashflow_pb2.CFSimple attribute)</a>
 </li>
       </ul></li>
+      <li><a href="pyredukti-api.html#redukti.Date.dmy">dmy() (redukti.Date static method)</a>
+</li>
       <li><a href="pyredukti-api.html#redukti.commands.do_bootstrap">do_bootstrap() (in module redukti.commands)</a>
 </li>
   </ul></td>
@@ -516,8 +522,6 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.cashflow_pb2.CFSingle.fra">fra (redukti.cashflow_pb2.CFSingle attribute)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.Date.from_dmy">from_dmy() (redukti.Date static method)</a>
-</li>
       <li><a href="pyredukti-api.html#redukti.valuation_pb2.CurveMapping.from_id">from_id (redukti.valuation_pb2.CurveMapping attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.valuation_pb2.PricingContext.from_scenario">from_scenario (redukti.valuation_pb2.PricingContext attribute)</a>
@@ -529,6 +533,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyredukti-api.html#redukti.bootstrap_pb2.BootstrapCurvesRequest.generate_par_sensitivities">generate_par_sensitivities (redukti.bootstrap_pb2.BootstrapCurvesRequest attribute)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.ScheduleGenerator.generate_schedule">generate_schedule() (redukti.ScheduleGenerator static method)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.InterestRateIndex.get_index">get_index() (redukti.InterestRateIndex static method)</a>
 </li>
@@ -796,12 +802,14 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.bootstrap_pb2.ParRates">ParRates (class in redukti.bootstrap_pb2)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.infra_pb2.ShutdownRequest.password">password (redukti.infra_pb2.ShutdownRequest attribute)</a>
+      <li><a href="pyredukti-api.html#redukti.Date.parse">parse() (redukti.Date static method)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.schedule_pb2.ScheduleParameters.payment_calendars">payment_calendars (redukti.schedule_pb2.ScheduleParameters attribute)</a>
+      <li><a href="pyredukti-api.html#redukti.infra_pb2.ShutdownRequest.password">password (redukti.infra_pb2.ShutdownRequest attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyredukti-api.html#redukti.schedule_pb2.ScheduleParameters.payment_calendars">payment_calendars (redukti.schedule_pb2.ScheduleParameters attribute)</a>
+</li>
       <li><a href="pyredukti-api.html#redukti.schedule_pb2.ScheduleParameters.payment_convention">payment_convention (redukti.schedule_pb2.ScheduleParameters attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.valuation_pb2.PricingContext.payment_cutoff_date">payment_cutoff_date (redukti.valuation_pb2.PricingContext attribute)</a>
@@ -1005,6 +1013,8 @@
 </li>
       </ul></li>
       <li><a href="pyredukti-api.html#redukti.schedule_pb2.Schedule">Schedule (class in redukti.schedule_pb2)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.ScheduleGenerator">ScheduleGenerator (class in redukti)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.schedule_pb2.ScheduleParameters">ScheduleParameters (class in redukti.schedule_pb2)</a>
 </li>
@@ -1260,10 +1270,10 @@
 <li class="toctree-l1"><a class="reference internal" href="openredukti-intro.html">Introduction to OpenRedukti</a></li>
 <li class="toctree-l1"><a class="reference internal" href="openredukti-docker-quickstart.html">Quick Start using Docker containers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="openredukti-building.html">Building OpenRedukti</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyredukti-intro.html">An Introduction to PyRedukti</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyredukti-api.html">Pything bindings: redukti package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="openredukti-cpp-api.html">OpenRedukti C++ API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="openredukti-ravi-api.html">OpenRedukti Scripting With Ravi</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyredukti-intro.html">An Introduction to PyRedukti</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyredukti-api.html">redukti package</a></li>
 </ul>
 
 <div class="relations">

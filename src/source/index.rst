@@ -13,10 +13,10 @@ Welcome to OpenRedukti's documentation!
    openredukti-intro
    openredukti-docker-quickstart
    openredukti-building
-   openredukti-cpp-api
-   openredukti-ravi-api
    pyredukti-intro
    pyredukti-api
+   openredukti-cpp-api
+   openredukti-ravi-api
 
 
 Indices and tables

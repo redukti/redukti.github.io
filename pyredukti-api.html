@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>redukti package &#8212; OpenRedukti Alpha documentation</title>
+    <title>Pything bindings: redukti package &#8212; OpenRedukti Alpha documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -14,6 +14,7 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="OpenRedukti C++ API" href="openredukti-cpp-api.html" />
     <link rel="prev" title="An Introduction to PyRedukti" href="pyredukti-intro.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -31,11 +32,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="redukti-package">
-<h1>redukti package<a class="headerlink" href="#redukti-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
+  <div class="section" id="pything-bindings-redukti-package">
+<h1>Pything bindings: redukti package<a class="headerlink" href="#pything-bindings-redukti-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="redukti-module">
 <h2>redukti module<a class="headerlink" href="#redukti-module" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -89,13 +87,35 @@ in a calculation, then the variables would have ids <code class="docutils litera
 <p>Negative values indicate days prior to 1899-12-31.
 Note that OpenRedukti requires dates to be in the range <code class="docutils literal notranslate"><span class="pre">1901-01-01</span></code> and <code class="docutils literal notranslate"><span class="pre">2199-12-31</span></code>.</p>
 <dl class="method">
+<dt id="redukti.Date.advance">
+<code class="sig-name descname">advance</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">int n</em>, <em class="sig-param">PeriodUnit unit</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.Date.advance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds or subtracts a period from a date.</p>
+<p>When handling month periods it ensures that the day stays the same if possible,
+but if not (e.g. no 29th Feb in final date) then the day is adjusted to fit in the month
+When handling year periods, the day and month are kept the same if possible
+or adjusted as above.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d</strong> – Input date</p></li>
+<li><p><strong>n</strong> – quantity</p></li>
+<li><p><strong>unit</strong> – The unit of <code class="docutils literal notranslate"><span class="pre">n</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>New Date object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="redukti.Date.day">
 <code class="sig-name descname">day</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#redukti.Date.day" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="redukti.Date.from_dmy">
-<em class="property">static </em><code class="sig-name descname">from_dmy</code><span class="sig-paren">(</span><em class="sig-param">unsigned int d</em>, <em class="sig-param">unsigned int m</em>, <em class="sig-param">int y</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.Date.from_dmy" title="Permalink to this definition">¶</a></dt>
+<dt id="redukti.Date.dmy">
+<em class="property">static </em><code class="sig-name descname">dmy</code><span class="sig-paren">(</span><em class="sig-param">unsigned int d</em>, <em class="sig-param">unsigned int m</em>, <em class="sig-param">int y</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.Date.dmy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructs a Date object from day, month, year.</p>
 </dd></dl>
 
@@ -103,6 +123,25 @@ Note that OpenRedukti requires dates to be in the range <code class="docutils li
 <dt id="redukti.Date.month">
 <code class="sig-name descname">month</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#redukti.Date.month" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="redukti.Date.parse">
+<em class="property">static </em><code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">s</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.Date.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses a string representation of date.</p>
+<p>The parser will detect seperator character ‘/’ or ‘-‘.
+The formats acceptable are ‘yyyy/mm/dd’, ‘dd/mm/yyyy’, ‘yyyy-mm-dd’, or ‘dd-mm-yyyy’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> – Input string containing a date value in supported format</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Date object if parsing is successful</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if input cannot be parsed</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.Date.serial">
@@ -201,6 +240,28 @@ Calendars can be overridden or added for other business centers using the <code 
 May fail if calendar instance already set and has been
 accessed by a client - i.e. new calendars can only be set prior to
 any use.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="redukti.ScheduleGenerator">
+<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">ScheduleGenerator</code><a class="headerlink" href="#redukti.ScheduleGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Utilities for generating schedules for interest rate products.
+The algorithm is based upon the FpML specifications.</p>
+<dl class="method">
+<dt id="redukti.ScheduleGenerator.generate_schedule">
+<em class="property">static </em><code class="sig-name descname">generate_schedule</code><span class="sig-paren">(</span><em class="sig-param">schedule_parameters</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.ScheduleGenerator.generate_schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a schedule</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>schedule_parameters</strong> (<a class="reference internal" href="#redukti.schedule_pb2.ScheduleParameters" title="redukti.schedule_pb2.ScheduleParameters"><em>schedule_pb2.ScheduleParameters</em></a>) – parameters for schedule generation</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An instance of schedule_pb2.Schedule</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -573,67 +634,95 @@ CSV format files.</p>
 <dl class="method">
 <dt id="redukti.library.MarketData.business_date">
 <code class="sig-name descname">business_date</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.MarketData.business_date" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the business date associated with this market data instance</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.library.MarketData.curve_definitions">
 <code class="sig-name descname">curve_definitions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.MarketData.curve_definitions" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gives a list of the curve definitions currently loaded</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.library.MarketData.curve_group">
 <code class="sig-name descname">curve_group</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.MarketData.curve_group" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the CurveGroup associated with this market data instance</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.library.MarketData.find_curve_definition">
 <code class="sig-name descname">find_curve_definition</code><span class="sig-paren">(</span><em class="sig-param">id</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.MarketData.find_curve_definition" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Finds a curve definition by its id</p>
+<p>Precondition is that curve definitions must have been loaded</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.library.MarketData.find_zero_curve_by_id">
 <code class="sig-name descname">find_zero_curve_by_id</code><span class="sig-paren">(</span><em class="sig-param">definition_id</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.MarketData.find_zero_curve_by_id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Given a curve definition id, locates the corresponding ZeroCurve data object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>definition_id</strong> – The curve definition id</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.library.MarketData.fixings">
 <code class="sig-name descname">fixings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.MarketData.fixings" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the currently loaded fixings</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.library.MarketData.has_fixings">
 <code class="sig-name descname">has_fixings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.MarketData.has_fixings" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if fixings are available (i.e. loaded)</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.library.MarketData.init_zero_curves">
 <code class="sig-name descname">init_zero_curves</code><span class="sig-paren">(</span><em class="sig-param">bootstrap_curves_reply</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.MarketData.init_zero_curves" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Converts the result from a curve building call to YieldCurve instances</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bootstrap_curves_reply</strong> – reply from the Bootstrap command</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.library.MarketData.pricing_context">
 <code class="sig-name descname">pricing_context</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.MarketData.pricing_context" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Builds a default PricingContext object from the market data information</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.library.MarketData.read_curvedefinitions">
 <code class="sig-name descname">read_curvedefinitions</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.MarketData.read_curvedefinitions" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Reads Curve Definitions from a CSV format file</p>
+<p>For an example file see: <a class="reference external" href="https://github.com/redukti/PyRedukti/blob/master/testdata/20121211/curve_definitions.csv">https://github.com/redukti/PyRedukti/blob/master/testdata/20121211/curve_definitions.csv</a></p>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.library.MarketData.read_fixings">
 <code class="sig-name descname">read_fixings</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.MarketData.read_fixings" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Reads Index Fixings from a CSV format file</p>
+<p>For an example of fixings data file see: <a class="reference external" href="https://github.com/redukti/PyRedukti/blob/master/testdata/20121211/fixings.csv">https://github.com/redukti/PyRedukti/blob/master/testdata/20121211/fixings.csv</a>.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.library.MarketData.read_parcurves">
 <code class="sig-name descname">read_parcurves</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.MarketData.read_parcurves" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads market quotes from a CSV format file</p>
+<p>For an example see: <a class="reference external" href="https://github.com/redukti/PyRedukti/blob/master/testdata/20121211/par_rates.csv">https://github.com/redukti/PyRedukti/blob/master/testdata/20121211/par_rates.csv</a>.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.library.MarketData.yield_curves">
 <code class="sig-name descname">yield_curves</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.MarketData.yield_curves" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gives a list of the yield curves currently available locally</p>
+<p>Note that the list is in the same order as the curve definitions</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -3056,11 +3145,8 @@ and will need to restarted</p>
 <li class="toctree-l1"><a class="reference internal" href="openredukti-intro.html">Introduction to OpenRedukti</a></li>
 <li class="toctree-l1"><a class="reference internal" href="openredukti-docker-quickstart.html">Quick Start using Docker containers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="openredukti-building.html">Building OpenRedukti</a></li>
-<li class="toctree-l1"><a class="reference internal" href="openredukti-cpp-api.html">OpenRedukti C++ API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="openredukti-ravi-api.html">OpenRedukti Scripting With Ravi</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyredukti-intro.html">An Introduction to PyRedukti</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">redukti package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Pything bindings: redukti package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#redukti-module">redukti module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-redukti.library">redukti.library module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-redukti.bootstrap_pb2">redukti.bootstrap_pb2 module</a></li>
@@ -3080,6 +3166,8 @@ and will need to restarted</p>
 <li class="toctree-l2"><a class="reference internal" href="#module-redukti">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-cpp-api.html">OpenRedukti C++ API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="openredukti-ravi-api.html">OpenRedukti Scripting With Ravi</a></li>
 </ul>
 
 <div class="relations">
@@ -3087,6 +3175,7 @@ and will need to restarted</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="pyredukti-intro.html" title="previous chapter">An Introduction to PyRedukti</a></li>
+      <li>Next: <a href="openredukti-cpp-api.html" title="next chapter">OpenRedukti C++ API</a></li>
   </ul></li>
 </ul>
 </div>

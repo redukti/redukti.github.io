@@ -49,10 +49,11 @@ Pre-requisites
 
 * Python 3.6 and above
 * Following packages are required
-  - pip
-  - grpcio
-  - grpcio-tools
-  - cython
+
+  * pip
+  * grpcio
+  * grpcio-tools
+  * cython
 
 Build steps
 +++++++++++

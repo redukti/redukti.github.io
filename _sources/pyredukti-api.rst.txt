@@ -1,8 +1,5 @@
-redukti package
-===============
-
-Submodules
-----------
+Pything bindings: redukti package
+=================================
 
 redukti module
 ---------------
@@ -18,6 +15,11 @@ redukti module
    :show-inheritance:
 
 .. autoclass:: redukti.Calendar
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: redukti.ScheduleGenerator
    :members:
    :undoc-members:
    :show-inheritance:
@@ -46,9 +48,6 @@ redukti module
    :members:
    :undoc-members:
    :show-inheritance:
-
-.. autofunction: redukti.generate_schedule
-
 
 redukti.library module
 ----------------------

@@ -36,7 +36,6 @@
 <h1>Quick Start using Docker containers<a class="headerlink" href="#quick-start-using-docker-containers" title="Permalink to this headline">¶</a></h1>
 <p>You can try out OpenRedukti using Docker container technology.</p>
 <p>We assume you have have Docker installed locally.</p>
-<p>Also if you want to save Jupyter Notebooks then you may need to use Linux env, as on Windows the file system binding may not work.</p>
 <div class="section" id="starting-openredukti-server">
 <h2>Starting OpenRedukti server<a class="headerlink" href="#starting-openredukti-server" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">redukti</span><span class="o">/</span><span class="n">openredukti</span><span class="p">:</span><span class="n">latest</span>
@@ -46,10 +45,22 @@
 </div>
 <div class="section" id="starting-python3-jupyter-with-pyredukti-support">
 <h2>Starting Python3 Jupyter with PyRedukti support<a class="headerlink" href="#starting-python3-jupyter-with-pyredukti-support" title="Permalink to this headline">¶</a></h2>
+<p>Note that following maps <code class="docutils literal notranslate"><span class="pre">$PWD</span></code> to <code class="docutils literal notranslate"><span class="pre">/data</span></code> so that any files you create in <code class="docutils literal notranslate"><span class="pre">/data</span></code> should appear under <code class="docutils literal notranslate"><span class="pre">$PWD</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">redukti</span><span class="o">/</span><span class="n">pyredukti</span><span class="p">:</span><span class="n">latest</span>
 <span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> <span class="o">-</span><span class="n">it</span> <span class="o">-</span><span class="n">p</span> <span class="mi">8888</span><span class="p">:</span><span class="mi">8888</span><span class="o">/</span><span class="n">tcp</span> <span class="o">-</span><span class="n">v</span><span class="s2">&quot;$PWD&quot;</span><span class="p">:</span><span class="o">/</span><span class="n">data</span><span class="p">:</span><span class="n">z</span> <span class="n">redukti</span><span class="o">/</span><span class="n">pyredukti</span><span class="p">:</span><span class="n">latest</span>
 </pre></div>
 </div>
+<p>The output from the container should tell you how to connect to the Jupyter instance using your Browser.</p>
+</div>
+<div class="section" id="important">
+<h2>Important<a class="headerlink" href="#important" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>To allow the Jupyter notebook to connect to OpenRedukti you will probably need to connect the containers to
+a network and setup aliases. I will add instructions soon</p></li>
+<li><p>If you want to save Notebooks outside the container then map a volume to <code class="docutils literal notranslate"><span class="pre">/data</span></code> as shown above. However this may
+not work on Windows.</p></li>
+<li><p>These Docker images are for testing only.</p></li>
+</ul>
 </div>
 </div>
 
@@ -76,13 +87,14 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Quick Start using Docker containers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#starting-openredukti-server">Starting OpenRedukti server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#starting-python3-jupyter-with-pyredukti-support">Starting Python3 Jupyter with PyRedukti support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#important">Important</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="openredukti-building.html">Building OpenRedukti</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyredukti-intro.html">An Introduction to PyRedukti</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyredukti-api.html">Pything bindings: redukti package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="openredukti-cpp-api.html">OpenRedukti C++ API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="openredukti-ravi-api.html">OpenRedukti Scripting With Ravi</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyredukti-intro.html">An Introduction to PyRedukti</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pyredukti-api.html">redukti package</a></li>
 </ul>
 
 <div class="relations">
