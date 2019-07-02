@@ -72,6 +72,9 @@ redukti::InterpolatorType
 redukti::CurveGroup
    Defines curve group ids for the purposes of grouping curves used in pricing.
 
+redukti::CurveType
+   CurveType identifies how the curve operates on its input
+
 redukti::IRRateType
    Defines the type of value being used in a curve definition.
 
@@ -101,7 +104,7 @@ The following key types are defined:
 
 ::
 
-   // This class provides a Period (length + TimeUnit) class
+   // This class provides a Period (length + PeriodUnit) class
    // and implements a limited algebra.
    // Must be standard layout for C compatibility
    class Period
@@ -300,8 +303,11 @@ The following key types are defined:
    // Dec 31st, 2199 
    constexpr Date maximum_date() noexcept;
 
-   // Parse a date
-   // Returns true on success
+   // Parse a string representation of date
+   // It will detect seperator character '/' or '-'.
+   // The formats acceptable are yyyy/mm/dd, dd/mm/yyyy, yyyy-mm-dd, or dd-mm-yyyy
+   // No exceptions thrown
+   // Returns true on success   
    bool parse_date(const char *s, Date *d) noexcept;
 
    // We need to ensure that 0 is not a valid date as this
@@ -329,6 +335,7 @@ OpenRedukti comes with predefined calendar implementations for following Busines
 * ``BRSP``
 
 These implementations are derived from the QuantLib library.
+You can also override or create one of the defined calendar enums by suppling a list of holidays.
 
 The Calendar API is as described below.
 
@@ -360,21 +367,21 @@ The Calendar API is as described below.
       Date end_of_month(Date d) const noexcept;
 
       // Adjusts a non-business day to the appropriate near business day
-      //  with respect to the given convention.
+      // with respect to the given convention.
       Date adjust(Date date, BusinessDayConvention convention = BusinessDayConvention::FOLLOWING) const noexcept;
 
-      //  Advances the given date of the given number of business days and
-      //  returns the result. Note that if unit is Days then business day
-      // convention and eom flags are not used as the date is move by the
+      // Advances the given date of the given number of business days and
+      // returns the result. Note that if unit is Days then business day
+      // convention and eom flags are not used as the date is moved by the
       // specified business days. For other period units the date is moved as
       // per raw calendar and then adjusted if it falls on a holiday
       Date advance(Date date, int n, PeriodUnit unit,
               BusinessDayConvention convention = BusinessDayConvention::FOLLOWING, bool endOfMonth = false) const
           noexcept;
 
-      //  Advances the given date as specified by the given period and
-      //  returns the result.
-      //  The input date is not modified.
+      // Advances the given date as specified by the given period and
+      // returns the result.
+      // The input date is not modified.
       Date advance(Date date, const Period &period,
               BusinessDayConvention convention = BusinessDayConvention::FOLLOWING, bool endOfMonth = false) const
           noexcept;
@@ -400,6 +407,10 @@ The Calendar API is as described below.
    // b) Ditto for joint calendar instances.
    // c) Calendar instances must be immutable.
    // d) It must be threadsafe
+   //
+   // These requirements place some restrictions on when a calendar instance can be
+   // be defined. Essentially define calendar instances at system startup prior to any 
+   // other operations with OpenRedukti
    class CalendarService
    {
    public:
@@ -415,13 +426,24 @@ The Calendar API is as described below.
       // any use.
       virtual bool set_calendar(BusinessCenter id, std::unique_ptr<Calendar> calendar) noexcept;
 
+      // Create a calendar from a set of holidays and assign it to the business center
+      // If the assignment is successful the service will take ownership of the instance
+      // May fail if calendar instance already set and has been
+      // accessed by a client - i.e. new calendars can only be set prior to
+      // any use.
+      virtual bool set_calendar(BusinessCenter id, const Date *holidays, size_t n) noexcept = 0;
+
       // Create joint calendar
       // Note that the order in which the business centers are given
-      // should not matter - i.e. the constituents must be sorted and then
+      // should not matter - i.e. the constituents are sorted and then
       // combined so that for a given combination the returned instance is
       // always the same
       virtual Calendar *get_calendar(JointCalendarParameters calendars,
                       JointCalendarRule rule = JointCalendarRule::JOIN_HOLIDAYS) noexcept;
+
+      // Front end to set_calendar()
+      virtual RegisterCalendarReply *handle_register_calendar_request(
+         const RegisterCalendarRequest *request, RegisterCalendarReply *reply) noexcept = 0;
    };
 
    // Gets the global calendar service
@@ -682,6 +704,11 @@ The C++ API for working with indices is given below::
       // Obtains an instance of IntrestRateIndex - must return an existing instance
       // if already defined 
       virtual InterestRateIndex *get_index(Currency currency, IndexFamily index_family, Tenor tenor);
+
+      // front-end to register_index()
+      virtual RegisterIndexDefinitionReply *
+         handle_register_index_definition_request(const RegisterIndexDefinitionRequest *request,
+                RegisterIndexDefinitionReply *reply) noexcept = 0;
    };
 
    extern IndexService *get_default_index_service();
@@ -1084,7 +1111,7 @@ described below.::
 
    class Interpolator
    {
-         public:
+   public:
       virtual ~Interpolator() {}
 
       // Interpolate at x
@@ -1167,47 +1194,67 @@ There are a bunch of protocol buffers types related to curves.::
    // The definitions are static i.e. they do not change
    // from day to day
    message IRCurveDefinition {
+      
       // All curve definitions must be given a unique id
       // This can be considered to be some sort of primary key
       // for the definition - i.e. no two curve definitions may
       // have the same id
       int32 id = 1;
+      
+      // Curves may be interpolated from values
+      // or parametric
+      CurveType curve_type = 2;
+
       // The curve group is intended to allow the different
       // configurations of the same curve to be created for
       // different use cases, e.g. different interpolation methods
       // may be used for IM versus VM, or a reduced set of tenors
       // may be used for computing Liquidity Margin
-      CurveGroup curve_group = 2;
-      Currency currency = 3;
-      IndexFamily index_family = 4;
+      CurveGroup curve_group = 3;
+      
+      Currency currency = 4;
+      
+      IndexFamily index_family = 5;
+      
       // Tenor is optional; if specified implies a tenor
       // specific curve
-      Tenor tenor = 5;
-      InterpolatorType interpolator_type = 6;
+      Tenor tenor = 6;
+      
+      InterpolatorType interpolator_type = 7;
+      
       // If interpolated_on is discount factors then it means
       // that the interpolator should operate on discount factors
       // rather than zero rates
-      IRRateType interpolated_on = 7;
+      IRRateType interpolated_on = 8;
+      
       // The maturity generation rule defines how the the bootstrapper
       // should generate the maturities of the curve
-      MaturityGenerationRule maturity_generation_rule = 8;
+      MaturityGenerationRule maturity_generation_rule = 9;
+      
       // If the curve is defined to have fixed maturity tenors
       // then a list of tenors is needed 
       // If the maturities are defined from input instruments then
       // tenors need not be defined
-      repeated Tenor tenors = 9;
+      repeated Tenor tenors = 10;
    }
 
    message ZeroCurve {
+      
       int32 curve_definition_id = 1;
+      
       repeated int32 maturities = 2;
+      
       repeated double values = 3;
    }
 
    message ZeroCurveParSensitivities {
+      
       int32 curve_definition_id = 1;
+      
       int32 num_instruments = 2;
+      
       int32 num_maturities = 3;
+
       // Map from <row,col> to value
       // The lower 16 bits represent the row index
       // The higher 16 bits represent the column index
@@ -1363,18 +1410,24 @@ The API for setting up and using curves is as follows::
    // changes to original values do not impact the curve. You can invoke
    // the method update_rates() to update the values after the curve is
    // created.
-   extern std::unique_ptr<YieldCurve, Deleter<YieldCurve>>
-   make_curve(Allocator *A, CurveId id, Date as_of_date, Date maturities[], double values[], size_t n,
-         InterpolatorType interpolator, IRRateType type = IRRateType::ZERO_RATE, int deriv_order = 0,
-         DayCountFraction fraction = DayCountFraction::ACT_365_FIXED) noexcept;
+   typedef std::unique_ptr<YieldCurve, Deleter<YieldCurve>> YieldCurvePointerType;
+   extern YieldCurvePointerType make_curve(Allocator *A, CurveId id, Date as_of_date, Date maturities[], double values[],
+               size_t n, InterpolatorType interpolator,
+               IRRateType type = IRRateType::ZERO_RATE, int deriv_order = 0,
+               DayCountFraction fraction = DayCountFraction::ACT_365_FIXED) noexcept;
 
-   class IRCurveDefinition;
-   class ZeroCurve;
+   extern YieldCurvePointerType make_svensson_curve(Allocator *A, CurveId id, Date as_of_date, double parameters[],
+               size_t n, DayCountFraction fraction = DayCountFraction::ACT_365_FIXED) noexcept;
 
-   extern std::unique_ptr<YieldCurve, Deleter<YieldCurve>>
-   make_curve(Date as_of_date, const IRCurveDefinition *defn, const ZeroCurve &curve, int deriv_order,
-         PricingCurveType type = PRICING_CURVE_TYPE_UNSPECIFIED, MarketDataQualifier mdq = MDQ_NORMAL,
-         short int cycle = 0, short int scenario = 0);
+   // When constructed this way, inputs are always continuously compounded zero rates. If the curve definition
+   // requires interpolation of discount factors then the zero rates are converted to discount factors
+   // internally.
+   // Note however, that when updating rates, values must be of the correct type - that is,
+   // discount factors if that is what is being interpolated on.
+   extern YieldCurvePointerType make_curve(Date as_of_date, const IRCurveDefinition *defn, const ZeroCurve &curve,
+               int deriv_order, PricingCurveType type = PRICING_CURVE_TYPE_UNSPECIFIED,
+               MarketDataQualifier mdq = MDQ_NORMAL, short int cycle = 0,
+               short int scenario = 0);
 
 
 Time Series / Fixings
@@ -1440,9 +1493,32 @@ The client supplies cashflow data in the form of following protocol buffer types
    // Simple cashflow (known amount)
    message CFSimple {
       Currency currency = 1;
+   
       double amount = 2;
+   
+      // Adjusted payment date
       int32 payment_date = 3;
+   
+      // We need to know the floating rate
+      // index on the trade to determine
+      // the discount curve mapping to use
       IsdaIndex trade_index = 4;
+   
+      // For fixed rate Bond cashflows
+      // we need to have a direct specification
+      // of the Curve Family (called IndexFamily)
+      // so that we can map to the best discount curve
+      // If this is set this should override
+      // derivation via trade_index above.
+      IndexFamily discounting_index_family = 5;
+   
+      // This is the date following which this
+      // cashflow will not be delivered
+      // Used by bonds
+      // Calculated by taking adjusted payment date
+      // and subtracting ex coupon days offset and then
+      // adusting the date
+      int32 ex_coupon_date = 6; 
    }
 
    // A floating calculation period
@@ -1461,11 +1537,32 @@ The client supplies cashflow data in the form of following protocol buffer types
    // May contain more than one calculation period
    message CFFloating { 
       Currency currency = 1;
+	
       repeated CFFloatingPeriod floating_periods = 2;
+      
       CompoundingMethod compounding_method = 3;
+      
       DayCountFraction day_count_fraction = 4;
+
       int32 payment_date = 5;
-   }
+
+      // For floating rate Bond cashflows
+      // we need to have a direct specification
+      // of the Curve Family (called IndexFamily)
+      // so that we can map to the best discount curve
+      // If this is set this should be used to
+      // map the discount curve rather than the
+      // floating rate.
+      IndexFamily discounting_index_family = 6;
+      
+      // This is the date following which this
+      // cashflow will not be delivered
+      // Used by bonds
+      // Calculated by taking adjusted payment date
+      // and subtracting ex coupon days offset and then
+      // adusting the date
+      int32 ex_coupon_date = 7;
+      }
 
    // FRA Cashflow
    message CFFra {
@@ -1996,4 +2093,30 @@ The API for interacting with the ValuationService is shown below.::
                          const ValuationRequest *request);
    };
 
+   std::unique_ptr<ValuationService> get_valuation_service(
+      IndexService *index_service, CalendarService *calendar_service);
 
+RequestProcessor
+================
+
+::
+
+   #include <request_processor.h>
+
+This implements the request dispatcher that is used in the gRPC server implementation.
+
+::
+
+   class RequestProcessor
+   {
+   public:
+      virtual ~RequestProcessor() {}
+      virtual Response *process(const Request *request, Response *response) = 0;
+      virtual void set_shutdown_handler(void *p, void (*funcptr)(void *)) = 0;
+   };
+
+   // Note that the RequestProcessor will take ownership
+   // of the CurveBuilderService and ValuationService
+   std::unique_ptr<RequestProcessor> get_request_processor(
+      std::unique_ptr<CurveBuilderService> bootstrapper,
+      std::unique_ptr<ValuationService> valuation_service);

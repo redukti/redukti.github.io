@@ -85,6 +85,8 @@ strings for values. Most of the enums used are defined in the protocol buffers d
 </dd>
 <dt>redukti::CurveGroup</dt><dd><p>Defines curve group ids for the purposes of grouping curves used in pricing.</p>
 </dd>
+<dt>redukti::CurveType</dt><dd><p>CurveType identifies how the curve operates on its input</p>
+</dd>
 <dt>redukti::IRRateType</dt><dd><p>Defines the type of value being used in a curve definition.</p>
 </dd>
 <dt>redukti::PricingCurveType</dt><dd><p>Defines the usage of a curve in a pricing scenario.</p>
@@ -107,7 +109,7 @@ chosen. The date library is based upon:</p>
 <li><p>The date implementation in QuantLib.</p></li>
 </ul>
 <p>The following key types are defined:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// This class provides a Period (length + TimeUnit) class</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// This class provides a Period (length + PeriodUnit) class</span>
 <span class="c1">// and implements a limited algebra.</span>
 <span class="c1">// Must be standard layout for C compatibility</span>
 <span class="k">class</span> <span class="nc">Period</span>
@@ -301,7 +303,10 @@ chosen. The date library is based upon:</p>
 <span class="c1">// Dec 31st, 2199</span>
 <span class="k">constexpr</span> <span class="n">Date</span> <span class="nf">maximum_date</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
 
-<span class="c1">// Parse a date</span>
+<span class="c1">// Parse a string representation of date</span>
+<span class="c1">// It will detect seperator character &#39;/&#39; or &#39;-&#39;.</span>
+<span class="c1">// The formats acceptable are yyyy/mm/dd, dd/mm/yyyy, yyyy-mm-dd, or dd-mm-yyyy</span>
+<span class="c1">// No exceptions thrown</span>
 <span class="c1">// Returns true on success</span>
 <span class="kt">bool</span> <span class="nf">parse_date</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="n">Date</span> <span class="o">*</span><span class="n">d</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
 
@@ -328,7 +333,8 @@ chosen. The date library is based upon:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">JPTO</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">BRSP</span></code></p></li>
 </ul>
-<p>These implementations are derived from the QuantLib library.</p>
+<p>These implementations are derived from the QuantLib library.
+You can also override or create one of the defined calendar enums by suppling a list of holidays.</p>
 <p>The Calendar API is as described below.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// The Calendar interface provides the means to determine whether</span>
 <span class="c1">// a given date is a holiday for a business center or not. Also</span>
@@ -356,21 +362,21 @@ chosen. The date library is based upon:</p>
    <span class="n">Date</span> <span class="nf">end_of_month</span><span class="p">(</span><span class="n">Date</span> <span class="n">d</span><span class="p">)</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span>
 
    <span class="c1">// Adjusts a non-business day to the appropriate near business day</span>
-   <span class="c1">//  with respect to the given convention.</span>
+   <span class="c1">// with respect to the given convention.</span>
    <span class="n">Date</span> <span class="nf">adjust</span><span class="p">(</span><span class="n">Date</span> <span class="n">date</span><span class="p">,</span> <span class="n">BusinessDayConvention</span> <span class="n">convention</span> <span class="o">=</span> <span class="n">BusinessDayConvention</span><span class="o">::</span><span class="n">FOLLOWING</span><span class="p">)</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span>
 
-   <span class="c1">//  Advances the given date of the given number of business days and</span>
-   <span class="c1">//  returns the result. Note that if unit is Days then business day</span>
-   <span class="c1">// convention and eom flags are not used as the date is move by the</span>
+   <span class="c1">// Advances the given date of the given number of business days and</span>
+   <span class="c1">// returns the result. Note that if unit is Days then business day</span>
+   <span class="c1">// convention and eom flags are not used as the date is moved by the</span>
    <span class="c1">// specified business days. For other period units the date is moved as</span>
    <span class="c1">// per raw calendar and then adjusted if it falls on a holiday</span>
    <span class="n">Date</span> <span class="nf">advance</span><span class="p">(</span><span class="n">Date</span> <span class="n">date</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">PeriodUnit</span> <span class="n">unit</span><span class="p">,</span>
            <span class="n">BusinessDayConvention</span> <span class="n">convention</span> <span class="o">=</span> <span class="n">BusinessDayConvention</span><span class="o">::</span><span class="n">FOLLOWING</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">endOfMonth</span> <span class="o">=</span> <span class="nb">false</span><span class="p">)</span> <span class="k">const</span>
        <span class="k">noexcept</span><span class="p">;</span>
 
-   <span class="c1">//  Advances the given date as specified by the given period and</span>
-   <span class="c1">//  returns the result.</span>
-   <span class="c1">//  The input date is not modified.</span>
+   <span class="c1">// Advances the given date as specified by the given period and</span>
+   <span class="c1">// returns the result.</span>
+   <span class="c1">// The input date is not modified.</span>
    <span class="n">Date</span> <span class="nf">advance</span><span class="p">(</span><span class="n">Date</span> <span class="n">date</span><span class="p">,</span> <span class="k">const</span> <span class="n">Period</span> <span class="o">&amp;</span><span class="n">period</span><span class="p">,</span>
            <span class="n">BusinessDayConvention</span> <span class="n">convention</span> <span class="o">=</span> <span class="n">BusinessDayConvention</span><span class="o">::</span><span class="n">FOLLOWING</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">endOfMonth</span> <span class="o">=</span> <span class="nb">false</span><span class="p">)</span> <span class="k">const</span>
        <span class="k">noexcept</span><span class="p">;</span>
@@ -396,6 +402,10 @@ chosen. The date library is based upon:</p>
 <span class="c1">// b) Ditto for joint calendar instances.</span>
 <span class="c1">// c) Calendar instances must be immutable.</span>
 <span class="c1">// d) It must be threadsafe</span>
+<span class="c1">//</span>
+<span class="c1">// These requirements place some restrictions on when a calendar instance can be</span>
+<span class="c1">// be defined. Essentially define calendar instances at system startup prior to any</span>
+<span class="c1">// other operations with OpenRedukti</span>
 <span class="k">class</span> <span class="nc">CalendarService</span>
 <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
@@ -411,13 +421,24 @@ chosen. The date library is based upon:</p>
    <span class="c1">// any use.</span>
    <span class="k">virtual</span> <span class="kt">bool</span> <span class="nf">set_calendar</span><span class="p">(</span><span class="n">BusinessCenter</span> <span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Calendar</span><span class="o">&gt;</span> <span class="n">calendar</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
 
+   <span class="c1">// Create a calendar from a set of holidays and assign it to the business center</span>
+   <span class="c1">// If the assignment is successful the service will take ownership of the instance</span>
+   <span class="c1">// May fail if calendar instance already set and has been</span>
+   <span class="c1">// accessed by a client - i.e. new calendars can only be set prior to</span>
+   <span class="c1">// any use.</span>
+   <span class="k">virtual</span> <span class="kt">bool</span> <span class="nf">set_calendar</span><span class="p">(</span><span class="n">BusinessCenter</span> <span class="n">id</span><span class="p">,</span> <span class="k">const</span> <span class="n">Date</span> <span class="o">*</span><span class="n">holidays</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">n</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
    <span class="c1">// Create joint calendar</span>
    <span class="c1">// Note that the order in which the business centers are given</span>
-   <span class="c1">// should not matter - i.e. the constituents must be sorted and then</span>
+   <span class="c1">// should not matter - i.e. the constituents are sorted and then</span>
    <span class="c1">// combined so that for a given combination the returned instance is</span>
    <span class="c1">// always the same</span>
    <span class="k">virtual</span> <span class="n">Calendar</span> <span class="o">*</span><span class="nf">get_calendar</span><span class="p">(</span><span class="n">JointCalendarParameters</span> <span class="n">calendars</span><span class="p">,</span>
                    <span class="n">JointCalendarRule</span> <span class="n">rule</span> <span class="o">=</span> <span class="n">JointCalendarRule</span><span class="o">::</span><span class="n">JOIN_HOLIDAYS</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
+
+   <span class="c1">// Front end to set_calendar()</span>
+   <span class="k">virtual</span> <span class="n">RegisterCalendarReply</span> <span class="o">*</span><span class="nf">handle_register_calendar_request</span><span class="p">(</span>
+      <span class="k">const</span> <span class="n">RegisterCalendarRequest</span> <span class="o">*</span><span class="n">request</span><span class="p">,</span> <span class="n">RegisterCalendarReply</span> <span class="o">*</span><span class="n">reply</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">};</span>
 
 <span class="c1">// Gets the global calendar service</span>
@@ -663,6 +684,11 @@ chosen. The date library is based upon:</p>
    <span class="c1">// Obtains an instance of IntrestRateIndex - must return an existing instance</span>
    <span class="c1">// if already defined</span>
    <span class="k">virtual</span> <span class="n">InterestRateIndex</span> <span class="o">*</span><span class="nf">get_index</span><span class="p">(</span><span class="n">Currency</span> <span class="n">currency</span><span class="p">,</span> <span class="n">IndexFamily</span> <span class="n">index_family</span><span class="p">,</span> <span class="n">Tenor</span> <span class="n">tenor</span><span class="p">);</span>
+
+   <span class="c1">// front-end to register_index()</span>
+   <span class="k">virtual</span> <span class="n">RegisterIndexDefinitionReply</span> <span class="o">*</span>
+      <span class="nf">handle_register_index_definition_request</span><span class="p">(</span><span class="k">const</span> <span class="n">RegisterIndexDefinitionRequest</span> <span class="o">*</span><span class="n">request</span><span class="p">,</span>
+             <span class="n">RegisterIndexDefinitionReply</span> <span class="o">*</span><span class="n">reply</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">};</span>
 
 <span class="k">extern</span> <span class="n">IndexService</span> <span class="o">*</span><span class="nf">get_default_index_service</span><span class="p">();</span>
@@ -1047,7 +1073,7 @@ described below.:</p>
 
 <span class="k">class</span> <span class="nc">Interpolator</span>
 <span class="p">{</span>
-      <span class="k">public</span><span class="o">:</span>
+<span class="k">public</span><span class="o">:</span>
    <span class="k">virtual</span> <span class="o">~</span><span class="n">Interpolator</span><span class="p">()</span> <span class="p">{}</span>
 
    <span class="c1">// Interpolate at x</span>
@@ -1127,47 +1153,67 @@ is also supported.</p>
 <span class="c1">// The definitions are static i.e. they do not change</span>
 <span class="c1">// from day to day</span>
 <span class="n">message</span> <span class="n">IRCurveDefinition</span> <span class="p">{</span>
+
    <span class="c1">// All curve definitions must be given a unique id</span>
    <span class="c1">// This can be considered to be some sort of primary key</span>
    <span class="c1">// for the definition - i.e. no two curve definitions may</span>
    <span class="c1">// have the same id</span>
    <span class="n">int32</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+   <span class="c1">// Curves may be interpolated from values</span>
+   <span class="c1">// or parametric</span>
+   <span class="n">CurveType</span> <span class="n">curve_type</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
    <span class="c1">// The curve group is intended to allow the different</span>
    <span class="c1">// configurations of the same curve to be created for</span>
    <span class="c1">// different use cases, e.g. different interpolation methods</span>
    <span class="c1">// may be used for IM versus VM, or a reduced set of tenors</span>
    <span class="c1">// may be used for computing Liquidity Margin</span>
-   <span class="n">CurveGroup</span> <span class="n">curve_group</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-   <span class="n">Currency</span> <span class="n">currency</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-   <span class="n">IndexFamily</span> <span class="n">index_family</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+   <span class="n">CurveGroup</span> <span class="n">curve_group</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+
+   <span class="n">Currency</span> <span class="n">currency</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+
+   <span class="n">IndexFamily</span> <span class="n">index_family</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+
    <span class="c1">// Tenor is optional; if specified implies a tenor</span>
    <span class="c1">// specific curve</span>
-   <span class="n">Tenor</span> <span class="n">tenor</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
-   <span class="n">InterpolatorType</span> <span class="n">interpolator_type</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+   <span class="n">Tenor</span> <span class="n">tenor</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+
+   <span class="n">InterpolatorType</span> <span class="n">interpolator_type</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+
    <span class="c1">// If interpolated_on is discount factors then it means</span>
    <span class="c1">// that the interpolator should operate on discount factors</span>
    <span class="c1">// rather than zero rates</span>
-   <span class="n">IRRateType</span> <span class="n">interpolated_on</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+   <span class="n">IRRateType</span> <span class="n">interpolated_on</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+
    <span class="c1">// The maturity generation rule defines how the the bootstrapper</span>
    <span class="c1">// should generate the maturities of the curve</span>
-   <span class="n">MaturityGenerationRule</span> <span class="n">maturity_generation_rule</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+   <span class="n">MaturityGenerationRule</span> <span class="n">maturity_generation_rule</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+
    <span class="c1">// If the curve is defined to have fixed maturity tenors</span>
    <span class="c1">// then a list of tenors is needed</span>
    <span class="c1">// If the maturities are defined from input instruments then</span>
    <span class="c1">// tenors need not be defined</span>
-   <span class="n">repeated</span> <span class="n">Tenor</span> <span class="n">tenors</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+   <span class="n">repeated</span> <span class="n">Tenor</span> <span class="n">tenors</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="n">message</span> <span class="n">ZeroCurve</span> <span class="p">{</span>
+
    <span class="n">int32</span> <span class="n">curve_definition_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
    <span class="n">repeated</span> <span class="n">int32</span> <span class="n">maturities</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
    <span class="n">repeated</span> <span class="kt">double</span> <span class="n">values</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="n">message</span> <span class="n">ZeroCurveParSensitivities</span> <span class="p">{</span>
+
    <span class="n">int32</span> <span class="n">curve_definition_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
    <span class="n">int32</span> <span class="n">num_instruments</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
    <span class="n">int32</span> <span class="n">num_maturities</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+
    <span class="c1">// Map from &lt;row,col&gt; to value</span>
    <span class="c1">// The lower 16 bits represent the row index</span>
    <span class="c1">// The higher 16 bits represent the column index</span>
@@ -1323,18 +1369,24 @@ is also supported.</p>
 <span class="c1">// changes to original values do not impact the curve. You can invoke</span>
 <span class="c1">// the method update_rates() to update the values after the curve is</span>
 <span class="c1">// created.</span>
-<span class="k">extern</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">YieldCurve</span><span class="p">,</span> <span class="n">Deleter</span><span class="o">&lt;</span><span class="n">YieldCurve</span><span class="o">&gt;&gt;</span>
-<span class="n">make_curve</span><span class="p">(</span><span class="n">Allocator</span> <span class="o">*</span><span class="n">A</span><span class="p">,</span> <span class="n">CurveId</span> <span class="n">id</span><span class="p">,</span> <span class="n">Date</span> <span class="n">as_of_date</span><span class="p">,</span> <span class="n">Date</span> <span class="n">maturities</span><span class="p">[],</span> <span class="kt">double</span> <span class="n">values</span><span class="p">[],</span> <span class="kt">size_t</span> <span class="n">n</span><span class="p">,</span>
-      <span class="n">InterpolatorType</span> <span class="n">interpolator</span><span class="p">,</span> <span class="n">IRRateType</span> <span class="n">type</span> <span class="o">=</span> <span class="n">IRRateType</span><span class="o">::</span><span class="n">ZERO_RATE</span><span class="p">,</span> <span class="kt">int</span> <span class="n">deriv_order</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-      <span class="n">DayCountFraction</span> <span class="n">fraction</span> <span class="o">=</span> <span class="n">DayCountFraction</span><span class="o">::</span><span class="n">ACT_365_FIXED</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">YieldCurve</span><span class="p">,</span> <span class="n">Deleter</span><span class="o">&lt;</span><span class="n">YieldCurve</span><span class="o">&gt;&gt;</span> <span class="n">YieldCurvePointerType</span><span class="p">;</span>
+<span class="k">extern</span> <span class="n">YieldCurvePointerType</span> <span class="nf">make_curve</span><span class="p">(</span><span class="n">Allocator</span> <span class="o">*</span><span class="n">A</span><span class="p">,</span> <span class="n">CurveId</span> <span class="n">id</span><span class="p">,</span> <span class="n">Date</span> <span class="n">as_of_date</span><span class="p">,</span> <span class="n">Date</span> <span class="n">maturities</span><span class="p">[],</span> <span class="kt">double</span> <span class="n">values</span><span class="p">[],</span>
+            <span class="kt">size_t</span> <span class="n">n</span><span class="p">,</span> <span class="n">InterpolatorType</span> <span class="n">interpolator</span><span class="p">,</span>
+            <span class="n">IRRateType</span> <span class="n">type</span> <span class="o">=</span> <span class="n">IRRateType</span><span class="o">::</span><span class="n">ZERO_RATE</span><span class="p">,</span> <span class="kt">int</span> <span class="n">deriv_order</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="n">DayCountFraction</span> <span class="n">fraction</span> <span class="o">=</span> <span class="n">DayCountFraction</span><span class="o">::</span><span class="n">ACT_365_FIXED</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
 
-<span class="k">class</span> <span class="nc">IRCurveDefinition</span><span class="p">;</span>
-<span class="k">class</span> <span class="nc">ZeroCurve</span><span class="p">;</span>
+<span class="k">extern</span> <span class="n">YieldCurvePointerType</span> <span class="nf">make_svensson_curve</span><span class="p">(</span><span class="n">Allocator</span> <span class="o">*</span><span class="n">A</span><span class="p">,</span> <span class="n">CurveId</span> <span class="n">id</span><span class="p">,</span> <span class="n">Date</span> <span class="n">as_of_date</span><span class="p">,</span> <span class="kt">double</span> <span class="n">parameters</span><span class="p">[],</span>
+            <span class="kt">size_t</span> <span class="n">n</span><span class="p">,</span> <span class="n">DayCountFraction</span> <span class="n">fraction</span> <span class="o">=</span> <span class="n">DayCountFraction</span><span class="o">::</span><span class="n">ACT_365_FIXED</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
 
-<span class="k">extern</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">YieldCurve</span><span class="p">,</span> <span class="n">Deleter</span><span class="o">&lt;</span><span class="n">YieldCurve</span><span class="o">&gt;&gt;</span>
-<span class="n">make_curve</span><span class="p">(</span><span class="n">Date</span> <span class="n">as_of_date</span><span class="p">,</span> <span class="k">const</span> <span class="n">IRCurveDefinition</span> <span class="o">*</span><span class="n">defn</span><span class="p">,</span> <span class="k">const</span> <span class="n">ZeroCurve</span> <span class="o">&amp;</span><span class="n">curve</span><span class="p">,</span> <span class="kt">int</span> <span class="n">deriv_order</span><span class="p">,</span>
-      <span class="n">PricingCurveType</span> <span class="n">type</span> <span class="o">=</span> <span class="n">PRICING_CURVE_TYPE_UNSPECIFIED</span><span class="p">,</span> <span class="n">MarketDataQualifier</span> <span class="n">mdq</span> <span class="o">=</span> <span class="n">MDQ_NORMAL</span><span class="p">,</span>
-      <span class="kt">short</span> <span class="kt">int</span> <span class="n">cycle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">short</span> <span class="kt">int</span> <span class="n">scenario</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+<span class="c1">// When constructed this way, inputs are always continuously compounded zero rates. If the curve definition</span>
+<span class="c1">// requires interpolation of discount factors then the zero rates are converted to discount factors</span>
+<span class="c1">// internally.</span>
+<span class="c1">// Note however, that when updating rates, values must be of the correct type - that is,</span>
+<span class="c1">// discount factors if that is what is being interpolated on.</span>
+<span class="k">extern</span> <span class="n">YieldCurvePointerType</span> <span class="nf">make_curve</span><span class="p">(</span><span class="n">Date</span> <span class="n">as_of_date</span><span class="p">,</span> <span class="k">const</span> <span class="n">IRCurveDefinition</span> <span class="o">*</span><span class="n">defn</span><span class="p">,</span> <span class="k">const</span> <span class="n">ZeroCurve</span> <span class="o">&amp;</span><span class="n">curve</span><span class="p">,</span>
+            <span class="kt">int</span> <span class="n">deriv_order</span><span class="p">,</span> <span class="n">PricingCurveType</span> <span class="n">type</span> <span class="o">=</span> <span class="n">PRICING_CURVE_TYPE_UNSPECIFIED</span><span class="p">,</span>
+            <span class="n">MarketDataQualifier</span> <span class="n">mdq</span> <span class="o">=</span> <span class="n">MDQ_NORMAL</span><span class="p">,</span> <span class="kt">short</span> <span class="kt">int</span> <span class="n">cycle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="kt">short</span> <span class="kt">int</span> <span class="n">scenario</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -1395,9 +1447,32 @@ represented as a set of cashflows, OpenRedukti does not care what the original r
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Simple cashflow (known amount)</span>
 <span class="n">message</span> <span class="n">CFSimple</span> <span class="p">{</span>
    <span class="n">Currency</span> <span class="n">currency</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
    <span class="kt">double</span> <span class="n">amount</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+   <span class="c1">// Adjusted payment date</span>
    <span class="n">int32</span> <span class="n">payment_date</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+
+   <span class="c1">// We need to know the floating rate</span>
+   <span class="c1">// index on the trade to determine</span>
+   <span class="c1">// the discount curve mapping to use</span>
    <span class="n">IsdaIndex</span> <span class="n">trade_index</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+
+   <span class="c1">// For fixed rate Bond cashflows</span>
+   <span class="c1">// we need to have a direct specification</span>
+   <span class="c1">// of the Curve Family (called IndexFamily)</span>
+   <span class="c1">// so that we can map to the best discount curve</span>
+   <span class="c1">// If this is set this should override</span>
+   <span class="c1">// derivation via trade_index above.</span>
+   <span class="n">IndexFamily</span> <span class="n">discounting_index_family</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+
+   <span class="c1">// This is the date following which this</span>
+   <span class="c1">// cashflow will not be delivered</span>
+   <span class="c1">// Used by bonds</span>
+   <span class="c1">// Calculated by taking adjusted payment date</span>
+   <span class="c1">// and subtracting ex coupon days offset and then</span>
+   <span class="c1">// adusting the date</span>
+   <span class="n">int32</span> <span class="n">ex_coupon_date</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="c1">// A floating calculation period</span>
@@ -1416,11 +1491,32 @@ represented as a set of cashflows, OpenRedukti does not care what the original r
 <span class="c1">// May contain more than one calculation period</span>
 <span class="n">message</span> <span class="n">CFFloating</span> <span class="p">{</span>
    <span class="n">Currency</span> <span class="n">currency</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
    <span class="n">repeated</span> <span class="n">CFFloatingPeriod</span> <span class="n">floating_periods</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
    <span class="n">CompoundingMethod</span> <span class="n">compounding_method</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+
    <span class="n">DayCountFraction</span> <span class="n">day_count_fraction</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+
    <span class="n">int32</span> <span class="n">payment_date</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
-<span class="p">}</span>
+
+   <span class="c1">// For floating rate Bond cashflows</span>
+   <span class="c1">// we need to have a direct specification</span>
+   <span class="c1">// of the Curve Family (called IndexFamily)</span>
+   <span class="c1">// so that we can map to the best discount curve</span>
+   <span class="c1">// If this is set this should be used to</span>
+   <span class="c1">// map the discount curve rather than the</span>
+   <span class="c1">// floating rate.</span>
+   <span class="n">IndexFamily</span> <span class="n">discounting_index_family</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+
+   <span class="c1">// This is the date following which this</span>
+   <span class="c1">// cashflow will not be delivered</span>
+   <span class="c1">// Used by bonds</span>
+   <span class="c1">// Calculated by taking adjusted payment date</span>
+   <span class="c1">// and subtracting ex coupon days offset and then</span>
+   <span class="c1">// adusting the date</span>
+   <span class="n">int32</span> <span class="n">ex_coupon_date</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+   <span class="p">}</span>
 
 <span class="c1">// FRA Cashflow</span>
 <span class="n">message</span> <span class="n">CFFra</span> <span class="p">{</span>
@@ -1944,6 +2040,31 @@ pricing of cashflows.</p>
    <span class="k">virtual</span> <span class="n">ValuationReply</span> <span class="o">*</span><span class="nf">handle_valuation_request</span><span class="p">(</span><span class="n">google</span><span class="o">::</span><span class="n">protobuf</span><span class="o">::</span><span class="n">Arena</span> <span class="o">*</span><span class="n">arena</span><span class="p">,</span>
                       <span class="k">const</span> <span class="n">ValuationRequest</span> <span class="o">*</span><span class="n">request</span><span class="p">);</span>
 <span class="p">};</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">ValuationService</span><span class="o">&gt;</span> <span class="n">get_valuation_service</span><span class="p">(</span>
+   <span class="n">IndexService</span> <span class="o">*</span><span class="n">index_service</span><span class="p">,</span> <span class="n">CalendarService</span> <span class="o">*</span><span class="n">calendar_service</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="requestprocessor">
+<h2>RequestProcessor<a class="headerlink" href="#requestprocessor" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;request_processor.h&gt;</span><span class="cp"></span>
+</pre></div>
+</div>
+<p>This implements the request dispatcher that is used in the gRPC server implementation.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">RequestProcessor</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+   <span class="k">virtual</span> <span class="o">~</span><span class="n">RequestProcessor</span><span class="p">()</span> <span class="p">{}</span>
+   <span class="k">virtual</span> <span class="n">Response</span> <span class="o">*</span><span class="n">process</span><span class="p">(</span><span class="k">const</span> <span class="n">Request</span> <span class="o">*</span><span class="n">request</span><span class="p">,</span> <span class="n">Response</span> <span class="o">*</span><span class="n">response</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">set_shutdown_handler</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">funcptr</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="p">))</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// Note that the RequestProcessor will take ownership</span>
+<span class="c1">// of the CurveBuilderService and ValuationService</span>
+<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">RequestProcessor</span><span class="o">&gt;</span> <span class="n">get_request_processor</span><span class="p">(</span>
+   <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">CurveBuilderService</span><span class="o">&gt;</span> <span class="n">bootstrapper</span><span class="p">,</span>
+   <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">ValuationService</span><span class="o">&gt;</span> <span class="n">valuation_service</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -1993,6 +2114,7 @@ pricing of cashflows.</p>
 <li class="toctree-l2"><a class="reference internal" href="#cashflow-pricing">Cashflow Pricing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#curve-building">Curve Building</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#valuation-service">Valuation Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#requestprocessor">RequestProcessor</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="openredukti-ravi-api.html">OpenRedukti Scripting With Ravi</a></li>

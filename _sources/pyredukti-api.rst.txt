@@ -1,3 +1,5 @@
+.. highlightlang:: python
+
 Pything bindings: redukti package
 =================================
 
