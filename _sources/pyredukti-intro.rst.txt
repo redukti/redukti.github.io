@@ -1,5 +1,5 @@
-An Introduction to PyRedukti
-============================
+An Introduction to Python Bindings for OpenRedukti
+==================================================
 
 PyRedukti is a Python binding for :doc:`openredukti-intro`.
 

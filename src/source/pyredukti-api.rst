@@ -1,7 +1,7 @@
 .. highlightlang:: python
 
-Pything bindings: redukti package
-=================================
+Python Library for OpenRedukti - API Reference
+==============================================
 
 redukti module
 ---------------
