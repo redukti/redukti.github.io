@@ -152,13 +152,3 @@ Building OpenRedukti with gRPC
 	cd build
 	cmake  -DCMAKE_INSTALL_PREFIX=c:\Software\OpenRedukti -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Release -DProtobuf_ROOT=c:\Software\protobuf371r -DgRPC_DIR=c:\work\vcpkg\installed\x64-windows-static-dyncrt\share\grpc -Dc-ares_DIR=c:\work\vcpkg\installed\x64-windows-static-dyncrt\share\c-ares ..
 
-Above creates projects suited for debug build. You can go into VS2017 and do the build from there.
-
-For a release build, do following::
-
-	mkdir buildrelease
-	cd buildrelease
-	cmake -DCMAKE_INSTALL_PREFIX=c:\Software\OpenRedukti -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Release ..
-
-Remember to select Release configuration in VS2017. You can run the INSTALL target to copy the final binaries to the installation location specified with ``-DCMAKE_INSTALL_PREFIX`` option.
-
