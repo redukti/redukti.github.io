@@ -120,25 +120,13 @@ We assume here that the installed libraries are under ``c:\Software\OpenRedukti`
 
 If you have your OpenBLAS and LAPACK files installed differently, please review and amend the ``FindOpenBLAS.cmake`` file in the ``cmake`` folder.
 
-Obtain Protocol Buffers via vcpkg
----------------------------------
-NOTE: I had to build protobuf locally because I faced some issues with below. (FIXME)
+Build Protocol Buffers
+----------------------
+I had to build protobuf locally. 
+I installed the Protobuf binaries into following locations:
 
-Install `vcpkg <https://github.com/Microsoft/vcpkg>`_.
-We assume below that ``vcpkg`` is installed at ``c:\work\vcpkg``.
-
-Get protobuf as follows::
-
-    vcpkg install protobuf:x64-windows
-
-On my machine after installation I get this::
-
-    C:\work\vcpkg>vcpkg list
-    protobuf:x64-windows                               3.6.1-2          Protocol Buffers - Google's data interchange format
-
-Ensure protoc is on the path as follows::
-
-    set PATH=C:\work\vcpkg\installed\x64-windows\tools\protobuf;%PATH%
+* ``c:\Software\protobuf371r`` - release version
+* ``c:\Software\protobuf371d`` - debug version
 
 Build gPRC
 ----------
@@ -147,14 +135,20 @@ This is an optional step.
 On Windows, you can build and install gRPC using `vcpkg`. This is what I did.
 Or else follow instructions at `gRPC C++ Building from source <https://github.com/grpc/grpc/blob/master/BUILDING.md>`_.  
 
-Build OpenRedukti
------------------
+Build OpenRedukti without gRPC
+------------------------------
 Once all of above steps are done, you can build OpenRedukti as follows::
 
 	mkdir build
 	cd build
-	set PATH=c:\Software\protobuf371d\bin;%PATH%
-	cmake  -DCMAKE_INSTALL_PREFIX=c:\Software\OpenRedukti -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Debug -DPROTOBUF_SRC_ROOT_FOLDER=c:\Software\protobuf371d -DgRPC_DIR=c:\work\vcpkg\installed\x64-windows-static-dyncrt\share\grpc -Dc-ares_DIR=c:\work\vcpkg\installed\x64-windows-static-dyncrt\share\c-ares ..
+	cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_INSTALL_PREFIX=c:\Software\OpenRedukti -DCMAKE_BUILD_TYPE=Release -DProtobuf_ROOT=c:\Software\protobuf371r ..
+	
+Building OpenRedukti with gRPC
+------------------------------
+
+	mkdir build
+	cd build
+	cmake  -DCMAKE_INSTALL_PREFIX=c:\Software\OpenRedukti -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Release -DProtobuf_ROOT=c:\Software\protobuf371r -DgRPC_DIR=c:\work\vcpkg\installed\x64-windows-static-dyncrt\share\grpc -Dc-ares_DIR=c:\work\vcpkg\installed\x64-windows-static-dyncrt\share\c-ares ..
 
 Above creates projects suited for debug build. You can go into VS2017 and do the build from there.
 
