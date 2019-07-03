@@ -146,6 +146,8 @@ Once all of above steps are done, you can build OpenRedukti as follows::
 Building OpenRedukti with gRPC
 ------------------------------
 
+::
+
 	mkdir build
 	cd build
 	cmake  -DCMAKE_INSTALL_PREFIX=c:\Software\OpenRedukti -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Release -DProtobuf_ROOT=c:\Software\protobuf371r -DgRPC_DIR=c:\work\vcpkg\installed\x64-windows-static-dyncrt\share\grpc -Dc-ares_DIR=c:\work\vcpkg\installed\x64-windows-static-dyncrt\share\c-ares ..
