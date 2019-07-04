@@ -151,24 +151,14 @@ $HOME/Software/redukti/bin/reduktiserv -s $HOME/Software/redukti/scripts/pricing
 We assume here that the installed libraries are under <code class="docutils literal notranslate"><span class="pre">c:\Software\OpenRedukti</span></code>.</p>
 <p>If you have your OpenBLAS and LAPACK files installed differently, please review and amend the <code class="docutils literal notranslate"><span class="pre">FindOpenBLAS.cmake</span></code> file in the <code class="docutils literal notranslate"><span class="pre">cmake</span></code> folder.</p>
 </div>
-<div class="section" id="obtain-protocol-buffers-via-vcpkg">
-<h3>Obtain Protocol Buffers via vcpkg<a class="headerlink" href="#obtain-protocol-buffers-via-vcpkg" title="Permalink to this headline">¶</a></h3>
-<p>NOTE: I had to build protobuf locally because I faced some issues with below. (FIXME)</p>
-<p>Install <a class="reference external" href="https://github.com/Microsoft/vcpkg">vcpkg</a>.
-We assume below that <code class="docutils literal notranslate"><span class="pre">vcpkg</span></code> is installed at <code class="docutils literal notranslate"><span class="pre">c:\work\vcpkg</span></code>.</p>
-<p>Get protobuf as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vcpkg</span> <span class="n">install</span> <span class="n">protobuf</span><span class="p">:</span><span class="n">x64</span><span class="o">-</span><span class="n">windows</span>
-</pre></div>
-</div>
-<p>On my machine after installation I get this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span>\<span class="n">work</span>\<span class="n">vcpkg</span><span class="o">&gt;</span><span class="n">vcpkg</span> <span class="nb">list</span>
-<span class="n">protobuf</span><span class="p">:</span><span class="n">x64</span><span class="o">-</span><span class="n">windows</span>                               <span class="mf">3.6</span><span class="o">.</span><span class="mi">1</span><span class="o">-</span><span class="mi">2</span>          <span class="n">Protocol</span> <span class="n">Buffers</span> <span class="o">-</span> <span class="n">Google</span><span class="s1">&#39;s data interchange format</span>
-</pre></div>
-</div>
-<p>Ensure protoc is on the path as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">PATH</span><span class="o">=</span><span class="n">C</span><span class="p">:</span>\<span class="n">work</span>\<span class="n">vcpkg</span>\<span class="n">installed</span>\<span class="n">x64</span><span class="o">-</span><span class="n">windows</span>\<span class="n">tools</span>\<span class="n">protobuf</span><span class="p">;</span><span class="o">%</span><span class="n">PATH</span><span class="o">%</span>
-</pre></div>
-</div>
+<div class="section" id="build-protocol-buffers">
+<h3>Build Protocol Buffers<a class="headerlink" href="#build-protocol-buffers" title="Permalink to this headline">¶</a></h3>
+<p>I had to build protobuf locally.
+I installed the Protobuf binaries into following locations:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">c:\Software\protobuf371r</span></code> - release version</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c:\Software\protobuf371d</span></code> - debug version</p></li>
+</ul>
 </div>
 <div class="section" id="build-gprc">
 <h3>Build gPRC<a class="headerlink" href="#build-gprc" title="Permalink to this headline">¶</a></h3>
@@ -176,23 +166,22 @@ We assume below that <code class="docutils literal notranslate"><span class="pre
 <p>On Windows, you can build and install gRPC using <cite>vcpkg</cite>. This is what I did.
 Or else follow instructions at <a class="reference external" href="https://github.com/grpc/grpc/blob/master/BUILDING.md">gRPC C++ Building from source</a>.</p>
 </div>
-<div class="section" id="id2">
-<h3>Build OpenRedukti<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="build-openredukti-without-grpc">
+<h3>Build OpenRedukti without gRPC<a class="headerlink" href="#build-openredukti-without-grpc" title="Permalink to this headline">¶</a></h3>
 <p>Once all of above steps are done, you can build OpenRedukti as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">build</span>
 <span class="n">cd</span> <span class="n">build</span>
-<span class="nb">set</span> <span class="n">PATH</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">Software</span>\<span class="n">protobuf371d</span>\<span class="nb">bin</span><span class="p">;</span><span class="o">%</span><span class="n">PATH</span><span class="o">%</span>
-<span class="n">cmake</span>  <span class="o">-</span><span class="n">DCMAKE_INSTALL_PREFIX</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">Software</span>\<span class="n">OpenRedukti</span> <span class="o">-</span><span class="n">G</span> <span class="s2">&quot;Visual Studio 15 2017 Win64&quot;</span> <span class="o">-</span><span class="n">DCMAKE_BUILD_TYPE</span><span class="o">=</span><span class="n">Debug</span> <span class="o">-</span><span class="n">DPROTOBUF_SRC_ROOT_FOLDER</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">Software</span>\<span class="n">protobuf371d</span> <span class="o">-</span><span class="n">DgRPC_DIR</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">work</span>\<span class="n">vcpkg</span>\<span class="n">installed</span>\<span class="n">x64</span><span class="o">-</span><span class="n">windows</span><span class="o">-</span><span class="n">static</span><span class="o">-</span><span class="n">dyncrt</span>\<span class="n">share</span>\<span class="n">grpc</span> <span class="o">-</span><span class="n">Dc</span><span class="o">-</span><span class="n">ares_DIR</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">work</span>\<span class="n">vcpkg</span>\<span class="n">installed</span>\<span class="n">x64</span><span class="o">-</span><span class="n">windows</span><span class="o">-</span><span class="n">static</span><span class="o">-</span><span class="n">dyncrt</span>\<span class="n">share</span>\<span class="n">c</span><span class="o">-</span><span class="n">ares</span> <span class="o">..</span>
+<span class="n">cmake</span> <span class="o">-</span><span class="n">G</span> <span class="s2">&quot;Visual Studio 15 2017 Win64&quot;</span> <span class="o">-</span><span class="n">DCMAKE_INSTALL_PREFIX</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">Software</span>\<span class="n">OpenRedukti</span> <span class="o">-</span><span class="n">DCMAKE_BUILD_TYPE</span><span class="o">=</span><span class="n">Release</span> <span class="o">-</span><span class="n">DProtobuf_ROOT</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">Software</span>\<span class="n">protobuf371r</span> <span class="o">..</span>
 </pre></div>
 </div>
-<p>Above creates projects suited for debug build. You can go into VS2017 and do the build from there.</p>
-<p>For a release build, do following:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">buildrelease</span>
-<span class="n">cd</span> <span class="n">buildrelease</span>
-<span class="n">cmake</span> <span class="o">-</span><span class="n">DCMAKE_INSTALL_PREFIX</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">Software</span>\<span class="n">OpenRedukti</span> <span class="o">-</span><span class="n">G</span> <span class="s2">&quot;Visual Studio 15 2017 Win64&quot;</span> <span class="o">-</span><span class="n">DCMAKE_BUILD_TYPE</span><span class="o">=</span><span class="n">Release</span> <span class="o">..</span>
+</div>
+<div class="section" id="building-openredukti-with-grpc">
+<h3>Building OpenRedukti with gRPC<a class="headerlink" href="#building-openredukti-with-grpc" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">build</span>
+<span class="n">cd</span> <span class="n">build</span>
+<span class="n">cmake</span>  <span class="o">-</span><span class="n">DCMAKE_INSTALL_PREFIX</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">Software</span>\<span class="n">OpenRedukti</span> <span class="o">-</span><span class="n">G</span> <span class="s2">&quot;Visual Studio 15 2017 Win64&quot;</span> <span class="o">-</span><span class="n">DCMAKE_BUILD_TYPE</span><span class="o">=</span><span class="n">Release</span> <span class="o">-</span><span class="n">DProtobuf_ROOT</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">Software</span>\<span class="n">protobuf371r</span> <span class="o">-</span><span class="n">DgRPC_DIR</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">work</span>\<span class="n">vcpkg</span>\<span class="n">installed</span>\<span class="n">x64</span><span class="o">-</span><span class="n">windows</span><span class="o">-</span><span class="n">static</span><span class="o">-</span><span class="n">dyncrt</span>\<span class="n">share</span>\<span class="n">grpc</span> <span class="o">-</span><span class="n">Dc</span><span class="o">-</span><span class="n">ares_DIR</span><span class="o">=</span><span class="n">c</span><span class="p">:</span>\<span class="n">work</span>\<span class="n">vcpkg</span>\<span class="n">installed</span>\<span class="n">x64</span><span class="o">-</span><span class="n">windows</span><span class="o">-</span><span class="n">static</span><span class="o">-</span><span class="n">dyncrt</span>\<span class="n">share</span>\<span class="n">c</span><span class="o">-</span><span class="n">ares</span> <span class="o">..</span>
 </pre></div>
 </div>
-<p>Remember to select Release configuration in VS2017. You can run the INSTALL target to copy the final binaries to the installation location specified with <code class="docutils literal notranslate"><span class="pre">-DCMAKE_INSTALL_PREFIX</span></code> option.</p>
 </div>
 </div>
 </div>
