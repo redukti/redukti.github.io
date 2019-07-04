@@ -38,7 +38,7 @@
 <h2>redukti module<a class="headerlink" href="#redukti-module" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="redukti.ADVar">
-<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">ADVar</code><a class="headerlink" href="#redukti.ADVar" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">ADVar</code><span class="sig-paren">(</span><em class="sig-param">int n_vars</em>, <em class="sig-param">int order</em>, <em class="sig-param">int variable</em>, <em class="sig-param">double initial_value</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.ADVar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>ADVar represents an automatically differentiated variable.</p>
 <p>An ADVar object contains a numeric value, but additionally it may
@@ -47,6 +47,17 @@ contain a gradient vector and a 2-dimensional hessian matrix.</p>
 context of a calculation. Variable ids start with <code class="docutils literal notranslate"><span class="pre">0</span></code>, and if there are 3 variables
 in a calculation, then the variables would have ids <code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">1</span></code>, and <code class="docutils literal notranslate"><span class="pre">2</span></code>.</p>
 <p>Note that all ADVars in a calculation must have the same number size and order.</p>
+<p>Construct a new ADVar variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_vars</strong> – Number of variables in the function</p></li>
+<li><p><strong>order</strong> – The order can be <code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">1</span></code>, or <code class="docutils literal notranslate"><span class="pre">2</span></code> and says whether 1st order and 2nd order derivatives should be computed</p></li>
+<li><p><strong>variable</strong> – This variable’s id in the function’s set of variables, <code class="docutils literal notranslate"><span class="pre">-1</span></code> can be used signify no position</p></li>
+<li><p><strong>initial_value</strong> – The value assigned to the variable initailly</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="redukti.ADVar.assign">
 <code class="sig-name descname">assign</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">ADVar other</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.ADVar.assign" title="Permalink to this definition">¶</a></dt>
@@ -81,11 +92,13 @@ in a calculation, then the variables would have ids <code class="docutils litera
 
 <dl class="class">
 <dt id="redukti.Date">
-<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">Date</code><a class="headerlink" href="#redukti.Date" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">Date</code><span class="sig-paren">(</span><em class="sig-param">int value</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.Date" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Holds a date value as the number of days since civil 1899-12-31.</p>
 <p>Negative values indicate days prior to 1899-12-31.
 Note that OpenRedukti requires dates to be in the range <code class="docutils literal notranslate"><span class="pre">1901-01-01</span></code> and <code class="docutils literal notranslate"><span class="pre">2199-12-31</span></code>.</p>
+<p>Constructs a Date object from a serial number
+:param value: serial number</p>
 <dl class="method">
 <dt id="redukti.Date.advance">
 <code class="sig-name descname">advance</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">int n</em>, <em class="sig-param">PeriodUnit unit</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.Date.advance" title="Permalink to this definition">¶</a></dt>
@@ -157,7 +170,7 @@ The formats acceptable are ‘yyyy/mm/dd’, ‘dd/mm/yyyy’, ‘yyyy-mm-dd’,
 
 <dl class="class">
 <dt id="redukti.Calendar">
-<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">Calendar</code><a class="headerlink" href="#redukti.Calendar" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">Calendar</code><span class="sig-paren">(</span><em class="sig-param">list business_centres</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.Calendar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Represents a Business/Holiday Calendar for a business center or a combination of business centers.</p>
 <p>The Calendar interface provides the means to determine whether
@@ -167,6 +180,12 @@ holiday calendar.</p>
 <p>Calendar instances are immutable.</p>
 <p>Currently in-built business centers are <code class="docutils literal notranslate"><span class="pre">AUSY</span></code>, <code class="docutils literal notranslate"><span class="pre">USNY</span></code>, <code class="docutils literal notranslate"><span class="pre">GBLO</span></code>, <code class="docutils literal notranslate"><span class="pre">EUTA</span></code>, <code class="docutils literal notranslate"><span class="pre">JPTO</span></code> and <code class="docutils literal notranslate"><span class="pre">BRSP</span></code>
 Calendars can be overridden or added for other business centers using the <code class="docutils literal notranslate"><span class="pre">register_calendar()</span></code> method</p>
+<p>Constructs a Calendar instance for specified list of business centers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>business_centres</strong> – List of business centers</p>
+</dd>
+</dl>
 <dl class="method">
 <dt id="redukti.Calendar.adjust">
 <code class="sig-name descname">adjust</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">Date date</em>, <em class="sig-param">BusinessDayConvention convention=enums.BusinessDayConvention.FOLLOWING</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.Calendar.adjust" title="Permalink to this definition">¶</a></dt>
@@ -268,11 +287,13 @@ The algorithm is based upon the FpML specifications.</p>
 
 <dl class="class">
 <dt id="redukti.DayFraction">
-<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">DayFraction</code><a class="headerlink" href="#redukti.DayFraction" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">DayFraction</code><span class="sig-paren">(</span><em class="sig-param">DayCountFraction dfc</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.DayFraction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Day Count Fraction calculator.</p>
 <p>Computes the difference between dates as per Day Count Convention.
 The difference is measured in factional units of a year, where one year 1.0.</p>
+<p>Constructs a DayFraction object
+:param dfc: The Day Count Fraction enum</p>
 <dl class="method">
 <dt id="redukti.DayFraction.year_fraction">
 <code class="sig-name descname">year_fraction</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">Date d1</em>, <em class="sig-param">Date d2</em><span class="sig-paren">)</span> &#x2192; double<a class="headerlink" href="#redukti.DayFraction.year_fraction" title="Permalink to this definition">¶</a></dt>
@@ -391,7 +412,7 @@ The difference is measured in factional units of a year, where one year 1.0.</p>
 
 <dl class="class">
 <dt id="redukti.YieldCurve">
-<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">YieldCurve</code><a class="headerlink" href="#redukti.YieldCurve" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">YieldCurve</code><span class="sig-paren">(</span><em class="sig-param">Date business_date</em>, <em class="sig-param">curve_defn</em>, <em class="sig-param">zero_curve</em>, <em class="sig-param">int deriv_order=2</em>, <em class="sig-param">PricingCurveType type=enums.PRICING_CURVE_TYPE_FORWARD</em>, <em class="sig-param">MarketDataQualifier mdq=enums.MDQ_NORMAL</em>, <em class="sig-param">int cycle=0</em>, <em class="sig-param">int scenario=0</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.YieldCurve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="redukti.YieldCurve.discount">
@@ -472,7 +493,7 @@ If you invoke this on a parametric curve you will get <code class="docutils lite
 
 <dl class="class">
 <dt id="redukti.InterpolatedYieldCurve">
-<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">InterpolatedYieldCurve</code><a class="headerlink" href="#redukti.InterpolatedYieldCurve" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">InterpolatedYieldCurve</code><span class="sig-paren">(</span><em class="sig-param">long long id</em>, <em class="sig-param">Date as_of_date</em>, <em class="sig-param">list maturities</em>, <em class="sig-param">list values</em>, <em class="sig-param">InterpolatorType interpolator_type</em>, <em class="sig-param">IRRateType rate_type</em>, <em class="sig-param">int deriv_order</em>, <em class="sig-param">DayCountFraction fraction</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.InterpolatedYieldCurve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>YieldCurve that operates on top of an interpolator.</p>
 <p>The curve can interpolate on discount factors or zero rates, except for
@@ -554,7 +575,7 @@ If you invoke this on a parametric curve you will get <code class="docutils lite
 
 <dl class="class">
 <dt id="redukti.SvenssonCurve">
-<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">SvenssonCurve</code><a class="headerlink" href="#redukti.SvenssonCurve" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">SvenssonCurve</code><span class="sig-paren">(</span><em class="sig-param">long long id</em>, <em class="sig-param">Date as_of_date</em>, <em class="sig-param">list parameters</em>, <em class="sig-param">DayCountFraction fraction</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.SvenssonCurve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Svensson YieldCurve - this is a parametric yield curve.</p>
 <p>This parametric yield curve computes rates using a formula that uses six parameters.
