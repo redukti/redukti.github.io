@@ -58,18 +58,37 @@ based upon <a class="reference external" href="https://grpc.io/">gRPC</a> techno
 <li><p><code class="docutils literal notranslate"><span class="pre">ScheduleGenerator</span></code> - generates cashflow schedules</p></li>
 </ul>
 <p>Associated with these are a bunch of types and enum values that are generated from Google Protocol Buffer descriptions.</p>
-<p>At a higher level, PyRedukti offers the ability to communicate with the OpenRedukti server.
+<p>At a higher level, PyRedukti offers the ability to communicate with the OpenRedukti Valuation and Curve Building services.
 Using this model, you get following additional capabilities:</p>
 <ul class="simple">
 <li><p>Build Zero Curves from market quotes (PAR rates)</p></li>
-<li><p>Prime the server with market data such as Zero Curves and Fixings</p></li>
+<li><p>Prime the Valuation Service with market data such as Zero Curves and Fixings</p></li>
 <li><p>Get NPV and Zero/PAR Sensitivities calculated for trades that can be represented as cashflows</p></li>
 </ul>
 <p>The following classes and utilities provide the core functions:</p>
 <ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">GRPCAdapter</span></code> - This adapter is used to communicate with the OpenRedukti server using gRPC Protocol</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LocalAdapter</span></code> - This adapter communicates with the <code class="docutils literal notranslate"><span class="pre">InMemoryRequestProcessor</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">InMemoryRequestProcessor</span></code> - This is the OpenRedukti Request Processor embedded locally within Python, useful for ad-hoc experiments</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">MarketData</span></code> - This class encapsulates reading raw market data from CSV formatted files</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ServerCommand</span></code> - This class encapsulates the functions for interacting with the OpenRedukti server</p></li>
 </ul>
+<div class="section" id="the-openredukti-computation-model">
+<h2>The OpenRedukti Computation Model<a class="headerlink" href="#the-openredukti-computation-model" title="Permalink to this headline">¶</a></h2>
+<p>OpenRedukti’s design is quite different from say QuantLib. In QuantLib various objects are interlinked via C++ pointers; this approach is
+unsuitable for a server deployment.</p>
+<p>OpenRedukti’s model decouples the raw market data, its conversion to curves, and the use of curves for valuation purposes.</p>
+<p>So in order to value trades, you have to do following:</p>
+<ol class="arabic simple">
+<li><p>Build curves using raw market data (i.e. quotes). Curve Building uses a multi-curve builder so this is an expensive step. During curve
+building you can optionally generate PAR sensitivities.</p></li>
+<li><p>You then seed a Valuation Service with the curves, fixings and some additional configuration data such as curve mappings. Essentially
+the Valuation Service hold all this data cached in memory.</p></li>
+<li><p>You then submit all trades for valuation to the Valuation Service.</p></li>
+<li><p>If you need to update the curves, you have to do the steps above again, and then revalue all your trades. Your trades have no links to the
+curves, trades live in your world, OpenRedukti doesn’t care about them.</p></li>
+</ol>
+</div>
 <div class="section" id="building-pyredukti">
 <h2>Building PyRedukti<a class="headerlink" href="#building-pyredukti" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="pre-requisites">
@@ -89,7 +108,7 @@ Using this model, you get following additional capabilities:</p>
 <div class="section" id="build-steps">
 <h3>Build steps<a class="headerlink" href="#build-steps" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p>First build with support for gRPC, see <a class="reference internal" href="openredukti-building.html"><span class="doc">Building OpenRedukti</span></a>.</p></li>
+<li><p>First build OpenRedukti with gRPC support, see <a class="reference internal" href="openredukti-building.html"><span class="doc">Building OpenRedukti</span></a>.</p></li>
 <li><p>We assume that Protobuf is installed under <code class="docutils literal notranslate"><span class="pre">$HOME/Software/protobuf</span></code>.</p></li>
 <li><p>We assume that OpenRedukti is installed under <code class="docutils literal notranslate"><span class="pre">$HOME/Software/redukti</span></code>.</p></li>
 <li><p>We assume that gRPC C++ library is installed under <code class="docutils literal notranslate"><span class="pre">$HOME/Software/grpc</span></code>.</p></li>
@@ -115,7 +134,6 @@ Using this model, you get following additional capabilities:</p>
 </div>
 <div class="section" id="checking-out-pyredukti">
 <h2>Checking Out PyRedukti<a class="headerlink" href="#checking-out-pyredukti" title="Permalink to this headline">¶</a></h2>
-<p>Note that you will need to start an OpenRedukti server if you wish to try out the valuation functionality.</p>
 <p>For example sessions in PyRedukti, please look at the Jupyter Notebook samples in <a class="reference external" href="https://github.com/redukti/PyRedukti/tree/master/notebooks">https://github.com/redukti/PyRedukti/tree/master/notebooks</a>.</p>
 </div>
 </div>
@@ -143,6 +161,7 @@ Using this model, you get following additional capabilities:</p>
 <li class="toctree-l1"><a class="reference internal" href="openredukti-docker-quickstart.html">Quick Start using Docker containers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="openredukti-building.html">Building OpenRedukti</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">An Introduction to Python Bindings for OpenRedukti</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-openredukti-computation-model">The OpenRedukti Computation Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#building-pyredukti">Building PyRedukti</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#checking-out-pyredukti">Checking Out PyRedukti</a></li>
 </ul>

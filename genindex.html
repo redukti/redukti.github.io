@@ -552,6 +552,8 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.ADVar.gradient">gradient() (redukti.ADVar method)</a>
 </li>
+      <li><a href="pyredukti-api.html#redukti.library.GRPCAdapter">GRPCAdapter (class in redukti.library)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -644,10 +646,10 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.library.MarketData.init_zero_curves">init_zero_curves() (redukti.library.MarketData method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyredukti-api.html#redukti.bootstrap_pb2.ParRates.instrument_ids">instrument_ids (redukti.bootstrap_pb2.ParRates attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyredukti-api.html#redukti.bootstrap_pb2.ParInstrument.instrument_key">instrument_key (redukti.bootstrap_pb2.ParInstrument attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.bootstrap_pb2.ParInstrument.instrument_type">instrument_type (redukti.bootstrap_pb2.ParInstrument attribute)</a>
@@ -670,6 +672,12 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.Calendar.is_holiday">is_holiday() (redukti.Calendar method)</a>
 </li>
+      <li><a href="pyredukti-api.html#redukti.library.GRPCAdapter.is_local">is_local() (redukti.library.GRPCAdapter method)</a>
+
+      <ul>
+        <li><a href="pyredukti-api.html#redukti.library.LocalAdapter.is_local">(redukti.library.LocalAdapter method)</a>
+</li>
+      </ul></li>
       <li><a href="pyredukti-api.html#redukti.valuation_pb2.PricingContext.is_todays_fixings_included">is_todays_fixings_included (redukti.valuation_pb2.PricingContext attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.index_pb2.IndexDefinition.isda_index">isda_index (redukti.index_pb2.IndexDefinition attribute)</a>
@@ -700,11 +708,13 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.schedule_pb2.ScheduleParameters.last_regular_payment_date">last_regular_payment_date (redukti.schedule_pb2.ScheduleParameters attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyredukti-api.html#redukti.schedule_pb2.ScheduleParameters.last_regular_period_end_date">last_regular_period_end_date (redukti.schedule_pb2.ScheduleParameters attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyredukti-api.html#redukti.library.load_market_data">load_market_data() (in module redukti.library)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.library.LocalAdapter">LocalAdapter (class in redukti.library)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.index_pb2.IndexDefinition.long_tenor_convention">long_tenor_convention (redukti.index_pb2.IndexDefinition attribute)</a>
 </li>
@@ -912,7 +922,7 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.services_pb2.Request.register_calendar_request">register_calendar_request (redukti.services_pb2.Request attribute)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.library.ServerCommand.register_curve_definitions">register_curve_definitions() (redukti.library.ServerCommand static method)</a>
+      <li><a href="pyredukti-api.html#redukti.library.ServerCommand.register_curve_definitions">register_curve_definitions() (redukti.library.ServerCommand method)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.services_pb2.Response.register_curve_definitions_reply">register_curve_definitions_reply (redukti.services_pb2.Response attribute)</a>
 </li>
@@ -920,7 +930,7 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.library.ServerCommand.register_curve_mappings">register_curve_mappings() (redukti.library.ServerCommand method)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.library.ServerCommand.register_fixings">register_fixings() (redukti.library.ServerCommand static method)</a>
+      <li><a href="pyredukti-api.html#redukti.library.ServerCommand.register_fixings">register_fixings() (redukti.library.ServerCommand method)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.library.ServerCommand.register_index_definition">register_index_definition() (redukti.library.ServerCommand method)</a>
 </li>
@@ -932,7 +942,7 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.library.ServerCommand.register_market_data">register_market_data() (redukti.library.ServerCommand method)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.library.ServerCommand.register_zero_curves">register_zero_curves() (redukti.library.ServerCommand static method)</a>
+      <li><a href="pyredukti-api.html#redukti.library.ServerCommand.register_zero_curves">register_zero_curves() (redukti.library.ServerCommand method)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.calendar_pb2.RegisterCalendarReply">RegisterCalendarReply (class in redukti.calendar_pb2)</a>
 </li>
@@ -1024,8 +1034,14 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.Date.serial">serial() (redukti.Date method)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.services_pb2_grpc.OpenReduktiServicesServicer.serve">serve() (redukti.services_pb2_grpc.OpenReduktiServicesServicer method)</a>
+      <li><a href="pyredukti-api.html#redukti.library.GRPCAdapter.serve">serve() (redukti.library.GRPCAdapter method)</a>
+
+      <ul>
+        <li><a href="pyredukti-api.html#redukti.library.LocalAdapter.serve">(redukti.library.LocalAdapter method)</a>
 </li>
+        <li><a href="pyredukti-api.html#redukti.services_pb2_grpc.OpenReduktiServicesServicer.serve">(redukti.services_pb2_grpc.OpenReduktiServicesServicer method)</a>
+</li>
+      </ul></li>
       <li><a href="pyredukti-api.html#redukti.library.ServerCommand">ServerCommand (class in redukti.library)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.services_pb2.Response.set_curve_mappings_reply">set_curve_mappings_reply (redukti.services_pb2.Response attribute)</a>
@@ -1040,10 +1056,10 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.services_pb2.Request.set_zero_curves_request">set_zero_curves_request (redukti.services_pb2.Request attribute)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.valuation_pb2.SetCurveMappingsReply">SetCurveMappingsReply (class in redukti.valuation_pb2)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyredukti-api.html#redukti.valuation_pb2.SetCurveMappingsReply">SetCurveMappingsReply (class in redukti.valuation_pb2)</a>
+</li>
       <li><a href="pyredukti-api.html#redukti.valuation_pb2.SetCurveMappingsRequest">SetCurveMappingsRequest (class in redukti.valuation_pb2)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.valuation_pb2.SetFixingsReply">SetFixingsReply (class in redukti.valuation_pb2)</a>

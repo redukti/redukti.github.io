@@ -29,17 +29,37 @@ At the low level, the Python bindings provide wrappers for a number of OpenReduk
 
 Associated with these are a bunch of types and enum values that are generated from Google Protocol Buffer descriptions.
 
-At a higher level, PyRedukti offers the ability to communicate with the OpenRedukti server.
+At a higher level, PyRedukti offers the ability to communicate with the OpenRedukti Valuation and Curve Building services.
 Using this model, you get following additional capabilities:
 
 * Build Zero Curves from market quotes (PAR rates)
-* Prime the server with market data such as Zero Curves and Fixings
+* Prime the Valuation Service with market data such as Zero Curves and Fixings
 * Get NPV and Zero/PAR Sensitivities calculated for trades that can be represented as cashflows 
 
 The following classes and utilities provide the core functions:
 
+* ``GRPCAdapter`` - This adapter is used to communicate with the OpenRedukti server using gRPC Protocol
+* ``LocalAdapter`` - This adapter communicates with the ``InMemoryRequestProcessor``
+* ``InMemoryRequestProcessor`` - This is the OpenRedukti Request Processor embedded locally within Python, useful for ad-hoc experiments
 * ``MarketData`` - This class encapsulates reading raw market data from CSV formatted files
 * ``ServerCommand`` - This class encapsulates the functions for interacting with the OpenRedukti server 
+
+The OpenRedukti Computation Model
+---------------------------------
+OpenRedukti's design is quite different from say QuantLib. In QuantLib various objects are interlinked via C++ pointers; this approach is 
+unsuitable for a server deployment.
+
+OpenRedukti's model decouples the raw market data, its conversion to curves, and the use of curves for valuation purposes.
+
+So in order to value trades, you have to do following:
+
+1. Build curves using raw market data (i.e. quotes). Curve Building uses a multi-curve builder so this is an expensive step. During curve
+   building you can optionally generate PAR sensitivities.
+2. You then seed a Valuation Service with the curves, fixings and some additional configuration data such as curve mappings. Essentially
+   the Valuation Service hold all this data cached in memory.
+3. You then submit all trades for valuation to the Valuation Service. 
+4. If you need to update the curves, you have to do the steps above again, and then revalue all your trades. Your trades have no links to the
+   curves, trades live in your world, OpenRedukti doesn't care about them.
 
 Building PyRedukti
 ------------------
@@ -58,7 +78,7 @@ Pre-requisites
 Build steps
 +++++++++++
 
-* First build with support for gRPC, see :doc:`openredukti-building`.
+* First build OpenRedukti with gRPC support, see :doc:`openredukti-building`.
 * We assume that Protobuf is installed under ``$HOME/Software/protobuf``.
 * We assume that OpenRedukti is installed under ``$HOME/Software/redukti``.
 * We assume that gRPC C++ library is installed under ``$HOME/Software/grpc``.
@@ -82,8 +102,6 @@ Build and install Python module
 
 Checking Out PyRedukti
 ----------------------
-
-Note that you will need to start an OpenRedukti server if you wish to try out the valuation functionality.
 
 For example sessions in PyRedukti, please look at the Jupyter Notebook samples in `https://github.com/redukti/PyRedukti/tree/master/notebooks 
 <https://github.com/redukti/PyRedukti/tree/master/notebooks>`_.

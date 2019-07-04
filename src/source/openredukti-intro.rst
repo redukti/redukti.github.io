@@ -38,6 +38,24 @@ The main differences between the Open Source release and the proprietary version
 
 For further details of the full scope of the MyCCP product, please visit `Redukti.Com <http://redukti.com/myccp-product-specifications.html>`_. 
 
+The OpenRedukti Computation Model
+=================================
+OpenRedukti's design is quite different from say QuantLib. In QuantLib various objects are interlinked via C++ pointers; this approach is 
+unsuitable for a server deployment.
+
+OpenRedukti's model decouples the raw market data, its conversion to curves, and the use of curves for valuation purposes.
+
+So in order to value trades, you have to do following:
+
+1. Build curves using raw market data (i.e. quotes). Curve Building uses a multi-curve builder so this is an expensive step. During curve
+   building you can optionally generate PAR sensitivities.
+2. You then seed a Valuation Service with the curves, fixings and some additional configuration data such as curve mappings. Essentially
+   the Valuation Service hold all this data cached in memory.
+3. You then submit all trades for valuation to the Valuation Service. 
+4. If you need to update the curves, you have to do the steps above again, and then revalue all your trades. Your trades have no links to the
+   curves, trades live in your world, OpenRedukti doesn't care about them.
+
+
 Ackowledgements
 ===============
 OpenRedukti gratefully acknowledges ideas and code it is using from other projects.

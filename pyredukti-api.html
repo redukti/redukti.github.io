@@ -646,6 +646,42 @@ For details please check documents on Svensson Yield curve.</p>
 <div class="section" id="module-redukti.library">
 <span id="redukti-library-module"></span><h2>redukti.library module<a class="headerlink" href="#module-redukti.library" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
+<dt id="redukti.library.GRPCAdapter">
+<em class="property">class </em><code class="sig-prename descclassname">redukti.library.</code><code class="sig-name descname">GRPCAdapter</code><span class="sig-paren">(</span><em class="sig-param">address</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.GRPCAdapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Provides a service invocation adapter that connects to an OpenRedukti server
+over the gRPC protocol</p>
+<dl class="method">
+<dt id="redukti.library.GRPCAdapter.is_local">
+<code class="sig-name descname">is_local</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.GRPCAdapter.is_local" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="redukti.library.GRPCAdapter.serve">
+<code class="sig-name descname">serve</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.GRPCAdapter.serve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="redukti.library.LocalAdapter">
+<em class="property">class </em><code class="sig-prename descclassname">redukti.library.</code><code class="sig-name descname">LocalAdapter</code><span class="sig-paren">(</span><em class="sig-param">pricing_script</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.LocalAdapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Provides a service invocation adapter that uses an internal InMemoryRequestProcessor
+to handle requests</p>
+<dl class="method">
+<dt id="redukti.library.LocalAdapter.is_local">
+<code class="sig-name descname">is_local</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.LocalAdapter.is_local" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="redukti.library.LocalAdapter.serve">
+<code class="sig-name descname">serve</code><span class="sig-paren">(</span><em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.LocalAdapter.serve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="redukti.library.MarketData">
 <em class="property">class </em><code class="sig-prename descclassname">redukti.library.</code><code class="sig-name descname">MarketData</code><span class="sig-paren">(</span><em class="sig-param">date</em>, <em class="sig-param">curve_group</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.MarketData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -749,10 +785,11 @@ CSV format files.</p>
 
 <dl class="class">
 <dt id="redukti.library.ServerCommand">
-<em class="property">class </em><code class="sig-prename descclassname">redukti.library.</code><code class="sig-name descname">ServerCommand</code><span class="sig-paren">(</span><em class="sig-param">address</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.ServerCommand" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">redukti.library.</code><code class="sig-name descname">ServerCommand</code><span class="sig-paren">(</span><em class="sig-param">adapter</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.ServerCommand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>The ServerCommand object encapsulates interactions withe OpenRedukti Valuation Server</p>
-<p>It communicates with the OpenRedukti Valuation server using gRPC protocol.
+<p>The ServerCommand object encapsulates interactions withe OpenRedukti Valuation and Curve Building Services.</p>
+<p>It communicates with the OpenRedukti Valuation/Curve Building sevices via an Adapter, which allows the
+interface to switch from local InMemoryRequestProcessor to a remote OpenRedukti Server instance.
 All requests and responses to/from the server are in Google Protocol Buffers format.</p>
 <p>Creates a new ServerCommand object with specified address</p>
 <dl class="field-list simple">
@@ -827,8 +864,15 @@ once a calendar is in use it cannot be safely replaced</p>
 
 <dl class="method">
 <dt id="redukti.library.ServerCommand.register_curve_definitions">
-<em class="property">static </em><code class="sig-name descname">register_curve_definitions</code><span class="sig-paren">(</span><em class="sig-param">stub</em>, <em class="sig-param">market_data</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.ServerCommand.register_curve_definitions" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">register_curve_definitions</code><span class="sig-paren">(</span><em class="sig-param">market_data</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.ServerCommand.register_curve_definitions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers curve definitions provided by the MarketData instance to the
+OpenRedukti Valuation service.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>market_data</strong> – MarketData instance that provides the curve definitions</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.library.ServerCommand.register_curve_mappings">
@@ -849,8 +893,18 @@ once a calendar is in use it cannot be safely replaced</p>
 
 <dl class="method">
 <dt id="redukti.library.ServerCommand.register_fixings">
-<em class="property">static </em><code class="sig-name descname">register_fixings</code><span class="sig-paren">(</span><em class="sig-param">stub</em>, <em class="sig-param">market_data</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.ServerCommand.register_fixings" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">register_fixings</code><span class="sig-paren">(</span><em class="sig-param">market_data</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.ServerCommand.register_fixings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers fixings provided by the market data instance to the OpenRedukti
+Valuation service.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>market_data</strong> – MarketData instance that is the provider of fixings data</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.library.ServerCommand.register_index_definition">
@@ -869,7 +923,7 @@ once a calendar is in use it cannot be safely replaced</p>
 <dl class="method">
 <dt id="redukti.library.ServerCommand.register_market_data">
 <code class="sig-name descname">register_market_data</code><span class="sig-paren">(</span><em class="sig-param">market_data</em>, <em class="sig-param">forward_curves_list</em>, <em class="sig-param">discount_curve_list</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.ServerCommand.register_market_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Registers a set of market data with the OpenRedukti server</p>
+<dd><p>Registers a set of market data with the OpenRedukti Valuation service</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -886,13 +940,27 @@ once a calendar is in use it cannot be safely replaced</p>
 
 <dl class="method">
 <dt id="redukti.library.ServerCommand.register_zero_curves">
-<em class="property">static </em><code class="sig-name descname">register_zero_curves</code><span class="sig-paren">(</span><em class="sig-param">stub</em>, <em class="sig-param">market_data</em>, <em class="sig-param">forward_curves_list</em>, <em class="sig-param">discount_curve_list</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.ServerCommand.register_zero_curves" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">register_zero_curves</code><span class="sig-paren">(</span><em class="sig-param">market_data</em>, <em class="sig-param">forward_curves_list</em>, <em class="sig-param">discount_curve_list</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.ServerCommand.register_zero_curves" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers zero rate curves provided by the MarketData instance to the
+OpenRedukti valuation service</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>market_data</strong> – MarketData instance that provides the zero rate curves</p></li>
+<li><p><strong>forward_curves_list</strong> – The curve definition ids that will be registered as Forward Curves</p></li>
+<li><p><strong>discount_curve_list</strong> – The curve definition ids that will be registered as Discount Curves</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.library.ServerCommand.reset_valuation_service">
 <code class="sig-name descname">reset_valuation_service</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.ServerCommand.reset_valuation_service" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resets all data held by the OpenRedukti valuation server</p>
+<dd><p>Resets all cached market data held by the OpenRedukti valuation service</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>None</p>
