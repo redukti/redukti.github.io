@@ -411,19 +411,137 @@ The difference is measured in factional units of a year, where one year 1.0.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="redukti.Interpolator">
+<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">Interpolator</code><span class="sig-paren">(</span><em class="sig-param">InterpolatorType interpolator_type</em>, <em class="sig-param">array x</em>, <em class="sig-param">array y</em>, <em class="sig-param">int order=0</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.Interpolator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An Interpolator computes values between ranges based upon an interpolation method.</p>
+<p>Several methods are supported.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">LINEAR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LOG_LINEAR</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MONOTONE_CONVEX</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FLAT_RIGHT</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FLAT_LEFT</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CUBIC_SPLINE_NOT_A_KNOT</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CUBIC_SPLINE_NATURAL</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LOG_CUBIC_SPLINE_NATURAL</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CUBIC_SPLINE_CLAMPED</span></code></p></li>
+</ul>
+<p>An Interpolator can not only interpolate values, but also compute sensitivities to the
+fixed points in the x-axis.</p>
+<p>Note that the Interpolators operate on the arrays supplied by the user; these
+are not copied. Since some interpolators pre-compute data, if the underlying arrays
+change these changes will not be reflected hence please do not change the input arrays.</p>
+<p>TODO prevent extrapolation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interpolator_type</strong> (<em>enums_pb2.InterpolatorType</em>) – The type of interpolator</p></li>
+<li><p><strong>x</strong> (<em>array</em>) – Array of doubles representing x-axis</p></li>
+<li><p><strong>y</strong> (<em>array</em>) – Array of doubles representing y-axis</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Whether the interpolator should compute derivatives, 0=No, 1=First order only, 2=First and second order.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>constructed interpolator object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#redukti.Interpolator" title="redukti.Interpolator">Interpolator</a></p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="redukti.Interpolator.interpolate">
+<code class="sig-name descname">interpolate</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">double x</em><span class="sig-paren">)</span> &#x2192; double<a class="headerlink" href="#redukti.Interpolator.interpolate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolates a value for the given point</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – The point at which an interpolated value is desired</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>interpolated value</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="redukti.Interpolator.interpolate_with_numeric_sensitivities">
+<code class="sig-name descname">interpolate_with_numeric_sensitivities</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">double x</em><span class="sig-paren">)</span> &#x2192; ADVar<a class="headerlink" href="#redukti.Interpolator.interpolate_with_numeric_sensitivities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolates a value for the given point, and sensitivities of the value to fixed points. Sensitivities computed numerically.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – The point at which an interpolated value is desired</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>interpolated value and sensitivities to the fixed points</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#redukti.ADVar" title="redukti.ADVar">ADVar</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="redukti.Interpolator.interpolate_with_sensitivities">
+<code class="sig-name descname">interpolate_with_sensitivities</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">double x</em><span class="sig-paren">)</span> &#x2192; ADVar<a class="headerlink" href="#redukti.Interpolator.interpolate_with_sensitivities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolates a value for the given point, and sensitivities of the value to fixed points. Sensitivities computed via autodiff.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – The point at which an interpolated value is desired</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>interpolated value and sensitivities to the fixed points</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#redukti.ADVar" title="redukti.ADVar">ADVar</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="redukti.YieldCurve">
 <em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">YieldCurve</code><span class="sig-paren">(</span><em class="sig-param">Date business_date</em>, <em class="sig-param">curve_defn</em>, <em class="sig-param">zero_curve</em>, <em class="sig-param">int deriv_order=2</em>, <em class="sig-param">PricingCurveType type=enums.PRICING_CURVE_TYPE_FORWARD</em>, <em class="sig-param">MarketDataQualifier mdq=enums.MDQ_NORMAL</em>, <em class="sig-param">int cycle=0</em>, <em class="sig-param">int scenario=0</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.YieldCurve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generic YieldCurve which may be an InterpolatedYieldCurve or a SvenssonYieldCurve.
+Due to technical limitations the YieldCurve instance is not a supertype of either
+but has the same interface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>business_date</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – The business date</p></li>
+<li><p><strong>curve_defn</strong> (<a class="reference internal" href="#redukti.curve_pb2.IRCurveDefinition" title="redukti.curve_pb2.IRCurveDefinition"><em>curve_pb2.IRCurveDefinition</em></a>) – The Interest Rate Curve definition</p></li>
+<li><p><strong>zero_curve</strong> (<a class="reference internal" href="#redukti.curve_pb2.ZeroCurve" title="redukti.curve_pb2.ZeroCurve"><em>redukti.curve_pb2.ZeroCurve</em></a>) – For InterpolatedYieldCurves this must supply list of maturities and zero rates, for SvenssonCurves it must supply the 6 parameters</p></li>
+<li><p><strong>deriv_order</strong> (<em>int</em>) – Whether the interpolator should compute derivatives, 0=No, 1=First order only, 2=First and second order. Note that SvenssonCurve does not support derivatives</p></li>
+<li><p><strong>type</strong> (<em>enums.PricingCurveType</em>) – A classifier that says whether the curve is to be used only for forward rates or both forward rates and discounting.</p></li>
+<li><p><strong>mdq</strong> (<em>enums.MarketDataQualifier</em>) – A classifier that says whether the curve belongs to Closing market data or Normal, i.e. intra-day, market data</p></li>
+<li><p><strong>cycle</strong> (<em>int</em>) – An identifier to differentiate between other market data sets for a given business day, and MarketDataQualifier. Should be incremented for each set</p></li>
+<li><p><strong>scenario</strong> (<em>int</em>) – Scenario identifier. Curves with scenario 0 support sensitivities. All other values do not compute sensitivities.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An instance of the YieldCurve</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#redukti.YieldCurve" title="redukti.YieldCurve">YieldCurve</a></p>
+</dd>
+</dl>
 <dl class="method">
 <dt id="redukti.YieldCurve.discount">
 <code class="sig-name descname">discount</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">Date d</em><span class="sig-paren">)</span> &#x2192; double<a class="headerlink" href="#redukti.YieldCurve.discount" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the discount factor for the given date</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>d</strong> – Date for which discount factor is desired</p>
+<dd class="field-odd"><p><strong>d</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – Date for which discount factor is desired</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Desired discount factor</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>discount factor (float)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -435,12 +553,15 @@ The difference is measured in factional units of a year, where one year 1.0.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>d1</strong> – Start date</p></li>
-<li><p><strong>d2</strong> – End date</p></li>
+<li><p><strong>d1</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – Start date</p></li>
+<li><p><strong>d2</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – End date</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Forward rate for the specified dates</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -453,10 +574,13 @@ Note that this is only available on interpolated curves.
 If you invoke this on a parametric curve you will get <code class="docutils literal notranslate"><span class="pre">None</span></code> as the answer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – A value in the range of the interpolator’s x-axis</p>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – A value in the range of the interpolator’s x-axis</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>An ADVar containing first order and second order sensitivities depending upon how the interpolator was configured</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#redukti.ADVar" title="redukti.ADVar">ADVar</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -467,10 +591,13 @@ If you invoke this on a parametric curve you will get <code class="docutils lite
 <dd><p>Gets time from the curve’s reference date to the given date expressed as a year fraction</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>d</strong> – date to be converted</p>
+<dd class="field-odd"><p><strong>d</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – date to be converted</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A double value expressing the time from curve’s reference date</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -481,10 +608,54 @@ If you invoke this on a parametric curve you will get <code class="docutils lite
 <dd><p>Computes the continuously compounded zero rate for a given date</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>d</strong> – Date for which the zero rate is desired</p>
+<dd class="field-odd"><p><strong>d</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – Date for which the zero rate is desired</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Continuously compounded zero rate at the given date</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="redukti.CurveId">
+<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">CurveId</code><span class="sig-paren">(</span><em class="sig-param">PricingCurveType pricing_curve_type</em>, <em class="sig-param">Currency ccy</em>, <em class="sig-param">IndexFamily index_family</em>, <em class="sig-param">Tenor tenor</em>, <em class="sig-param">Date as_of_date</em>, <em class="sig-param">int cycle=0</em>, <em class="sig-param">MarketDataQualifier qual=enums.MDQ_NORMAL</em>, <em class="sig-param">int scenario=0</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.CurveId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>CurveId constructs a long value encoding a number of curve attributes.
+This is used as the curve identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pricing_curve_type</strong> (<em>enums_pb2.PricingCurveType</em>) – A classifier that says whether the curve is to be used only for forward rates or both forward rates and discounting.</p></li>
+<li><p><strong>ccy</strong> (<em>enums_pb2.Currency</em>) – The currency of the curve</p></li>
+<li><p><strong>index_family</strong> (<em>enums_pb2.IndexFamily</em>) – The Index Family of the curve</p></li>
+<li><p><strong>tenor</strong> (<em>enums_pb2.Tenor</em>) – If this curve is specialized for a tenor then thsi should identify the tenor else use TENOR_UNSPECIFIED</p></li>
+<li><p><strong>as_of_date</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – The business date</p></li>
+<li><p><strong>cycle</strong> (<em>int</em>) – An identifier to differentiate between other market data sets for a given business day, and MarketDataQualifier. Should be incremented for each set</p></li>
+<li><p><strong>qual</strong> (<em>enums_pb2.MarketDataQualifier</em>) – A classifier that says whether the curve belongs to Closing market data or Normal, i.e. intra-day, market data</p></li>
+<li><p><strong>scenario</strong> (<em>int</em>) – Scenario identifier. Curves with scenario 0 support sensitivities. All other values do not compute sensitivities.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The constructed curve identifier</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#redukti.CurveId" title="redukti.CurveId">CurveId</a></p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="redukti.CurveId.id">
+<code class="sig-name descname">id</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span> &#x2192; long long<a class="headerlink" href="#redukti.CurveId.id" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The long value constructed from the curve parameters</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -498,16 +669,33 @@ If you invoke this on a parametric curve you will get <code class="docutils lite
 <p>YieldCurve that operates on top of an interpolator.</p>
 <p>The curve can interpolate on discount factors or zero rates, except for
 <code class="docutils literal notranslate"><span class="pre">MonotoneConvex</span></code> which can only interpolate on zero rates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – A Curve Id value computed using</p></li>
+<li><p><strong>as_of_date</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – The business date</p></li>
+<li><p><strong>maturities</strong> (<em>list</em>) – List of redukti.Date values for curve’s fixed points</p></li>
+<li><p><strong>values</strong> (<em>list</em>) – List of float values - either zero rates or discount factors, depending on rate_type parameter</p></li>
+<li><p><strong>interpolator_type</strong> (<em>enums_pb2.InterpolatorType</em>) – The type of interpolator to be used</p></li>
+<li><p><strong>rate_type</strong> (<em>enums.IRRateType</em>) – Specifies whether the values are zero rates or discount factors</p></li>
+<li><p><strong>deriv_order</strong> (<em>int</em>) – Whether the interpolator should compute derivatives, 0=No, 1=First order only, 2=First and second order. Note that SvenssonCurve does not support derivatives</p></li>
+<li><p><strong>fraction</strong> (<em>enums_pb2.DayCountFraction</em>) – The Day Count Fraction for computing time intervals</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="redukti.InterpolatedYieldCurve.discount">
 <code class="sig-name descname">discount</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">Date d</em><span class="sig-paren">)</span> &#x2192; double<a class="headerlink" href="#redukti.InterpolatedYieldCurve.discount" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the discount factor for the given date</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>d</strong> – Date for which discount factor is desired</p>
+<dd class="field-odd"><p><strong>d</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – Date for which discount factor is desired</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Desired discount factor</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -519,12 +707,15 @@ If you invoke this on a parametric curve you will get <code class="docutils lite
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>d1</strong> – Start date</p></li>
-<li><p><strong>d2</strong> – End date</p></li>
+<li><p><strong>d1</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – Start date</p></li>
+<li><p><strong>d2</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – End date</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Forward rate for the specified dates</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -535,10 +726,13 @@ If you invoke this on a parametric curve you will get <code class="docutils lite
 <dd><p>Obtains sensitivities of x to the interpolator fixed points.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – A value in the range of the interpolator’s x-axis</p>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – A value in the range of the interpolator’s x-axis</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>An ADVar containing first order and second order sensitivities depending upon how the interpolator was configured</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#redukti.ADVar" title="redukti.ADVar">ADVar</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -549,10 +743,13 @@ If you invoke this on a parametric curve you will get <code class="docutils lite
 <dd><p>Gets time from the curve’s reference date to the given date expressed as a year fraction</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>d</strong> – date to be converted</p>
+<dd class="field-odd"><p><strong>d</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – date to be converted</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A double value expressing the time from curve’s reference date</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -563,10 +760,13 @@ If you invoke this on a parametric curve you will get <code class="docutils lite
 <dd><p>Computes the continuously compounded zero rate for a given date</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>d</strong> – Date for which the zero rate is desired</p>
+<dd class="field-odd"><p><strong>d</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – Date for which the zero rate is desired</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Continuously compounded zero rate at the given date</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -581,16 +781,29 @@ If you invoke this on a parametric curve you will get <code class="docutils lite
 <p>This parametric yield curve computes rates using a formula that uses six parameters.
 For details please check documents on Svensson Yield curve.</p>
 <p>As this is a parametric curve, it does not support computing rate sensitivities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – A Curve Id value computed using</p></li>
+<li><p><strong>as_of_date</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – The business date</p></li>
+<li><p><strong>parameters</strong> (<em>list</em>) – The 6 curve parameters</p></li>
+<li><p><strong>fraction</strong> (<em>enums_pb2.DayCountFraction</em>) – The Day Count Fraction for computing time intervals</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="redukti.SvenssonCurve.discount">
 <code class="sig-name descname">discount</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">Date d</em><span class="sig-paren">)</span> &#x2192; double<a class="headerlink" href="#redukti.SvenssonCurve.discount" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the discount factor for the given date</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>d</strong> – Date for which discount factor is desired</p>
+<dd class="field-odd"><p><strong>d</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – Date for which discount factor is desired</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Desired discount factor</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -602,12 +815,15 @@ For details please check documents on Svensson Yield curve.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>d1</strong> – Start date</p></li>
-<li><p><strong>d2</strong> – End date</p></li>
+<li><p><strong>d1</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – Start date</p></li>
+<li><p><strong>d2</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – End date</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Forward rate for the specified dates</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -618,10 +834,13 @@ For details please check documents on Svensson Yield curve.</p>
 <dd><p>Gets time from the curve’s reference date to the given date expressed as a year fraction</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>d</strong> – date to be converted</p>
+<dd class="field-odd"><p><strong>d</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – date to be converted</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A double value expressing the time from curve’s reference date</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -632,10 +851,55 @@ For details please check documents on Svensson Yield curve.</p>
 <dd><p>Computes the continuously compounded zero rate for a given date</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>d</strong> – Date for which the zero rate is desired</p>
+<dd class="field-odd"><p><strong>d</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – Date for which the zero rate is desired</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Continuously compounded zero rate at the given date</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="redukti.InMemoryRequestProcessor">
+<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">InMemoryRequestProcessor</code><span class="sig-paren">(</span><em class="sig-param">pricing_script</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.InMemoryRequestProcessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The InMemoryRequestProcessor creates internal instance of the OpenRedukti RequestProcessor
+class. This instance contains internal instances of the OpenRedukti CurveBuilderService
+and ValuationService and hence can process all requests that would normally be submitted to
+the OpenRedukti server over gRPC protocol.</p>
+<p>The InMemoryRequestProcessor is useful when you only want to use the OpenRedukti
+functions internally in Python and do not need to interact with the OpenRedukti server.</p>
+<p>The downside of this internal instance is that if there is a bug in the tOpenRedukti
+code it can crash your Python instance. Hence this type of use is not recommended unless
+you have tested your interactions thoroughly and are confident that there will not be any
+issues.</p>
+<p>Note that the InMemoryRequestProcessor is a relatively heavyweight object and some of
+its computations may take a while to run. Internally threads may be started by the linear
+algebra library used, additionally the CurveBuilderService creates its own Lua scripting
+VM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pricing_script</strong> (<em>str</em>) – The path to the Lua pricing script for the CurveBuildingService</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="redukti.InMemoryRequestProcessor.serve">
+<code class="sig-name descname">serve</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.InMemoryRequestProcessor.serve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple request processing service, designed to be compatible with the OpenRedukti server protocol.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>request</strong> (<a class="reference internal" href="#redukti.services_pb2.Request" title="redukti.services_pb2.Request"><em>services_pb2.Request</em></a>) – Request to process, one of the sub requests must be populated</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The result from the request processor</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>response (<a class="reference internal" href="#redukti.services_pb2.Response" title="redukti.services_pb2.Response">services_pb2.Response</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -664,11 +928,59 @@ over the gRPC protocol</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="redukti.library.InstrumentTemplateRepository">
+<em class="property">class </em><code class="sig-prename descclassname">redukti.library.</code><code class="sig-name descname">InstrumentTemplateRepository</code><a class="headerlink" href="#redukti.library.InstrumentTemplateRepository" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Repository of templates used to construct trades</p>
+<dl class="method">
+<dt id="redukti.library.InstrumentTemplateRepository.add_template">
+<code class="sig-name descname">add_template</code><span class="sig-paren">(</span><em class="sig-param">id</em>, <em class="sig-param">template</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.InstrumentTemplateRepository.add_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a template to the repository</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – Unique id for the template</p></li>
+<li><p><strong>template</strong> (<a class="reference internal" href="#redukti.instrument_templates_pb2.InstrumentTemplate" title="redukti.instrument_templates_pb2.InstrumentTemplate"><em>instrument_templates_pb2.InstrumentTemplate</em></a>) – The template to be added</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="redukti.library.InstrumentTemplateRepository.get_template">
+<code class="sig-name descname">get_template</code><span class="sig-paren">(</span><em class="sig-param">id</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.InstrumentTemplateRepository.get_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the specified template identified by id
+:param id: unique template id
+:type id: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Template if available for the given id</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="redukti.library.InstrumentTemplateRepository.show_templates">
+<code class="sig-name descname">show_templates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.InstrumentTemplateRepository.show_templates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints available templates</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="redukti.library.LocalAdapter">
 <em class="property">class </em><code class="sig-prename descclassname">redukti.library.</code><code class="sig-name descname">LocalAdapter</code><span class="sig-paren">(</span><em class="sig-param">pricing_script</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.LocalAdapter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Provides a service invocation adapter that uses an internal InMemoryRequestProcessor
 to handle requests</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pricing_script</strong> (<em>str</em>) – Path of the <code class="docutils literal notranslate"><span class="pre">pricing.lua</span></code> script that is used by the CurveBuilder to construct cashflows</p>
+</dd>
+</dl>
 <dl class="method">
 <dt id="redukti.library.LocalAdapter.is_local">
 <code class="sig-name descname">is_local</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.LocalAdapter.is_local" title="Permalink to this definition">¶</a></dt>
@@ -688,6 +1000,14 @@ to handle requests</p>
 <p>The MarketData object encapsulates the market data required for valuation</p>
 <p>The MarketData object provides utilities for loading market data from
 CSV format files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>date</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>redukti.Date</em></a>) – The business date</p></li>
+<li><p><strong>curve_group</strong> (<em>enums_pb2.CurveGroup</em>) – The curve group to which the market data belongs</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="redukti.library.MarketData.business_date">
 <code class="sig-name descname">business_date</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.MarketData.business_date" title="Permalink to this definition">¶</a></dt>
@@ -742,7 +1062,10 @@ CSV format files.</p>
 <dd><p>Converts the result from a curve building call to YieldCurve instances</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>bootstrap_curves_reply</strong> – reply from the Bootstrap command</p>
+<dd class="field-odd"><p><strong>bootstrap_curves_reply</strong> (<a class="reference internal" href="#redukti.bootstrap_pb2.BootstrapCurvesReply" title="redukti.bootstrap_pb2.BootstrapCurvesReply"><em>bootstrap_pb2.BootstrapCurvesReply</em></a>) – reply from the Bootstrap command</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Constructed list of YieldCurve objects</p>
 </dd>
 </dl>
 </dd></dl>
@@ -818,8 +1141,8 @@ All requests and responses to/from the server are in Google Protocol Buffers for
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pricing_context</strong> – valuation_pb2.PricingContext instance</p></li>
-<li><p><strong>cfcollection</strong> – cashflow_pb2.CFCollection instance</p></li>
+<li><p><strong>pricing_context</strong> (<a class="reference internal" href="#redukti.valuation_pb2.PricingContext" title="redukti.valuation_pb2.PricingContext"><em>valuation_pb2.PricingContext</em></a>) – Pricing Context that defines various parameters</p></li>
+<li><p><strong>cfcollection</strong> (<a class="reference internal" href="#redukti.cashflow_pb2.CFCollection" title="redukti.cashflow_pb2.CFCollection"><em>cashflow_pb2.CFCollection</em></a>) – cashflow collection instance that contains the cashflows to be evaluated</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -852,7 +1175,7 @@ once a calendar is in use it cannot be safely replaced</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>business_center_id</strong> – Business Center id for which calendar is being registered</p></li>
+<li><p><strong>business_center_id</strong> (<em>enums_pb2.BusinessCenter</em>) – Business Center id for which calendar is being registered</p></li>
 <li><p><strong>holidays_list</strong> – List containing redukti.Date objects</p></li>
 </ul>
 </dd>
@@ -869,7 +1192,7 @@ once a calendar is in use it cannot be safely replaced</p>
 OpenRedukti Valuation service.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>market_data</strong> – MarketData instance that provides the curve definitions</p>
+<dd class="field-odd"><p><strong>market_data</strong> (<a class="reference internal" href="#redukti.library.MarketData" title="redukti.library.MarketData"><em>MarketData</em></a>) – MarketData instance that provides the curve definitions</p>
 </dd>
 </dl>
 </dd></dl>
@@ -898,7 +1221,7 @@ OpenRedukti Valuation service.</p>
 Valuation service.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>market_data</strong> – MarketData instance that is the provider of fixings data</p>
+<dd class="field-odd"><p><strong>market_data</strong> (<a class="reference internal" href="#redukti.library.MarketData" title="redukti.library.MarketData"><em>MarketData</em></a>) – MarketData instance that is the provider of fixings data</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>None</p>
@@ -912,7 +1235,7 @@ Valuation service.</p>
 <dd><p>Registers an index definition with the server</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>index_definition</strong> – An instance of index_pb2.IndexDefinition</p>
+<dd class="field-odd"><p><strong>index_definition</strong> (<a class="reference internal" href="#redukti.index_pb2.IndexDefinition" title="redukti.index_pb2.IndexDefinition"><em>index_pb2.IndexDefinition</em></a>) – An instance of index_pb2.IndexDefinition</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>None</p>
@@ -927,7 +1250,7 @@ Valuation service.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>market_data</strong> – Instance of MarketData</p></li>
+<li><p><strong>market_data</strong> (<a class="reference internal" href="#redukti.library.MarketData" title="redukti.library.MarketData"><em>MarketData</em></a>) – Instance of MarketData</p></li>
 <li><p><strong>forward_curves_list</strong> – List of curve ids that should be registered as forward curves</p></li>
 <li><p><strong>discount_curve_list</strong> – List of curve ids that should be registered as discount curves</p></li>
 </ul>
@@ -946,7 +1269,7 @@ OpenRedukti valuation service</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>market_data</strong> – MarketData instance that provides the zero rate curves</p></li>
+<li><p><strong>market_data</strong> (<a class="reference internal" href="#redukti.library.MarketData" title="redukti.library.MarketData"><em>MarketData</em></a>) – MarketData instance that provides the zero rate curves</p></li>
 <li><p><strong>forward_curves_list</strong> – The curve definition ids that will be registered as Forward Curves</p></li>
 <li><p><strong>discount_curve_list</strong> – The curve definition ids that will be registered as Discount Curves</p></li>
 </ul>
@@ -993,12 +1316,12 @@ and will need to restarted</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>notional</strong> – Notional amount</p></li>
-<li><p><strong>effective_date</strong> – The unadjusted effective date of the swap</p></li>
-<li><p><strong>termination_date</strong> – The unadjusted termination date of the swap</p></li>
-<li><p><strong>template_name</strong> – The template to be used to determine various parameters</p></li>
-<li><p><strong>fixed_rate</strong> – The fixed rate on the fixed leg</p></li>
-<li><p><strong>fixed_leg_sign</strong> – The sign of the fixed leg, -1.0 indicates pay fixed rate</p></li>
+<li><p><strong>notional</strong> (<em>float</em>) – Notional amount</p></li>
+<li><p><strong>effective_date</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>redukti.Date</em></a>) – The unadjusted effective date of the swap</p></li>
+<li><p><strong>termination_date</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>redukti.Date</em></a>) – The unadjusted termination date of the swap</p></li>
+<li><p><strong>template_name</strong> (<em>str</em>) – The template to be used to determine various parameters</p></li>
+<li><p><strong>fixed_rate</strong> (<em>float</em>) – The fixed rate on the fixed leg</p></li>
+<li><p><strong>fixed_leg_sign</strong> (<em>float</em>) – The sign of the fixed leg, -1.0 indicates pay fixed rate</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1006,6 +1329,11 @@ and will need to restarted</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="function">
+<dt id="redukti.library.is_ois_index">
+<code class="sig-prename descclassname">redukti.library.</code><code class="sig-name descname">is_ois_index</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.library.is_ois_index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="redukti.library.load_market_data">
@@ -1613,9 +1941,6 @@ and will need to restarted</p>
 <dd></dd></dl>
 
 </div>
-<div class="section" id="module-redukti.common_pb2">
-<span id="redukti-common-pb2-module"></span><h2>redukti.common_pb2 module<a class="headerlink" href="#module-redukti.common_pb2" title="Permalink to this headline">¶</a></h2>
-</div>
 <div class="section" id="module-redukti.curve_pb2">
 <span id="redukti-curve-pb2-module"></span><h2>redukti.curve_pb2 module<a class="headerlink" href="#module-redukti.curve_pb2" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -1989,78 +2314,117 @@ and will need to restarted</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-redukti.infra_pb2">
-<span id="redukti-infra-pb2-module"></span><h2>redukti.infra_pb2 module<a class="headerlink" href="#module-redukti.infra_pb2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-redukti.instrument_templates_pb2">
+<span id="redukti-instrument-templates-pb2-module"></span><h2>redukti.instrument_templates_pb2 module<a class="headerlink" href="#module-redukti.instrument_templates_pb2" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="redukti.infra_pb2.HelloReply">
-<em class="property">class </em><code class="sig-prename descclassname">redukti.infra_pb2.</code><code class="sig-name descname">HelloReply</code><a class="headerlink" href="#redukti.infra_pb2.HelloReply" title="Permalink to this definition">¶</a></dt>
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate">
+<em class="property">class </em><code class="sig-prename descclassname">redukti.instrument_templates_pb2.</code><code class="sig-name descname">InstrumentTemplate</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">google.protobuf.pyext._message.CMessage</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">google.protobuf.message.Message</span></code></p>
 <dl class="attribute">
-<dt id="redukti.infra_pb2.HelloReply.DESCRIPTOR">
-<code class="sig-name descname">DESCRIPTOR</code><em class="property"> = &lt;google.protobuf.pyext._message.MessageDescriptor object&gt;</em><a class="headerlink" href="#redukti.infra_pb2.HelloReply.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.DESCRIPTOR">
+<code class="sig-name descname">DESCRIPTOR</code><em class="property"> = &lt;google.protobuf.pyext._message.MessageDescriptor object&gt;</em><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="redukti.infra_pb2.HelloReply.message">
-<code class="sig-name descname">message</code><a class="headerlink" href="#redukti.infra_pb2.HelloReply.message" title="Permalink to this definition">¶</a></dt>
-<dd><p>Field redukti.HelloReply.message</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="redukti.infra_pb2.HelloRequest">
-<em class="property">class </em><code class="sig-prename descclassname">redukti.infra_pb2.</code><code class="sig-name descname">HelloRequest</code><a class="headerlink" href="#redukti.infra_pb2.HelloRequest" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">google.protobuf.pyext._message.CMessage</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">google.protobuf.message.Message</span></code></p>
-<dl class="attribute">
-<dt id="redukti.infra_pb2.HelloRequest.DESCRIPTOR">
-<code class="sig-name descname">DESCRIPTOR</code><em class="property"> = &lt;google.protobuf.pyext._message.MessageDescriptor object&gt;</em><a class="headerlink" href="#redukti.infra_pb2.HelloRequest.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="redukti.infra_pb2.HelloRequest.delay_for">
-<code class="sig-name descname">delay_for</code><a class="headerlink" href="#redukti.infra_pb2.HelloRequest.delay_for" title="Permalink to this definition">¶</a></dt>
-<dd><p>Field redukti.HelloRequest.delay_for</p>
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.compounding_method1">
+<code class="sig-name descname">compounding_method1</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.compounding_method1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.compounding_method1</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="redukti.infra_pb2.HelloRequest.immediate">
-<code class="sig-name descname">immediate</code><a class="headerlink" href="#redukti.infra_pb2.HelloRequest.immediate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Field redukti.HelloRequest.immediate</p>
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.compounding_method2">
+<code class="sig-name descname">compounding_method2</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.compounding_method2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.compounding_method2</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="redukti.infra_pb2.HelloRequest.name">
-<code class="sig-name descname">name</code><a class="headerlink" href="#redukti.infra_pb2.HelloRequest.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Field redukti.HelloRequest.name</p>
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.currency">
+<code class="sig-name descname">currency</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.currency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.currency</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.day_count_fraction1">
+<code class="sig-name descname">day_count_fraction1</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.day_count_fraction1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.day_count_fraction1</p>
 </dd></dl>
 
-<dl class="class">
-<dt id="redukti.infra_pb2.ShutdownReply">
-<em class="property">class </em><code class="sig-prename descclassname">redukti.infra_pb2.</code><code class="sig-name descname">ShutdownReply</code><a class="headerlink" href="#redukti.infra_pb2.ShutdownReply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">google.protobuf.pyext._message.CMessage</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">google.protobuf.message.Message</span></code></p>
 <dl class="attribute">
-<dt id="redukti.infra_pb2.ShutdownReply.DESCRIPTOR">
-<code class="sig-name descname">DESCRIPTOR</code><em class="property"> = &lt;google.protobuf.pyext._message.MessageDescriptor object&gt;</em><a class="headerlink" href="#redukti.infra_pb2.ShutdownReply.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.day_count_fraction2">
+<code class="sig-name descname">day_count_fraction2</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.day_count_fraction2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.day_count_fraction2</p>
 </dd></dl>
 
-<dl class="class">
-<dt id="redukti.infra_pb2.ShutdownRequest">
-<em class="property">class </em><code class="sig-prename descclassname">redukti.infra_pb2.</code><code class="sig-name descname">ShutdownRequest</code><a class="headerlink" href="#redukti.infra_pb2.ShutdownRequest" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">google.protobuf.pyext._message.CMessage</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">google.protobuf.message.Message</span></code></p>
 <dl class="attribute">
-<dt id="redukti.infra_pb2.ShutdownRequest.DESCRIPTOR">
-<code class="sig-name descname">DESCRIPTOR</code><em class="property"> = &lt;google.protobuf.pyext._message.MessageDescriptor object&gt;</em><a class="headerlink" href="#redukti.infra_pb2.ShutdownRequest.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.fixed_discounting_index_family">
+<code class="sig-name descname">fixed_discounting_index_family</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.fixed_discounting_index_family" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.fixed_discounting_index_family</p>
+</dd></dl>
 
 <dl class="attribute">
-<dt id="redukti.infra_pb2.ShutdownRequest.password">
-<code class="sig-name descname">password</code><a class="headerlink" href="#redukti.infra_pb2.ShutdownRequest.password" title="Permalink to this definition">¶</a></dt>
-<dd><p>Field redukti.ShutdownRequest.password</p>
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.floating_index1">
+<code class="sig-name descname">floating_index1</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.floating_index1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.floating_index1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.floating_index2">
+<code class="sig-name descname">floating_index2</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.floating_index2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.floating_index2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.floating_tenor1">
+<code class="sig-name descname">floating_tenor1</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.floating_tenor1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.floating_tenor1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.floating_tenor2">
+<code class="sig-name descname">floating_tenor2</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.floating_tenor2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.floating_tenor2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.payment_calendars">
+<code class="sig-name descname">payment_calendars</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.payment_calendars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.payment_calendars</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.payment_day_convention">
+<code class="sig-name descname">payment_day_convention</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.payment_day_convention" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.payment_day_convention</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.payment_frequency1">
+<code class="sig-name descname">payment_frequency1</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.payment_frequency1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.payment_frequency1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.payment_frequency2">
+<code class="sig-name descname">payment_frequency2</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.payment_frequency2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.payment_frequency2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.product_sub_type">
+<code class="sig-name descname">product_sub_type</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.product_sub_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.product_sub_type</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.reset_frequency_if_compounding1">
+<code class="sig-name descname">reset_frequency_if_compounding1</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.reset_frequency_if_compounding1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.reset_frequency_if_compounding1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="redukti.instrument_templates_pb2.InstrumentTemplate.reset_frequency_if_compounding2">
+<code class="sig-name descname">reset_frequency_if_compounding2</code><a class="headerlink" href="#redukti.instrument_templates_pb2.InstrumentTemplate.reset_frequency_if_compounding2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.InstrumentTemplate.reset_frequency_if_compounding2</p>
 </dd></dl>
 
 </dd></dl>
@@ -2243,6 +2607,52 @@ and will need to restarted</p>
 </div>
 <div class="section" id="module-redukti.services_pb2">
 <span id="redukti-services-pb2-module"></span><h2>redukti.services_pb2 module<a class="headerlink" href="#module-redukti.services_pb2" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="redukti.services_pb2.HelloReply">
+<em class="property">class </em><code class="sig-prename descclassname">redukti.services_pb2.</code><code class="sig-name descname">HelloReply</code><a class="headerlink" href="#redukti.services_pb2.HelloReply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">google.protobuf.pyext._message.CMessage</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">google.protobuf.message.Message</span></code></p>
+<dl class="attribute">
+<dt id="redukti.services_pb2.HelloReply.DESCRIPTOR">
+<code class="sig-name descname">DESCRIPTOR</code><em class="property"> = &lt;google.protobuf.pyext._message.MessageDescriptor object&gt;</em><a class="headerlink" href="#redukti.services_pb2.HelloReply.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="redukti.services_pb2.HelloReply.message">
+<code class="sig-name descname">message</code><a class="headerlink" href="#redukti.services_pb2.HelloReply.message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.HelloReply.message</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="redukti.services_pb2.HelloRequest">
+<em class="property">class </em><code class="sig-prename descclassname">redukti.services_pb2.</code><code class="sig-name descname">HelloRequest</code><a class="headerlink" href="#redukti.services_pb2.HelloRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">google.protobuf.pyext._message.CMessage</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">google.protobuf.message.Message</span></code></p>
+<dl class="attribute">
+<dt id="redukti.services_pb2.HelloRequest.DESCRIPTOR">
+<code class="sig-name descname">DESCRIPTOR</code><em class="property"> = &lt;google.protobuf.pyext._message.MessageDescriptor object&gt;</em><a class="headerlink" href="#redukti.services_pb2.HelloRequest.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="redukti.services_pb2.HelloRequest.delay_for">
+<code class="sig-name descname">delay_for</code><a class="headerlink" href="#redukti.services_pb2.HelloRequest.delay_for" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.HelloRequest.delay_for</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="redukti.services_pb2.HelloRequest.immediate">
+<code class="sig-name descname">immediate</code><a class="headerlink" href="#redukti.services_pb2.HelloRequest.immediate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.HelloRequest.immediate</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="redukti.services_pb2.HelloRequest.name">
+<code class="sig-name descname">name</code><a class="headerlink" href="#redukti.services_pb2.HelloRequest.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.HelloRequest.name</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="class">
 <dt id="redukti.services_pb2.Request">
 <em class="property">class </em><code class="sig-prename descclassname">redukti.services_pb2.</code><code class="sig-name descname">Request</code><a class="headerlink" href="#redukti.services_pb2.Request" title="Permalink to this definition">¶</a></dt>
@@ -2511,6 +2921,34 @@ and will need to restarted</p>
 <dt id="redukti.services_pb2.ResponseHeader.response_sub_code">
 <code class="sig-name descname">response_sub_code</code><a class="headerlink" href="#redukti.services_pb2.ResponseHeader.response_sub_code" title="Permalink to this definition">¶</a></dt>
 <dd><p>Field redukti.ResponseHeader.response_sub_code</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="redukti.services_pb2.ShutdownReply">
+<em class="property">class </em><code class="sig-prename descclassname">redukti.services_pb2.</code><code class="sig-name descname">ShutdownReply</code><a class="headerlink" href="#redukti.services_pb2.ShutdownReply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">google.protobuf.pyext._message.CMessage</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">google.protobuf.message.Message</span></code></p>
+<dl class="attribute">
+<dt id="redukti.services_pb2.ShutdownReply.DESCRIPTOR">
+<code class="sig-name descname">DESCRIPTOR</code><em class="property"> = &lt;google.protobuf.pyext._message.MessageDescriptor object&gt;</em><a class="headerlink" href="#redukti.services_pb2.ShutdownReply.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="redukti.services_pb2.ShutdownRequest">
+<em class="property">class </em><code class="sig-prename descclassname">redukti.services_pb2.</code><code class="sig-name descname">ShutdownRequest</code><a class="headerlink" href="#redukti.services_pb2.ShutdownRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">google.protobuf.pyext._message.CMessage</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">google.protobuf.message.Message</span></code></p>
+<dl class="attribute">
+<dt id="redukti.services_pb2.ShutdownRequest.DESCRIPTOR">
+<code class="sig-name descname">DESCRIPTOR</code><em class="property"> = &lt;google.protobuf.pyext._message.MessageDescriptor object&gt;</em><a class="headerlink" href="#redukti.services_pb2.ShutdownRequest.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="redukti.services_pb2.ShutdownRequest.password">
+<code class="sig-name descname">password</code><a class="headerlink" href="#redukti.services_pb2.ShutdownRequest.password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field redukti.ShutdownRequest.password</p>
 </dd></dl>
 
 </dd></dl>
@@ -3242,11 +3680,10 @@ and will need to restarted</p>
 <li class="toctree-l2"><a class="reference internal" href="#module-redukti.calendar_pb2">redukti.calendar_pb2 module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-redukti.cashflow_pb2">redukti.cashflow_pb2 module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-redukti.commands">redukti.commands module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-redukti.common_pb2">redukti.common_pb2 module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-redukti.curve_pb2">redukti.curve_pb2 module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-redukti.enums_pb2">redukti.enums_pb2 module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-redukti.index_pb2">redukti.index_pb2 module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-redukti.infra_pb2">redukti.infra_pb2 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-redukti.instrument_templates_pb2">redukti.instrument_templates_pb2 module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-redukti.schedule_pb2">redukti.schedule_pb2 module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-redukti.services_pb2">redukti.services_pb2 module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-redukti.services_pb2_grpc">redukti.services_pb2_grpc module</a></li>

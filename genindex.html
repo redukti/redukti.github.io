@@ -78,6 +78,8 @@
       </ul></li>
       <li><a href="pyredukti-api.html#redukti.services_pb2_grpc.add_OpenReduktiServicesServicer_to_server">add_OpenReduktiServicesServicer_to_server() (in module redukti.services_pb2_grpc)</a>
 </li>
+      <li><a href="pyredukti-api.html#redukti.library.InstrumentTemplateRepository.add_template">add_template() (redukti.library.InstrumentTemplateRepository method)</a>
+</li>
       <li><a href="pyredukti-api.html#redukti.Calendar.adjust">adjust() (redukti.Calendar method)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.InterestRateIndex.adjust_date">adjust_date() (redukti.InterestRateIndex method)</a>
@@ -86,10 +88,10 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.schedule_pb2.Schedule.adjusted_payment_dates">adjusted_payment_dates (redukti.schedule_pb2.Schedule attribute)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.schedule_pb2.Schedule.adjusted_start_dates">adjusted_start_dates (redukti.schedule_pb2.Schedule attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyredukti-api.html#redukti.schedule_pb2.Schedule.adjusted_start_dates">adjusted_start_dates (redukti.schedule_pb2.Schedule attribute)</a>
+</li>
       <li><a href="pyredukti-api.html#redukti.Calendar.advance">advance() (redukti.Calendar method)</a>
 
       <ul>
@@ -178,6 +180,10 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.cashflow_pb2.CFFloating.compounding_method">compounding_method (redukti.cashflow_pb2.CFFloating attribute)</a>
 </li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.compounding_method1">compounding_method1 (redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.compounding_method2">compounding_method2 (redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
+</li>
       <li><a href="pyredukti-api.html#redukti.cashflow_pb2.CFFloating.currency">currency (redukti.cashflow_pb2.CFFloating attribute)</a>
 
       <ul>
@@ -190,6 +196,8 @@
         <li><a href="pyredukti-api.html#redukti.curve_pb2.ZeroCurveSet.currency">(redukti.curve_pb2.ZeroCurveSet attribute)</a>
 </li>
         <li><a href="pyredukti-api.html#redukti.index_pb2.IndexDefinition.currency">(redukti.index_pb2.IndexDefinition attribute)</a>
+</li>
+        <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.currency">(redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
 </li>
         <li><a href="pyredukti-api.html#redukti.valuation_pb2.PricingCurveIdentifier.currency">(redukti.valuation_pb2.PricingCurveIdentifier attribute)</a>
 </li>
@@ -238,6 +246,8 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.curve_pb2.IRCurveDefinition.curve_type">curve_type (redukti.curve_pb2.IRCurveDefinition attribute)</a>
 </li>
+      <li><a href="pyredukti-api.html#redukti.CurveId">CurveId (class in redukti)</a>
+</li>
       <li><a href="pyredukti-api.html#redukti.valuation_pb2.CurveInterpolationReply">CurveInterpolationReply (class in redukti.valuation_pb2)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.valuation_pb2.CurveInterpolationRequest">CurveInterpolationRequest (class in redukti.valuation_pb2)</a>
@@ -280,13 +290,17 @@
         <li><a href="pyredukti-api.html#redukti.index_pb2.IndexDefinition.day_count_fraction">(redukti.index_pb2.IndexDefinition attribute)</a>
 </li>
       </ul></li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.day_count_fraction1">day_count_fraction1 (redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.day_count_fraction2">day_count_fraction2 (redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
+</li>
       <li><a href="pyredukti-api.html#redukti.DayFraction">DayFraction (class in redukti)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.index_pb2.IndexDefinition.default_for_index_family">default_for_index_family (redukti.index_pb2.IndexDefinition attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.valuation_pb2.CurveInterpolationRequest.definition">definition (redukti.valuation_pb2.CurveInterpolationRequest attribute)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.infra_pb2.HelloRequest.delay_for">delay_for (redukti.infra_pb2.HelloRequest attribute)</a>
+      <li><a href="pyredukti-api.html#redukti.services_pb2.HelloRequest.delay_for">delay_for (redukti.services_pb2.HelloRequest attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.valuation_pb2.PricingContext.derivative_order">derivative_order (redukti.valuation_pb2.PricingContext attribute)</a>
 </li>
@@ -339,17 +353,15 @@
 </li>
         <li><a href="pyredukti-api.html#redukti.index_pb2.RegisterIndexDefinitionRequest.DESCRIPTOR">(redukti.index_pb2.RegisterIndexDefinitionRequest attribute)</a>
 </li>
-        <li><a href="pyredukti-api.html#redukti.infra_pb2.HelloReply.DESCRIPTOR">(redukti.infra_pb2.HelloReply attribute)</a>
-</li>
-        <li><a href="pyredukti-api.html#redukti.infra_pb2.HelloRequest.DESCRIPTOR">(redukti.infra_pb2.HelloRequest attribute)</a>
-</li>
-        <li><a href="pyredukti-api.html#redukti.infra_pb2.ShutdownReply.DESCRIPTOR">(redukti.infra_pb2.ShutdownReply attribute)</a>
-</li>
-        <li><a href="pyredukti-api.html#redukti.infra_pb2.ShutdownRequest.DESCRIPTOR">(redukti.infra_pb2.ShutdownRequest attribute)</a>
+        <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.DESCRIPTOR">(redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
 </li>
         <li><a href="pyredukti-api.html#redukti.schedule_pb2.Schedule.DESCRIPTOR">(redukti.schedule_pb2.Schedule attribute)</a>
 </li>
         <li><a href="pyredukti-api.html#redukti.schedule_pb2.ScheduleParameters.DESCRIPTOR">(redukti.schedule_pb2.ScheduleParameters attribute)</a>
+</li>
+        <li><a href="pyredukti-api.html#redukti.services_pb2.HelloReply.DESCRIPTOR">(redukti.services_pb2.HelloReply attribute)</a>
+</li>
+        <li><a href="pyredukti-api.html#redukti.services_pb2.HelloRequest.DESCRIPTOR">(redukti.services_pb2.HelloRequest attribute)</a>
 </li>
         <li><a href="pyredukti-api.html#redukti.services_pb2.Request.DESCRIPTOR">(redukti.services_pb2.Request attribute)</a>
 </li>
@@ -358,6 +370,10 @@
         <li><a href="pyredukti-api.html#redukti.services_pb2.Response.DESCRIPTOR">(redukti.services_pb2.Response attribute)</a>
 </li>
         <li><a href="pyredukti-api.html#redukti.services_pb2.ResponseHeader.DESCRIPTOR">(redukti.services_pb2.ResponseHeader attribute)</a>
+</li>
+        <li><a href="pyredukti-api.html#redukti.services_pb2.ShutdownReply.DESCRIPTOR">(redukti.services_pb2.ShutdownReply attribute)</a>
+</li>
+        <li><a href="pyredukti-api.html#redukti.services_pb2.ShutdownRequest.DESCRIPTOR">(redukti.services_pb2.ShutdownRequest attribute)</a>
 </li>
         <li><a href="pyredukti-api.html#redukti.shared_pb2.ReplyHeader.DESCRIPTOR">(redukti.shared_pb2.ReplyHeader attribute)</a>
 </li>
@@ -476,6 +492,8 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.schedule_pb2.ScheduleParameters.first_regular_period_start_date">first_regular_period_start_date (redukti.schedule_pb2.ScheduleParameters attribute)</a>
 </li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.fixed_discounting_index_family">fixed_discounting_index_family (redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
+</li>
       <li><a href="pyredukti-api.html#redukti.cashflow_pb2.CFFra.fixed_rate">fixed_rate (redukti.cashflow_pb2.CFFra attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.index_pb2.IndexDefinition.fixing_calendars">fixing_calendars (redukti.index_pb2.IndexDefinition attribute)</a>
@@ -494,17 +512,25 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.valuation_pb2.FixingsByIndexTenor">FixingsByIndexTenor (class in redukti.valuation_pb2)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyredukti-api.html#redukti.valuation_pb2.FixingsByIndexTenor.FixingsEntry">FixingsByIndexTenor.FixingsEntry (class in redukti.valuation_pb2)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyredukti-api.html#redukti.cashflow_pb2.CFSingle.floating">floating (redukti.cashflow_pb2.CFSingle attribute)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.floating_index1">floating_index1 (redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.floating_index2">floating_index2 (redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.cashflow_pb2.CFFra.floating_period">floating_period (redukti.cashflow_pb2.CFFra attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.cashflow_pb2.CFFloating.floating_periods">floating_periods (redukti.cashflow_pb2.CFFloating attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.bootstrap_pb2.ParInstrument.floating_tenor">floating_tenor (redukti.bootstrap_pb2.ParInstrument attribute)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.floating_tenor1">floating_tenor1 (redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.floating_tenor2">floating_tenor2 (redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.bootstrap_pb2.ParInstrument.forward_curve_definition_id">forward_curve_definition_id (redukti.bootstrap_pb2.ParInstrument attribute)</a>
 </li>
@@ -540,14 +566,16 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.InterestRateIndex.get_index_by_isdaindex">get_index_by_isdaindex() (redukti.InterestRateIndex static method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyredukti-api.html#redukti.InterpolatedYieldCurve.get_sensitivities">get_sensitivities() (redukti.InterpolatedYieldCurve method)</a>
 
       <ul>
         <li><a href="pyredukti-api.html#redukti.YieldCurve.get_sensitivities">(redukti.YieldCurve method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyredukti-api.html#redukti.library.InstrumentTemplateRepository.get_template">get_template() (redukti.library.InstrumentTemplateRepository method)</a>
+</li>
       <li><a href="pyredukti-api.html#redukti.library.ServerCommand.get_valuation">get_valuation() (redukti.library.ServerCommand method)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.ADVar.gradient">gradient() (redukti.ADVar method)</a>
@@ -600,9 +628,9 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.services_pb2.Request.hello_request">hello_request (redukti.services_pb2.Request attribute)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.infra_pb2.HelloReply">HelloReply (class in redukti.infra_pb2)</a>
+      <li><a href="pyredukti-api.html#redukti.services_pb2.HelloReply">HelloReply (class in redukti.services_pb2)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.infra_pb2.HelloRequest">HelloRequest (class in redukti.infra_pb2)</a>
+      <li><a href="pyredukti-api.html#redukti.services_pb2.HelloRequest">HelloRequest (class in redukti.services_pb2)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.ADVar.hessian">hessian() (redukti.ADVar method)</a>
 </li>
@@ -616,7 +644,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyredukti-api.html#redukti.curve_pb2.IRCurveDefinition.id">id (redukti.curve_pb2.IRCurveDefinition attribute)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.infra_pb2.HelloRequest.immediate">immediate (redukti.infra_pb2.HelloRequest attribute)</a>
+      <li><a href="pyredukti-api.html#redukti.CurveId.id">id() (redukti.CurveId method)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.services_pb2.HelloRequest.immediate">immediate (redukti.services_pb2.HelloRequest attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.cashflow_pb2.CFFloatingPeriod.index">index (redukti.cashflow_pb2.CFFloatingPeriod attribute)</a>
 
@@ -646,21 +676,35 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.library.MarketData.init_zero_curves">init_zero_curves() (redukti.library.MarketData method)</a>
 </li>
+      <li><a href="pyredukti-api.html#redukti.InMemoryRequestProcessor">InMemoryRequestProcessor (class in redukti)</a>
+</li>
       <li><a href="pyredukti-api.html#redukti.bootstrap_pb2.ParRates.instrument_ids">instrument_ids (redukti.bootstrap_pb2.ParRates attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyredukti-api.html#redukti.bootstrap_pb2.ParInstrument.instrument_key">instrument_key (redukti.bootstrap_pb2.ParInstrument attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.bootstrap_pb2.ParInstrument.instrument_type">instrument_type (redukti.bootstrap_pb2.ParInstrument attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyredukti-api.html#redukti.bootstrap_pb2.ParCurve.instruments">instruments (redukti.bootstrap_pb2.ParCurve attribute)</a>
 </li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate">InstrumentTemplate (class in redukti.instrument_templates_pb2)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.library.InstrumentTemplateRepository">InstrumentTemplateRepository (class in redukti.library)</a>
+</li>
       <li><a href="pyredukti-api.html#redukti.InterestRateIndex">InterestRateIndex (class in redukti)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.Interpolator.interpolate">interpolate() (redukti.Interpolator method)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.Interpolator.interpolate_with_numeric_sensitivities">interpolate_with_numeric_sensitivities() (redukti.Interpolator method)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.Interpolator.interpolate_with_sensitivities">interpolate_with_sensitivities() (redukti.Interpolator method)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.curve_pb2.IRCurveDefinition.interpolated_on">interpolated_on (redukti.curve_pb2.IRCurveDefinition attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.InterpolatedYieldCurve">InterpolatedYieldCurve (class in redukti)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.Interpolator">Interpolator (class in redukti)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.curve_pb2.IRCurveDefinition.interpolator_type">interpolator_type (redukti.curve_pb2.IRCurveDefinition attribute)</a>
 </li>
@@ -678,6 +722,8 @@
         <li><a href="pyredukti-api.html#redukti.library.LocalAdapter.is_local">(redukti.library.LocalAdapter method)</a>
 </li>
       </ul></li>
+      <li><a href="pyredukti-api.html#redukti.library.is_ois_index">is_ois_index() (in module redukti.library)</a>
+</li>
       <li><a href="pyredukti-api.html#redukti.valuation_pb2.PricingContext.is_todays_fixings_included">is_todays_fixings_included (redukti.valuation_pb2.PricingContext attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.index_pb2.IndexDefinition.isda_index">isda_index (redukti.index_pb2.IndexDefinition attribute)</a>
@@ -738,7 +784,7 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.bootstrap_pb2.BootstrapCurvesRequest.max_solver_iterations">max_solver_iterations (redukti.bootstrap_pb2.BootstrapCurvesRequest attribute)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.infra_pb2.HelloReply.message">message (redukti.infra_pb2.HelloReply attribute)</a>
+      <li><a href="pyredukti-api.html#redukti.services_pb2.HelloReply.message">message (redukti.services_pb2.HelloReply attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.Date.month">month() (redukti.Date method)</a>
 </li>
@@ -748,7 +794,7 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pyredukti-api.html#redukti.infra_pb2.HelloRequest.name">name (redukti.infra_pb2.HelloRequest attribute)</a>
+      <li><a href="pyredukti-api.html#redukti.services_pb2.HelloRequest.name">name (redukti.services_pb2.HelloRequest attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.cashflow_pb2.CFFloatingPeriod.notional">notional (redukti.cashflow_pb2.CFFloatingPeriod attribute)</a>
 
@@ -814,14 +860,18 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.Date.parse">parse() (redukti.Date static method)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.infra_pb2.ShutdownRequest.password">password (redukti.infra_pb2.ShutdownRequest attribute)</a>
+      <li><a href="pyredukti-api.html#redukti.services_pb2.ShutdownRequest.password">password (redukti.services_pb2.ShutdownRequest attribute)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.payment_calendars">payment_calendars (redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
+
+      <ul>
+        <li><a href="pyredukti-api.html#redukti.schedule_pb2.ScheduleParameters.payment_calendars">(redukti.schedule_pb2.ScheduleParameters attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="pyredukti-api.html#redukti.schedule_pb2.ScheduleParameters.payment_convention">payment_convention (redukti.schedule_pb2.ScheduleParameters attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pyredukti-api.html#redukti.schedule_pb2.ScheduleParameters.payment_calendars">payment_calendars (redukti.schedule_pb2.ScheduleParameters attribute)</a>
-</li>
-      <li><a href="pyredukti-api.html#redukti.schedule_pb2.ScheduleParameters.payment_convention">payment_convention (redukti.schedule_pb2.ScheduleParameters attribute)</a>
-</li>
       <li><a href="pyredukti-api.html#redukti.valuation_pb2.PricingContext.payment_cutoff_date">payment_cutoff_date (redukti.valuation_pb2.PricingContext attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.cashflow_pb2.CFFloating.payment_date">payment_date (redukti.cashflow_pb2.CFFloating attribute)</a>
@@ -834,7 +884,13 @@
         <li><a href="pyredukti-api.html#redukti.cashflow_pb2.CFSimple.payment_date">(redukti.cashflow_pb2.CFSimple attribute)</a>
 </li>
       </ul></li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.payment_day_convention">payment_day_convention (redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
+</li>
       <li><a href="pyredukti-api.html#redukti.schedule_pb2.ScheduleParameters.payment_frequency">payment_frequency (redukti.schedule_pb2.ScheduleParameters attribute)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.payment_frequency1">payment_frequency1 (redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.payment_frequency2">payment_frequency2 (redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.schedule_pb2.ScheduleParameters.payment_lag">payment_lag (redukti.schedule_pb2.ScheduleParameters attribute)</a>
 </li>
@@ -849,6 +905,8 @@
       <li><a href="pyredukti-api.html#redukti.valuation_pb2.PricingContext">PricingContext (class in redukti.valuation_pb2)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.valuation_pb2.PricingCurveIdentifier">PricingCurveIdentifier (class in redukti.valuation_pb2)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.product_sub_type">product_sub_type (redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -890,15 +948,13 @@
 </li>
       <li><a href="pyredukti-api.html#module-redukti.commands">redukti.commands (module)</a>
 </li>
-      <li><a href="pyredukti-api.html#module-redukti.common_pb2">redukti.common_pb2 (module)</a>
-</li>
       <li><a href="pyredukti-api.html#module-redukti.curve_pb2">redukti.curve_pb2 (module)</a>
 </li>
       <li><a href="pyredukti-api.html#module-redukti.enums_pb2">redukti.enums_pb2 (module)</a>
 </li>
       <li><a href="pyredukti-api.html#module-redukti.index_pb2">redukti.index_pb2 (module)</a>
 </li>
-      <li><a href="pyredukti-api.html#module-redukti.infra_pb2">redukti.infra_pb2 (module)</a>
+      <li><a href="pyredukti-api.html#module-redukti.instrument_templates_pb2">redukti.instrument_templates_pb2 (module)</a>
 </li>
       <li><a href="pyredukti-api.html#module-redukti.library">redukti.library (module)</a>
 </li>
@@ -936,12 +992,12 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.services_pb2.Response.register_index_definition_reply">register_index_definition_reply (redukti.services_pb2.Response attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyredukti-api.html#redukti.services_pb2.Request.register_index_definition_request">register_index_definition_request (redukti.services_pb2.Request attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.library.ServerCommand.register_market_data">register_market_data() (redukti.library.ServerCommand method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyredukti-api.html#redukti.library.ServerCommand.register_zero_curves">register_zero_curves() (redukti.library.ServerCommand method)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.calendar_pb2.RegisterCalendarReply">RegisterCalendarReply (class in redukti.calendar_pb2)</a>
@@ -965,6 +1021,10 @@
       <li><a href="pyredukti-api.html#redukti.services_pb2.RequestHeader.requested_page_number">requested_page_number (redukti.services_pb2.RequestHeader attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.services_pb2.RequestHeader">RequestHeader (class in redukti.services_pb2)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.reset_frequency_if_compounding1">reset_frequency_if_compounding1 (redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
+</li>
+      <li><a href="pyredukti-api.html#redukti.instrument_templates_pb2.InstrumentTemplate.reset_frequency_if_compounding2">reset_frequency_if_compounding2 (redukti.instrument_templates_pb2.InstrumentTemplate attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.library.ServerCommand.reset_valuation_service">reset_valuation_service() (redukti.library.ServerCommand method)</a>
 </li>
@@ -1034,9 +1094,11 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.Date.serial">serial() (redukti.Date method)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.library.GRPCAdapter.serve">serve() (redukti.library.GRPCAdapter method)</a>
+      <li><a href="pyredukti-api.html#redukti.InMemoryRequestProcessor.serve">serve() (redukti.InMemoryRequestProcessor method)</a>
 
       <ul>
+        <li><a href="pyredukti-api.html#redukti.library.GRPCAdapter.serve">(redukti.library.GRPCAdapter method)</a>
+</li>
         <li><a href="pyredukti-api.html#redukti.library.LocalAdapter.serve">(redukti.library.LocalAdapter method)</a>
 </li>
         <li><a href="pyredukti-api.html#redukti.services_pb2_grpc.OpenReduktiServicesServicer.serve">(redukti.services_pb2_grpc.OpenReduktiServicesServicer method)</a>
@@ -1074,15 +1136,17 @@
 </li>
       <li><a href="pyredukti-api.html#redukti.index_pb2.IndexDefinition.short_tenor_threshold">short_tenor_threshold (redukti.index_pb2.IndexDefinition attribute)</a>
 </li>
+      <li><a href="pyredukti-api.html#redukti.library.InstrumentTemplateRepository.show_templates">show_templates() (redukti.library.InstrumentTemplateRepository method)</a>
+</li>
       <li><a href="pyredukti-api.html#redukti.services_pb2.Response.shutdown_reply">shutdown_reply (redukti.services_pb2.Response attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.services_pb2.Request.shutdown_request">shutdown_request (redukti.services_pb2.Request attribute)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.library.ServerCommand.shutdown_valuation_service">shutdown_valuation_service() (redukti.library.ServerCommand method)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.infra_pb2.ShutdownReply">ShutdownReply (class in redukti.infra_pb2)</a>
+      <li><a href="pyredukti-api.html#redukti.services_pb2.ShutdownReply">ShutdownReply (class in redukti.services_pb2)</a>
 </li>
-      <li><a href="pyredukti-api.html#redukti.infra_pb2.ShutdownRequest">ShutdownRequest (class in redukti.infra_pb2)</a>
+      <li><a href="pyredukti-api.html#redukti.services_pb2.ShutdownRequest">ShutdownRequest (class in redukti.services_pb2)</a>
 </li>
       <li><a href="pyredukti-api.html#redukti.cashflow_pb2.CFSingle.simple">simple (redukti.cashflow_pb2.CFSingle attribute)</a>
 </li>

@@ -40,7 +40,7 @@ For further details of the full scope of the MyCCP product, please visit `Redukt
 
 The OpenRedukti Computation Model
 =================================
-OpenRedukti's design is quite different from say QuantLib. In QuantLib various objects are interlinked via C++ pointers; this approach is 
+OpenRedukti's design is quite different from QuantLib. In QuantLib various objects are interlinked via C++ pointers; this approach is 
 unsuitable for a server deployment.
 
 OpenRedukti's model decouples the raw market data, its conversion to curves, and the use of curves for valuation purposes.
@@ -49,11 +49,19 @@ So in order to value trades, you have to do following:
 
 1. Build curves using raw market data (i.e. quotes). Curve Building uses a multi-curve builder so this is an expensive step. During curve
    building you can optionally generate PAR sensitivities.
-2. You then seed a Valuation Service with the curves, fixings and some additional configuration data such as curve mappings. Essentially
-   the Valuation Service hold all this data cached in memory.
-3. You then submit all trades for valuation to the Valuation Service. 
-4. If you need to update the curves, you have to do the steps above again, and then revalue all your trades. Your trades have no links to the
-   curves, trades live in your world, OpenRedukti doesn't care about them.
+2. You then seed a Valuation Service with the curves, fixings and some additional configuration data such as curve mappings. 
+   OpenRedukti has the concept of market date sets. Each market data set is identified by the business date, the market data qualifier,
+   and a cycle number. This allows multiple market data sets to be computed and registered at the same time. 
+   The Valuation Service caches all the registered market data sets in memory.
+3. Each curve in the market data set is identified by a scenario number. This should be 0 for the base curves.
+   However, you may add additional curves with incremented scenario numbers. Such curves are used for VaR computation in 
+   OpenRedukti, and each scenario curve represents a VaR scenario, i.e. the curve is shifted from the base curve in some manner.
+   Note that scenario curves never compute sensitivities.
+4. Once the required market data set is registerted, you  submit all trades for valuation to the Valuation Service. 
+   Each valuation request must be for a specific market data set, identified by the PricingContext.
+5. If you need to update the curves for a particular market data ser, you have to do the steps above again, and then revalue all your trades
+   for that set. Typically though you would create a new market data set rather an update one already created. Your trades have no links to the
+   market data set, trades live in your world, OpenRedukti doesn't care about them. 
 
 
 Ackowledgements

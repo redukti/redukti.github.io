@@ -36,7 +36,17 @@ redukti module
    :undoc-members:
    :show-inheritance:
 
+.. autoclass:: redukti.Interpolator
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 .. autoclass:: redukti.YieldCurve
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: redukti.CurveId
    :members:
    :undoc-members:
    :show-inheritance:
@@ -47,6 +57,11 @@ redukti module
    :show-inheritance:
 
 .. autoclass:: redukti.SvenssonCurve
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: redukti.InMemoryRequestProcessor
    :members:
    :undoc-members:
    :show-inheritance:
@@ -91,14 +106,6 @@ redukti.commands module
    :undoc-members:
    :show-inheritance:
 
-redukti.common\_pb2 module
---------------------------
-
-.. automodule:: redukti.common_pb2
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 redukti.curve\_pb2 module
 -------------------------
 
@@ -123,10 +130,10 @@ redukti.index\_pb2 module
    :undoc-members:
    :show-inheritance:
 
-redukti.infra\_pb2 module
--------------------------
+redukti.instrument\_templates\_pb2 module
+-----------------------------------------
 
-.. automodule:: redukti.infra_pb2
+.. automodule:: redukti.instrument_templates_pb2
    :members:
    :undoc-members:
    :show-inheritance:
