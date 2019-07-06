@@ -47,6 +47,9 @@ contain a gradient vector and a 2-dimensional hessian matrix.</p>
 context of a calculation. Variable ids start with <code class="docutils literal notranslate"><span class="pre">0</span></code>, and if there are 3 variables
 in a calculation, then the variables would have ids <code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">1</span></code>, and <code class="docutils literal notranslate"><span class="pre">2</span></code>.</p>
 <p>Note that all ADVars in a calculation must have the same number size and order.</p>
+<p>Note that ADVar objects are heavyweight and not efficient to use in Python code.
+Most operations on ADVar create new values, so in a sense these
+are immutable objects in Python code.</p>
 <p>Construct a new ADVar variable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -71,6 +74,20 @@ in a calculation, then the variables would have ids <code class="docutils litera
 </dd></dl>
 
 <dl class="method">
+<dt id="redukti.ADVar.exp">
+<code class="sig-name descname">exp</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.ADVar.exp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes exp(var)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>exponent</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#redukti.ADVar" title="redukti.ADVar">ADVar</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="redukti.ADVar.gradient">
 <code class="sig-name descname">gradient</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.ADVar.gradient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the first order derivatives if available else empty list</p>
@@ -80,6 +97,20 @@ in a calculation, then the variables would have ids <code class="docutils litera
 <dt id="redukti.ADVar.hessian">
 <code class="sig-name descname">hessian</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.ADVar.hessian" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the second order derivatives if available else empty list</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="redukti.ADVar.log">
+<code class="sig-name descname">log</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.ADVar.log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes log(var)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>natural logarithm</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#redukti.ADVar" title="redukti.ADVar">ADVar</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -97,8 +128,18 @@ in a calculation, then the variables would have ids <code class="docutils litera
 <p>Holds a date value as the number of days since civil 1899-12-31.</p>
 <p>Negative values indicate days prior to 1899-12-31.
 Note that OpenRedukti requires dates to be in the range <code class="docutils literal notranslate"><span class="pre">1901-01-01</span></code> and <code class="docutils literal notranslate"><span class="pre">2199-12-31</span></code>.</p>
-<p>Constructs a Date object from a serial number
-:param value: serial number</p>
+<p>Constructs a Date object from a serial number</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – serial number</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Date object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#redukti.Date" title="redukti.Date">Date</a></p>
+</dd>
+</dl>
 <dl class="method">
 <dt id="redukti.Date.advance">
 <code class="sig-name descname">advance</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">int n</em>, <em class="sig-param">PeriodUnit unit</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.Date.advance" title="Permalink to this definition">¶</a></dt>
@@ -110,13 +151,16 @@ or adjusted as above.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>d</strong> – Input date</p></li>
-<li><p><strong>n</strong> – quantity</p></li>
-<li><p><strong>unit</strong> – The unit of <code class="docutils literal notranslate"><span class="pre">n</span></code></p></li>
+<li><p><strong>d</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – Input date</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – quantity</p></li>
+<li><p><strong>unit</strong> (<em>enums_pb2.PeriodUnit</em>) – The unit of <code class="docutils literal notranslate"><span class="pre">n</span></code></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>New Date object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#redukti.Date" title="redukti.Date">Date</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -124,34 +168,62 @@ or adjusted as above.</p>
 <dl class="method">
 <dt id="redukti.Date.day">
 <code class="sig-name descname">day</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#redukti.Date.day" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Day component</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.Date.dmy">
 <em class="property">static </em><code class="sig-name descname">dmy</code><span class="sig-paren">(</span><em class="sig-param">unsigned int d</em>, <em class="sig-param">unsigned int m</em>, <em class="sig-param">int y</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.Date.dmy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructs a Date object from day, month, year.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d</strong> (<em>int</em>) – Day of month, 1 based</p></li>
+<li><p><strong>m</strong> (<em>int</em>) – Month of the year, 1 based</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – Year in YYYY</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="redukti.Date.month">
 <code class="sig-name descname">month</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#redukti.Date.month" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>month component</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.Date.parse">
 <em class="property">static </em><code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">s</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.Date.parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parses a string representation of date.</p>
-<p>The parser will detect seperator character ‘/’ or ‘-‘.
+<p>The parser will detect separator character ‘/’ or ‘-‘.
 The formats acceptable are ‘yyyy/mm/dd’, ‘dd/mm/yyyy’, ‘yyyy-mm-dd’, or ‘dd-mm-yyyy’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>s</strong> – Input string containing a date value in supported format</p>
+<dd class="field-odd"><p><strong>s</strong> (<em>str</em>) – Input string containing a date value in supported format</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Date object if parsing is successful</p>
+<dd class="field-even"><p>if parsing is successful</p>
 </dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><strong>ValueError</strong> – if input cannot be parsed</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#redukti.Date" title="redukti.Date">Date</a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – if input cannot be parsed</p>
 </dd>
 </dl>
 </dd></dl>
@@ -159,12 +231,28 @@ The formats acceptable are ‘yyyy/mm/dd’, ‘dd/mm/yyyy’, ‘yyyy-mm-dd’,
 <dl class="method">
 <dt id="redukti.Date.serial">
 <code class="sig-name descname">serial</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#redukti.Date.serial" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>serial number</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="redukti.Date.year">
 <code class="sig-name descname">year</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#redukti.Date.year" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>returns year component</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -278,7 +366,10 @@ The algorithm is based upon the FpML specifications.</p>
 <dd class="field-odd"><p><strong>schedule_parameters</strong> (<a class="reference internal" href="#redukti.schedule_pb2.ScheduleParameters" title="redukti.schedule_pb2.ScheduleParameters"><em>schedule_pb2.ScheduleParameters</em></a>) – parameters for schedule generation</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>An instance of schedule_pb2.Schedule</p>
+<dd class="field-even"><p>computed schedule</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#redukti.schedule_pb2.Schedule" title="redukti.schedule_pb2.Schedule">schedule_pb2.Schedule</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -422,10 +513,8 @@ The difference is measured in factional units of a year, where one year 1.0.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">MONOTONE_CONVEX</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">FLAT_RIGHT</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">FLAT_LEFT</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">CUBIC_SPLINE_NOT_A_KNOT</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">CUBIC_SPLINE_NATURAL</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">LOG_CUBIC_SPLINE_NATURAL</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">CUBIC_SPLINE_CLAMPED</span></code></p></li>
 </ul>
 <p>An Interpolator can not only interpolate values, but also compute sensitivities to the
 fixed points in the x-axis.</p>
@@ -541,7 +630,7 @@ but has the same interface.</p>
 <dd class="field-even"><p>Desired discount factor</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>discount factor (float)</p>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -569,8 +658,8 @@ but has the same interface.</p>
 <dl class="method">
 <dt id="redukti.YieldCurve.get_sensitivities">
 <code class="sig-name descname">get_sensitivities</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">double x</em><span class="sig-paren">)</span> &#x2192; ADVar<a class="headerlink" href="#redukti.YieldCurve.get_sensitivities" title="Permalink to this definition">¶</a></dt>
-<dd><p>Obtains sensitivities of x to the interpolator fixed points.
-Note that this is only available on interpolated curves.
+<dd><p>Obtains sensitivities of x to the interpolator’s fixed points.
+This function is only available on interpolated curves.
 If you invoke this on a parametric curve you will get <code class="docutils literal notranslate"><span class="pre">None</span></code> as the answer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -623,7 +712,7 @@ If you invoke this on a parametric curve you will get <code class="docutils lite
 
 <dl class="class">
 <dt id="redukti.CurveId">
-<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">CurveId</code><span class="sig-paren">(</span><em class="sig-param">PricingCurveType pricing_curve_type</em>, <em class="sig-param">Currency ccy</em>, <em class="sig-param">IndexFamily index_family</em>, <em class="sig-param">Tenor tenor</em>, <em class="sig-param">Date as_of_date</em>, <em class="sig-param">int cycle=0</em>, <em class="sig-param">MarketDataQualifier qual=enums.MDQ_NORMAL</em>, <em class="sig-param">int scenario=0</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.CurveId" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">redukti.</code><code class="sig-name descname">CurveId</code><span class="sig-paren">(</span><em class="sig-param">PricingCurveType pricing_curve_type</em>, <em class="sig-param">Currency ccy</em>, <em class="sig-param">IndexFamily index_family</em>, <em class="sig-param">Tenor tenor</em>, <em class="sig-param">Date as_of_date</em>, <em class="sig-param">int cycle=0</em>, <em class="sig-param">MarketDataQualifier qualifier=enums.MDQ_NORMAL</em>, <em class="sig-param">int scenario=0</em><span class="sig-paren">)</span><a class="headerlink" href="#redukti.CurveId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>CurveId constructs a long value encoding a number of curve attributes.
 This is used as the curve identifier.</p>
@@ -633,10 +722,10 @@ This is used as the curve identifier.</p>
 <li><p><strong>pricing_curve_type</strong> (<em>enums_pb2.PricingCurveType</em>) – A classifier that says whether the curve is to be used only for forward rates or both forward rates and discounting.</p></li>
 <li><p><strong>ccy</strong> (<em>enums_pb2.Currency</em>) – The currency of the curve</p></li>
 <li><p><strong>index_family</strong> (<em>enums_pb2.IndexFamily</em>) – The Index Family of the curve</p></li>
-<li><p><strong>tenor</strong> (<em>enums_pb2.Tenor</em>) – If this curve is specialized for a tenor then thsi should identify the tenor else use TENOR_UNSPECIFIED</p></li>
+<li><p><strong>tenor</strong> (<em>enums_pb2.Tenor</em>) – If this curve is specialized for a tenor then this should identify the tenor else use TENOR_UNSPECIFIED</p></li>
 <li><p><strong>as_of_date</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – The business date</p></li>
 <li><p><strong>cycle</strong> (<em>int</em>) – An identifier to differentiate between other market data sets for a given business day, and MarketDataQualifier. Should be incremented for each set</p></li>
-<li><p><strong>qual</strong> (<em>enums_pb2.MarketDataQualifier</em>) – A classifier that says whether the curve belongs to Closing market data or Normal, i.e. intra-day, market data</p></li>
+<li><p><strong>qualifier</strong> (<em>enums_pb2.MarketDataQualifier</em>) – A classifier that says whether the curve belongs to Closing market data or Normal, i.e. intra-day, market data</p></li>
 <li><p><strong>scenario</strong> (<em>int</em>) – Scenario identifier. Curves with scenario 0 support sensitivities. All other values do not compute sensitivities.</p></li>
 </ul>
 </dd>
@@ -672,7 +761,7 @@ This is used as the curve identifier.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>int</em>) – A Curve Id value computed using</p></li>
+<li><p><strong>id</strong> (<em>int</em>) – An id for the curve, this may be 0, but is usually the result of CurveId.id(), especially when curve will be used in pricing.</p></li>
 <li><p><strong>as_of_date</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – The business date</p></li>
 <li><p><strong>maturities</strong> (<em>list</em>) – List of redukti.Date values for curve’s fixed points</p></li>
 <li><p><strong>values</strong> (<em>list</em>) – List of float values - either zero rates or discount factors, depending on rate_type parameter</p></li>
@@ -784,7 +873,7 @@ For details please check documents on Svensson Yield curve.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>int</em>) – A Curve Id value computed using</p></li>
+<li><p><strong>id</strong> (<em>int</em>) – An id for the curve, this may be 0, but is usually the result of CurveId.id(), especially when curve will be used in pricing.</p></li>
 <li><p><strong>as_of_date</strong> (<a class="reference internal" href="#redukti.Date" title="redukti.Date"><em>Date</em></a>) – The business date</p></li>
 <li><p><strong>parameters</strong> (<em>list</em>) – The 6 curve parameters</p></li>
 <li><p><strong>fraction</strong> (<em>enums_pb2.DayCountFraction</em>) – The Day Count Fraction for computing time intervals</p></li>
@@ -874,7 +963,7 @@ and ValuationService and hence can process all requests that would normally be s
 the OpenRedukti server over gRPC protocol.</p>
 <p>The InMemoryRequestProcessor is useful when you only want to use the OpenRedukti
 functions internally in Python and do not need to interact with the OpenRedukti server.</p>
-<p>The downside of this internal instance is that if there is a bug in the tOpenRedukti
+<p>The downside of this internal instance is that if there is a bug in the OpenRedukti
 code it can crash your Python instance. Hence this type of use is not recommended unless
 you have tested your interactions thoroughly and are confident that there will not be any
 issues.</p>
@@ -893,13 +982,13 @@ VM.</p>
 <dd><p>Simple request processing service, designed to be compatible with the OpenRedukti server protocol.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>request</strong> (<a class="reference internal" href="#redukti.services_pb2.Request" title="redukti.services_pb2.Request"><em>services_pb2.Request</em></a>) – Request to process, one of the sub requests must be populated</p>
+<dd class="field-odd"><p><strong>request</strong> (<a class="reference internal" href="#redukti.services_pb2.Request" title="redukti.services_pb2.Request"><em>services_pb2.Request</em></a>) – The request to process, one of the sub requests must be populated</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The result from the request processor</p>
+<dd class="field-even"><p>The result returned from OpenRedukti</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>response (<a class="reference internal" href="#redukti.services_pb2.Response" title="redukti.services_pb2.Response">services_pb2.Response</a>)</p>
+<dd class="field-odd"><p><a class="reference internal" href="#redukti.services_pb2.Response" title="redukti.services_pb2.Response">services_pb2.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
